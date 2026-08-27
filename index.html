@@ -50,7 +50,10 @@
 
             color: var(--text);
 
-            /* 페이지 전체 기준 배경 흐름 */
+            /*
+            페이지 전체 기준 배경 흐름
+            맨 위 → 맨 아래로 갈수록 점점 깊어짐
+            */
             background:
                 linear-gradient(
                     to bottom,
@@ -69,7 +72,6 @@
             overflow-x: hidden;
         }
 
-        /* 메인 콘텐츠가 배경 이펙트 위로 올라오도록 설정 */
         main, footer {
             position: relative;
             z-index: 2;
@@ -90,7 +92,7 @@
 
 
         /* =========================================
-           ✨ 하이엔드 테크 배경 이펙트 (Ultimate Vibe)
+           ✨ 초고화질 배경 이펙트 V2 (Ultra Flashy)
         ========================================= */
 
         .background-effects {
@@ -103,7 +105,7 @@
             background: radial-gradient(circle at 50% 50%, rgba(10, 50, 100, 0.05), transparent 60%);
         }
 
-        /* 1. 오로라 & 딥 글로우 */
+        /* 1. 오로라 & 딥 글로우 (회전하고 교차하는 거대한 빛) */
         .bg-orb {
             position: absolute;
             border-radius: 50%;
@@ -126,7 +128,7 @@
             100% { transform: rotate(360deg) scale(1); }
         }
 
-        /* 2. 3D 입체 바닥 그리드 */
+        /* 2. 다이내믹 3D 하이퍼스페이스 그리드 */
         .bg-grid-container {
             position: absolute;
             bottom: -30%; left: -50%;
@@ -141,8 +143,8 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 200%;
             background-image:
-                linear-gradient(rgba(159, 211, 245, 0.4) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(159, 211, 245, 0.4) 1px, transparent 1px);
+                linear-gradient(rgba(159, 211, 245, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(159, 211, 245, 0.5) 1px, transparent 1px);
             background-size: 80px 80px;
             animation: grid-forward 10s linear infinite;
         }
@@ -151,22 +153,22 @@
             100% { transform: translateY(80px); }
         }
 
-        /* 3. 랜덤 궤적의 데이터 유성우 */
+        /* 3. 유성우 쏟아지는 효과 (Shooting Data Meteors) */
         .meteor-container {
             position: absolute;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            overflow: hidden;
+            top: 0; left: 0; width: 100%; height: 100%;
+            transform: rotate(-25deg) scale(1.5);
         }
         .meteor {
             position: absolute;
-            top: 0; left: 0;
-            width: 2px;
+            width: 2px; height: 180px;
             background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.9), #fff);
+            animation: meteor-fall linear infinite;
             opacity: 0;
             border-radius: 4px;
             box-shadow: 0 0 25px 2px rgba(97, 170, 255, 0.8);
-            transform-origin: top center;
         }
+        /* 유성의 머리부분 (눈부신 빛망울) */
         .meteor::after {
             content: '';
             position: absolute;
@@ -175,62 +177,32 @@
             border-radius: 50%;
             box-shadow: 0 0 30px 10px rgba(159, 211, 245, 1);
         }
-
-        /* 다양한 궤적 설정 */
-        @keyframes meteor-fall-1 {
-            0% { transform: translate(20vw, -20vh) rotate(23deg); opacity: 0; }
-            2% { opacity: 1; }
-            12% { transform: translate(-40vw, 120vh) rotate(23deg); opacity: 0; }
-            100% { transform: translate(-40vw, 120vh) rotate(23deg); opacity: 0; }
-        }
-        @keyframes meteor-fall-2 {
-            0% { transform: translate(50vw, -20vh) rotate(26deg); opacity: 0; }
-            2% { opacity: 1; }
-            15% { transform: translate(-20vw, 120vh) rotate(26deg); opacity: 0; }
-            100% { transform: translate(-20vw, 120vh) rotate(26deg); opacity: 0; }
-        }
-        @keyframes meteor-fall-3 {
-            0% { transform: translate(90vw, -20vh) rotate(30deg); opacity: 0; }
-            2% { opacity: 1; }
-            14% { transform: translate(10vw, 120vh) rotate(30deg); opacity: 0; }
-            100% { transform: translate(10vw, 120vh) rotate(30deg); opacity: 0; }
-        }
-        @keyframes meteor-fall-4 {
-            0% { transform: translate(120vw, 10vh) rotate(36deg); opacity: 0; }
-            2% { opacity: 1; }
-            16% { transform: translate(40vw, 120vh) rotate(36deg); opacity: 0; }
-            100% { transform: translate(40vw, 120vh) rotate(36deg); opacity: 0; }
-        }
-        @keyframes meteor-fall-5 {
-            0% { transform: translate(70vw, -40vh) rotate(29deg); opacity: 0; }
-            2% { opacity: 1; }
-            13% { transform: translate(-20vw, 120vh) rotate(29deg); opacity: 0; }
-            100% { transform: translate(-20vw, 120vh) rotate(29deg); opacity: 0; }
+        .m-1 { left: 20%; animation-duration: 3.5s; animation-delay: 0.5s; }
+        .m-2 { left: 40%; animation-duration: 5s; animation-delay: 2s; height: 280px; }
+        .m-3 { left: 60%; animation-duration: 4s; animation-delay: 1.5s; }
+        .m-4 { left: 80%; animation-duration: 6s; animation-delay: 3.5s; height: 200px; }
+        .m-5 { left: 90%; animation-duration: 4.5s; animation-delay: 1s; }
+        
+        @keyframes meteor-fall {
+            0% { transform: translateY(-500px); opacity: 0; }
+            10% { opacity: 1; }
+            50% { opacity: 1; }
+            100% { transform: translateY(150vh); opacity: 0; }
         }
 
-        /* 비정형 타이밍 배치 */
-        .m-1 { height: 180px; animation: meteor-fall-1 12.5s infinite; animation-delay: 0s; }
-        .m-2 { height: 250px; animation: meteor-fall-2 15.3s infinite; animation-delay: 3.2s; }
-        .m-3 { height: 150px; animation: meteor-fall-3 10.7s infinite; animation-delay: 1.5s; }
-        .m-4 { height: 200px; animation: meteor-fall-4 13.8s infinite; animation-delay: 5.1s; }
-        .m-5 { height: 300px; animation: meteor-fall-5 17.2s infinite; animation-delay: 7.4s; }
-        .m-6 { height: 220px; animation: meteor-fall-1 14.1s infinite; animation-delay: 4.5s; }
-        .m-7 { height: 160px; animation: meteor-fall-2 11.8s infinite; animation-delay: 8.7s; }
-        .m-8 { height: 190px; animation: meteor-fall-3 16.5s infinite; animation-delay: 2.3s; }
-        .m-9 { height: 270px; animation: meteor-fall-4 19.4s infinite; animation-delay: 11.1s; }
-        .m-10 { height: 140px; animation: meteor-fall-5 13.3s infinite; animation-delay: 9.6s; }
-
-        /* 4. 떠오르는 별빛 입자 & 보케 */
+        /* 4. 반짝이는 보케(Bokeh) & 입자 (Twinkling Particles) */
         .particle {
             position: absolute;
             border-radius: 50%;
             background: #fff;
             animation: float-up linear infinite, twinkle ease-in-out infinite alternate;
         }
+        /* 흐릿하게 빛나는 보케 덩어리 */
         .p-glow {
             box-shadow: 0 0 25px 8px rgba(159, 211, 245, 0.9);
             opacity: 0.5;
         }
+        /* 선명하게 반짝이는 별빛 입자 */
         .p-sparkle {
             box-shadow: 0 0 10px 2px #fff;
         }
@@ -395,6 +367,7 @@
 
         /* =========================================
            HERO
+           첫 화면
         ========================================= */
 
         .hero {
@@ -1199,11 +1172,6 @@
             <div class="meteor m-3"></div>
             <div class="meteor m-4"></div>
             <div class="meteor m-5"></div>
-            <div class="meteor m-6"></div>
-            <div class="meteor m-7"></div>
-            <div class="meteor m-8"></div>
-            <div class="meteor m-9"></div>
-            <div class="meteor m-10"></div>
         </div>
 
         <!-- 4. 보케(Bokeh) & 별빛 입자 -->
