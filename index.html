@@ -321,16 +321,13 @@
             letter-spacing: -0.05em;
         }
 
-        .brand-mark {
-            display: grid;
-            place-items: center;
-            width: 34px;
-            height: 34px;
+        /* 로고 이미지 스타일 */
+        .brand-logo {
+            width: 36px;
+            height: 36px;
             border-radius: 10px;
-            color: white;
-            background: linear-gradient(135deg, #3c8df1, #0b3264);
-            font-size: 13px;
-            font-weight: 900;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(7, 28, 57, 0.15);
         }
 
         .nav-links {
@@ -880,10 +877,20 @@
         }
 
         .footer-brand {
-            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
             color: white;
             font-size: 18px;
             font-weight: 900;
+        }
+
+        .footer-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            object-fit: cover;
         }
         
         .footer-right {
@@ -1188,7 +1195,8 @@
     <nav id="navbar">
         <div class="nav-inner">
             <a href="#home" class="brand">
-                <span class="brand-mark">청</span>
+                <!-- 텍스트 로고 대신 이미지 로고 삽입 -->
+                <img src="image_794eed.jpg" alt="청춘비서 로고" class="brand-logo">
                 청춘비서
             </a>
             <div class="nav-links">
@@ -1424,7 +1432,11 @@
     <footer>
         <div class="container footer-inner">
             <div>
-                <div class="footer-brand">청춘비서</div>
+                <div class="footer-brand">
+                    <!-- 푸터용 이미지 로고 삽입 -->
+                    <img src="image_794eed.jpg" alt="청춘비서 로고" class="footer-logo">
+                    청춘비서
+                </div>
                 <div>청춘의 막막한 앞길을 혼자 헤매지 않도록.</div>
             </div>
             <div class="footer-right">
