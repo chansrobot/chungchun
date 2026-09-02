@@ -621,7 +621,7 @@
 
 
         /* =========================================
-           핵심 기능
+           핵심 기능 (디자인 수정됨: 글래스모피즘 카드)
         ========================================= */
 
         .features-section {
@@ -631,22 +631,30 @@
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
+            gap: 24px; /* 간격 추가 */
             margin-top: 80px;
-            border-top: 1px solid var(--line);
-            border-left: 1px solid var(--line);
         }
 
         .feature {
             min-height: 300px;
-            padding: 35px 30px;
-            border-right: 1px solid var(--line);
-            border-bottom: 1px solid var(--line);
-            transition: 0.3s ease;
+            padding: 40px 35px;
+            background: rgba(255, 255, 255, 0.45); /* 부드러운 반투명 배경 */
+            border: 1px solid rgba(255, 255, 255, 0.6); /* 은은한 테두리 */
+            border-radius: 24px; /* 모서리 둥글게 */
+            box-shadow: 0 10px 30px rgba(7, 28, 57, 0.06); /* 부드러운 그림자 */
+            backdrop-filter: blur(16px); /* 글래스모피즘 블러 효과 */
+            -webkit-backdrop-filter: blur(16px);
+            /* 트랜지션을 좀 더 탄력있고 부드럽게 수정 */
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .feature:hover {
-            background: rgba(240, 247, 255, 0.8);
-            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.85);
+            /* 카드가 확실하게 위로 뜨면서 살짝 커지는 다이내믹한 효과 */
+            transform: translateY(-12px) scale(1.02);
+            /* 푸른빛이 도는 깊은 그림자와 안쪽으로 살짝 빛나는 테두리 효과 추가 */
+            box-shadow: 0 25px 50px rgba(40, 117, 214, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+            border-color: rgba(255, 255, 255, 1);
         }
 
         .feature.large { grid-column: span 7; }
@@ -922,6 +930,16 @@
 
         .copyright {
             line-height: 1.6;
+        }
+        
+        /* 추가됨: 팀원 이니셜 텍스트 스타일 */
+        .team-initials {
+            margin-top: 14px;
+            display: inline-block;
+            color: #9bcaff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.2em;
         }
 
 
@@ -1433,8 +1451,6 @@
         <div class="container footer-inner">
             <div>
                 <div class="footer-brand">
-                    <!-- 푸터용 이미지 로고 삽입 -->
-                    <img src="image_794eed.jpg" alt="청춘비서 로고" class="footer-logo">
                     청춘비서
                 </div>
                 <div>청춘의 막막한 앞길을 혼자 헤매지 않도록.</div>
@@ -1445,7 +1461,8 @@
                 </div>
                 <div class="copyright">
                     © 2026 WAYLiB. All rights reserved.<br>
-                    crafted by WAYLiB from Mohyeon
+                    crafted by WAYLiB from Mohyeon<br>
+                    <div class="team-initials">LCY · LGH · LJA · KJE</div>
                 </div>
             </div>
         </div>
@@ -1485,7 +1502,7 @@
 
                 <h4>제6조 (서비스의 제공, 중단 및 데이터 보관)</h4>
                 <p>1. 본 서비스는 회사의 운영상, 기술상 필요에 따라 사전 고지 없이 일부 또는 전체 기능이 변경, 업데이트, 중단될 수 있습니다.<br>
-                2. 회사는 시스템 오류, 정기 점검, 통신 장애, 기타 불가항력적 사유로 인해 발생한 서비스 중단이나 사용자의 데이터 유실(To-do 기록, 캘린더 일정 삭제 등)로 인한 간접적, 부수적 피해에 대해 배상할 책임을 지지 않습니다.</p>
+                2. 회사는 시스템 오류, 정기 점검, 통신 장애, 기타 불가항력 사유로 인해 발생한 서비스 중단이나 사용자의 데이터 유실(To-do 기록, 캘린더 일정 삭제 등)로 인한 간접적, 부수적 피해에 대해 배상할 책임을 지지 않습니다.</p>
 
                 <h4>제7조 (사용자의 의무)</h4>
                 <p>사용자는 다음 행위를 하여서는 안 됩니다.<br>
