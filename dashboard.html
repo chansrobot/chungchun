@@ -9,7 +9,7 @@
            기본 & 변수 설정
         ========================================= */
         :root {
-            --bg-color: #f4f8fe; /* 대시보드 배경색 */
+            --bg-color: #f4f8fe; 
             --white: #ffffff;
             --navy: #192b4d;
             --text-dark: #2d3748;
@@ -88,7 +88,6 @@
             color: var(--text-light);
         }
 
-        /* 드롭다운 메뉴 */
         .dropdown {
             position: absolute;
             top: 70px;
@@ -100,13 +99,11 @@
             box-shadow: var(--shadow-sm);
             width: 180px;
             padding: 10px 0;
-            display: none; /* 기본 숨김 */
+            display: none; 
             flex-direction: column;
         }
 
-        .nav-item:hover .dropdown {
-            display: flex; /* 마우스 오버 시 표시 */
-        }
+        .nav-item:hover .dropdown { display: flex; }
 
         .dropdown li {
             padding: 12px 20px;
@@ -130,8 +127,9 @@
         .icon-bell {
             width: 20px; height: 20px;
             fill: none; stroke: var(--text-dark); stroke-width: 2;
-            cursor: pointer;
+            cursor: pointer; transition: 0.2s;
         }
+        .icon-bell:hover { stroke: var(--blue-primary); transform: scale(1.1); }
 
         .user-profile {
             width: 36px; height: 36px;
@@ -139,8 +137,9 @@
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             color: var(--blue-primary);
-            cursor: pointer;
+            cursor: pointer; transition: 0.2s;
         }
+        .user-profile:hover { background-color: var(--blue-primary); color: white; }
 
         /* =========================================
            MAIN CONTENT AREA
@@ -160,6 +159,7 @@
             top: 40px;
             display: flex;
             align-items: flex-start;
+            z-index: 10;
         }
 
         .tab-left {
@@ -174,7 +174,9 @@
             gap: 10px;
             box-shadow: var(--shadow-sm);
             cursor: pointer;
+            transition: 0.3s;
         }
+        .tab-left:hover { background-color: var(--blue-primary); padding-left: 5px; }
 
         .tab-left span {
             writing-mode: vertical-rl;
@@ -190,6 +192,18 @@
             border-radius: 20px;
             box-shadow: var(--shadow-lg);
             padding: 30px 25px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-origin: left center;
+        }
+
+        .calendar-card.hidden {
+            opacity: 0;
+            transform: scaleX(0);
+            margin-left: 0;
+            width: 0;
+            padding-left: 0;
+            padding-right: 0;
         }
 
         .cal-header {
@@ -209,6 +223,11 @@
             font-weight: 700;
             margin-bottom: 20px;
         }
+
+        .cal-arrow {
+            color: #a0aec0; cursor: pointer; padding: 5px; font-weight: bold; transition: 0.2s;
+        }
+        .cal-arrow:hover { color: var(--blue-primary); }
 
         .cal-grid {
             display: grid;
@@ -233,13 +252,19 @@
             justify-content: center;
             font-weight: 500;
             cursor: pointer;
+            transition: 0.2s;
+            border-radius: 50%;
+        }
+
+        .cal-grid .date:hover {
+            background-color: #f1f5f9;
         }
 
         .cal-grid .date.active {
             background-color: var(--blue-light);
-            border-radius: 50%;
             color: var(--blue-primary);
             font-weight: 800;
+            box-shadow: inset 0 0 0 1px var(--blue-primary);
         }
 
         .cal-grid .date.has-event-blue::after {
@@ -266,7 +291,12 @@
             align-items: center;
             font-size: 13px;
             font-weight: 600;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 6px;
+            transition: 0.2s;
         }
+        .schedule-item:hover { background-color: #f8fafc; }
         
         .schedule-item span:first-child {
             display: flex; align-items: center; gap: 8px;
@@ -289,6 +319,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            transition: 0.4s;
         }
 
         .greeting h1 {
@@ -315,22 +346,24 @@
             color: var(--text-light);
             box-shadow: var(--shadow-sm);
             margin-bottom: 40px;
+            cursor: pointer;
+            transition: 0.2s;
         }
+        .progress-badge:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
 
         .progress-badge .blue { color: var(--blue-primary); }
         .progress-badge .mint { color: var(--mint); }
 
-        /* 3D 일러스트 자리 (이미지로 교체하세요) */
+        /* 집 짓기 일러스트 영역 (SVG 컨테이너) */
         .illustration-placeholder {
             width: 380px;
             height: 250px;
-            background: url('https://cdn-icons-png.flaticon.com/512/3238/3238000.png') no-repeat center center;
-            background-size: contain;
-            opacity: 0.8;
             margin-bottom: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* 하단 요약 상태바 */
         .status-bar {
             display: flex;
             align-items: center;
@@ -345,26 +378,35 @@
             font-size: 14px;
             font-weight: 600;
             color: var(--text-dark);
+            cursor: pointer;
+            transition: 0.2s;
         }
+        .status-item:hover { color: var(--blue-primary); }
 
         .status-item svg {
             width: 20px; height: 20px;
             stroke: var(--text-light); fill: none; stroke-width: 2;
+            transition: 0.2s;
         }
+        .status-item:hover svg { stroke: var(--blue-primary); transform: translateY(-2px); }
         
-        .status-item span.count {
-            color: var(--blue-primary);
-        }
-        .status-item span.count-mint {
-            color: var(--mint);
-        }
+        .status-item span.count { color: var(--blue-primary); }
+        .status-item span.count-mint { color: var(--mint); }
 
-        /* --- 우측 플로팅 탭 --- */
+        /* --- 우측 플로팅 서랍 탭 --- */
         .right-sidebar {
             position: absolute;
             right: 0;
             top: 50%;
             transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 10;
+        }
+
+        .right-sidebar.closed {
+            transform: translate(320px, -50%); 
         }
 
         .tab-right {
@@ -379,7 +421,9 @@
             gap: 10px;
             box-shadow: -4px 4px 15px rgba(16, 185, 129, 0.1);
             cursor: pointer;
+            transition: 0.3s;
         }
+        .tab-right:hover { background-color: var(--mint-light); padding-right: 20px; }
 
         .tab-right svg {
             width: 24px; height: 24px; stroke: var(--mint); fill: none; stroke-width: 2;
@@ -392,11 +436,68 @@
             text-align: center;
             line-height: 1.4;
         }
+
+        .todo-panel {
+            width: 320px;
+            height: 500px;
+            background: var(--white);
+            border-left: 1px solid var(--border-light);
+            box-shadow: var(--shadow-lg);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .todo-header {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .todo-header span {
+            color: var(--mint);
+            font-size: 14px;
+        }
+
+        .todo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .todo-item:hover { background-color: #f8fafc; }
+
+        .todo-item input[type="checkbox"] {
+            width: 18px; height: 18px;
+            accent-color: var(--mint);
+            cursor: pointer;
+        }
+        
+        .todo-item.done {
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- 상단 네비게이션 바 -->
     <header>
         <a href="index.html" class="header-logo">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -406,7 +507,6 @@
         <ul class="nav-menu">
             <li class="nav-item">
                 공지사항 <i>▼</i>
-                <!-- 드롭다운 메뉴 -->
                 <ul class="dropdown">
                     <li>주거 지원정책 공지</li>
                     <li>청약 및 임대주택 공지</li>
@@ -415,15 +515,13 @@
                 </ul>
             </li>
             <li class="nav-item">청춘비서 도서관 <i>▼</i></li>
-            <li class="nav-item">주거비 계산기</li>
+            <li class="nav-item" onclick="alert('준비 중인 기능입니다.')">주거비 계산기</li>
             <li class="nav-item">마이페이지 <i>▼</i></li>
         </ul>
 
         <div class="header-actions">
-            <!-- 알림 아이콘 -->
-            <svg class="icon-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-            <!-- 유저 프로필 -->
-            <div class="user-profile">
+            <svg class="icon-bell" id="btn-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <div class="user-profile" id="btn-profile">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </div>
         </div>
@@ -431,27 +529,26 @@
 
     <main>
         <!-- 좌측 캘린더 영역 -->
-        <aside class="left-sidebar">
-            <div class="tab-left">
+        <aside class="left-sidebar" id="left-sidebar">
+            <div class="tab-left" id="btn-cal-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 <span>캘린더</span>
             </div>
             
-            <div class="calendar-card">
+            <div class="calendar-card" id="calendar-card">
                 <div class="cal-header">
                     나의 캘린더 
-                    <span style="color:#a0aec0; cursor:pointer;">&lt;</span>
+                    <span class="cal-arrow" onclick="alert('월간 일정을 확인합니다.')">&lt;</span>
                 </div>
                 
                 <div class="cal-month">
-                    <span style="color:#a0aec0; cursor:pointer;">&lt;</span>
+                    <span class="cal-arrow">&lt;</span>
                     2026년 8월
-                    <span style="color:#a0aec0; cursor:pointer;">&gt;</span>
+                    <span class="cal-arrow">&gt;</span>
                 </div>
 
-                <div class="cal-grid">
+                <div class="cal-grid" id="cal-grid">
                     <div class="day-name">일</div><div class="day-name">월</div><div class="day-name">화</div><div class="day-name">수</div><div class="day-name">목</div><div class="day-name">금</div><div class="day-name">토</div>
-                    
                     <div class="date" style="color:#cbd5e0;">26</div><div class="date" style="color:#cbd5e0;">27</div><div class="date" style="color:#cbd5e0;">28</div><div class="date" style="color:#cbd5e0;">29</div><div class="date" style="color:#cbd5e0;">30</div><div class="date" style="color:#cbd5e0;">31</div><div class="date">1</div>
                     <div class="date">2</div><div class="date">3</div><div class="date">4</div><div class="date">5</div><div class="date">6</div><div class="date">7</div><div class="date has-event-blue">8</div>
                     <div class="date">9</div><div class="date">10</div><div class="date">11</div><div class="date">12</div><div class="date">13</div><div class="date">14</div><div class="date">15</div>
@@ -461,11 +558,11 @@
                 </div>
 
                 <div class="cal-schedule">
-                    <div class="schedule-item item-blue">
+                    <div class="schedule-item item-blue" onclick="alert('체크리스트 창으로 이동합니다.')">
                         <span>이사 준비 체크리스트</span>
                         <span class="s-date">8.8(토)</span>
                     </div>
-                    <div class="schedule-item item-mint">
+                    <div class="schedule-item item-mint" onclick="alert('전월세 상담 화면으로 이동합니다.')">
                         <span>전월세 계약 상담</span>
                         <span class="s-date">8.19(수)</span>
                     </div>
@@ -480,23 +577,79 @@
                 <p>필요한 일정과 할 일을 가볍게 확인해 보세요</p>
             </div>
             
-            <div class="progress-badge">
-                독립까지 <span class="blue">87일</span> · 이번 달 <span class="mint">42%</span> 완료
+            <div class="progress-badge" onclick="alert('전체 자립 로드맵을 확인합니다.')">
+                독립까지 <span class="blue">87일</span> · 오늘 진행률 <span class="mint" id="main-progress">0%</span>
             </div>
 
-            <!-- 3D 일러스트 자리 (디자인 시안의 집/달력 이미지로 나중에 교체) -->
-            <div class="illustration-placeholder"></div>
+            <!-- 코드로 짠 '집 지어지는 SVG 그래픽' 영역 -->
+            <div class="illustration-placeholder" id="house-illustration">
+                <svg id="house-svg" viewBox="0 0 380 250" style="width:100%; height:100%; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                    <!-- 0. 공터/설계도 (항상 표시) -->
+                    <g id="house-blueprint" stroke="#cbd5e0" stroke-width="2" fill="none" stroke-dasharray="6,4">
+                        <polyline points="110,105 190,40 270,105" />
+                        <rect x="130" y="105" width="120" height="85" />
+                        <rect x="115" y="190" width="150" height="10" />
+                        <rect x="175" y="150" width="30" height="40" />
+                        <rect x="145" y="125" width="20" height="20" />
+                    </g>
+                    <!-- 바닥 지지선 -->
+                    <line x1="40" y1="200" x2="340" y2="200" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" />
+            
+                    <!-- 1. 기초 공사 (20%+) -->
+                    <g id="house-foundation" style="opacity:0; transition: opacity 0.5s ease-in-out;">
+                        <rect x="115" y="190" width="150" height="10" fill="#94a3b8" rx="3" />
+                    </g>
+            
+                    <!-- 2. 골조 및 벽면 (40%+) -->
+                    <g id="house-walls" style="opacity:0; transition: opacity 0.5s ease-in-out;">
+                        <rect x="130" y="105" width="120" height="85" fill="#eff6ff" stroke="#3b82f6" stroke-width="3" />
+                    </g>
+            
+                    <!-- 3. 지붕 완성 (60%+) -->
+                    <g id="house-roof" style="opacity:0; transition: opacity 0.5s ease-in-out;">
+                        <polygon points="105,105 190,35 275,105" fill="#3b82f6" stroke="#2563eb" stroke-width="3" stroke-linejoin="round" />
+                        <!-- 지붕 음영 디테일 -->
+                        <polygon points="190,35 275,105 190,105" fill="#2563eb" opacity="0.2" />
+                    </g>
+            
+                    <!-- 4. 인테리어/디테일 (80%+) -->
+                    <g id="house-details" style="opacity:0; transition: opacity 0.5s ease-in-out;">
+                        <!-- 문 -->
+                        <rect x="175" y="150" width="30" height="40" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2" rx="2" />
+                        <circle cx="200" cy="170" r="2.5" fill="#2563eb" />
+                        <!-- 창문 -->
+                        <rect x="145" y="125" width="20" height="20" fill="#ffffff" stroke="#3b82f6" stroke-width="2" rx="2" />
+                        <line x1="155" y1="125" x2="155" y2="145" stroke="#3b82f6" stroke-width="2" />
+                        <line x1="145" y1="135" x2="165" y2="135" stroke="#3b82f6" stroke-width="2" />
+                    </g>
+            
+                    <!-- 5. 조경 및 완공 효과 (100%) -->
+                    <g id="house-deco" style="opacity:0; transition: opacity 0.5s ease-in-out;">
+                        <!-- 해 -->
+                        <circle cx="90" cy="60" r="18" fill="#fcd34d" />
+                        <!-- 구름 -->
+                        <path d="M 270 60 Q 280 50 290 60 Q 305 55 310 70 Q 320 80 300 80 L 270 80 Q 255 80 260 65 Q 255 55 270 60 Z" fill="#e0e7ff" opacity="0.8" />
+                        <!-- 나무 -->
+                        <rect x="295" y="165" width="8" height="35" fill="#8B4513" rx="2" />
+                        <circle cx="299" cy="145" r="22" fill="#10b981" />
+                        <circle cx="285" cy="160" r="14" fill="#059669" />
+                        <circle cx="313" cy="160" r="14" fill="#34d399" />
+                        <!-- 바닥 풀 장식 -->
+                        <path d="M 100 200 Q 105 190 110 200" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
+                        <path d="M 280 200 Q 285 192 290 200" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
+                    </g>
+                </svg>
+            </div>
 
-            <!-- 하단 상태 요약 바 -->
             <div class="status-bar">
                 <div class="status-item">
                     <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     예정 일정 <span class="count">3</span>
                 </div>
                 <div style="color:var(--border-light);">•</div>
-                <div class="status-item">
+                <div class="status-item" id="btn-status-todo">
                     <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                    오늘 할 일 <span class="count-mint">1/3</span>
+                    오늘 할 일 <span class="count-mint" id="main-todo-count">0/5</span>
                 </div>
                 <div style="color:var(--border-light);">•</div>
                 <div class="status-item">
@@ -506,15 +659,127 @@
             </div>
         </section>
 
-        <!-- 우측 플로팅 할 일 탭 -->
-        <aside class="right-sidebar">
-            <div class="tab-right">
+        <!-- 우측 플로팅 서랍 탭 (기본 닫힘 상태) -->
+        <aside class="right-sidebar closed" id="right-sidebar">
+            <div class="tab-right" id="btn-todo-toggle">
                 <svg viewBox="0 0 24 24" style="stroke-width: 2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 <svg viewBox="0 0 24 24" style="margin-top: 10px;"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                <div class="tab-text">오늘 할 일<br>1/3</div>
+                <div class="tab-text" id="tab-todo-count">오늘 할 일<br>0/5</div>
+            </div>
+            
+            <!-- 투두리스트 패널 (항목 5개로 확장) -->
+            <div class="todo-panel">
+                <div class="todo-header">
+                    오늘의 로드맵
+                    <span id="panel-todo-ratio">0/5 완료</span>
+                </div>
+                <div class="todo-list" id="todo-list">
+                    <label class="todo-item">
+                        <input type="checkbox">
+                        <span>독립 예산 계획 세우기</span>
+                    </label>
+                    <label class="todo-item">
+                        <input type="checkbox">
+                        <span>청년 맞춤형 전세대출 확인</span>
+                    </label>
+                    <label class="todo-item">
+                        <input type="checkbox">
+                        <span>마음에 드는 매물 임장가기</span>
+                    </label>
+                    <label class="todo-item">
+                        <input type="checkbox">
+                        <span>전월세 계약서 및 확정일자</span>
+                    </label>
+                    <label class="todo-item">
+                        <input type="checkbox">
+                        <span>전입신고 14일 이내 완료</span>
+                    </label>
+                </div>
             </div>
         </aside>
     </main>
 
+    <!-- 인터랙션 자바스크립트 -->
+    <script>
+        document.getElementById('btn-bell').addEventListener('click', () => alert('도착한 새로운 알림이 없습니다.'));
+        document.getElementById('btn-profile').addEventListener('click', () => alert('지안님의 마이페이지로 이동합니다.'));
+
+        const btnCalToggle = document.getElementById('btn-cal-toggle');
+        const calendarCard = document.getElementById('calendar-card');
+        btnCalToggle.addEventListener('click', () => {
+            calendarCard.classList.toggle('hidden');
+        });
+
+        const dates = document.querySelectorAll('.cal-grid .date');
+        dates.forEach(date => {
+            date.addEventListener('click', function() {
+                if(this.style.color === 'rgb(203, 213, 224)') return; 
+                dates.forEach(d => d.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        const btnTodoToggle = document.getElementById('btn-todo-toggle');
+        const btnStatusTodo = document.getElementById('btn-status-todo');
+        const rightSidebar = document.getElementById('right-sidebar');
+
+        const toggleTodoSidebar = () => {
+            rightSidebar.classList.toggle('closed');
+        };
+        btnTodoToggle.addEventListener('click', toggleTodoSidebar);
+        btnStatusTodo.addEventListener('click', toggleTodoSidebar);
+
+        // SVG 애니메이션 컨트롤 로직
+        const checkboxes = document.querySelectorAll('#todo-list input[type="checkbox"]');
+        const textMainTodo = document.getElementById('main-todo-count');
+        const textTabTodo = document.getElementById('tab-todo-count');
+        const textPanelRatio = document.getElementById('panel-todo-ratio');
+        const mainProgress = document.getElementById('main-progress');
+
+        // 퍼센트에 맞춰 SVG 투명도(opacity) 조절
+        const updateHouseSVG = (percent) => {
+            document.getElementById('house-foundation').style.opacity = percent >= 20 ? 1 : 0;
+            document.getElementById('house-walls').style.opacity = percent >= 40 ? 1 : 0;
+            document.getElementById('house-roof').style.opacity = percent >= 60 ? 1 : 0;
+            document.getElementById('house-details').style.opacity = percent >= 80 ? 1 : 0;
+            document.getElementById('house-deco').style.opacity = percent >= 100 ? 1 : 0;
+            
+            // 100% 달성 시 살짝 튀어오르는(Bounce) 효과
+            const svgHouse = document.getElementById('house-svg');
+            if(percent === 100) {
+                svgHouse.style.transform = 'scale(1.08)';
+            } else {
+                svgHouse.style.transform = 'scale(1)';
+            }
+        };
+
+        const updateTodoProgress = () => {
+            const total = checkboxes.length;
+            const checked = document.querySelectorAll('#todo-list input[type="checkbox"]:checked').length;
+            const currentPercent = Math.round((checked / total) * 100); 
+            
+            const ratioText = `${checked}/${total}`;
+            textMainTodo.innerText = ratioText;
+            textTabTodo.innerHTML = `오늘 할 일<br>${ratioText}`;
+            textPanelRatio.innerText = `${ratioText} 완료`;
+            mainProgress.innerText = `${currentPercent}%`;
+
+            updateHouseSVG(currentPercent);
+        };
+
+        checkboxes.forEach(box => {
+            box.addEventListener('change', function() {
+                if(this.checked) {
+                    this.parentElement.classList.add('done');
+                } else {
+                    this.parentElement.classList.remove('done');
+                }
+                updateTodoProgress();
+            });
+        });
+
+        // 로드 시 초기 상태 세팅
+        updateTodoProgress();
+    </script>
 </body>
 </html>
