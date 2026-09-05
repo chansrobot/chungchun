@@ -3,783 +3,1576 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>청춘비서 대시보드</title>
+
+    <title>청춘비서 | WAYLiB</title>
+
     <style>
+
         /* =========================================
-           기본 & 변수 설정
+           기본 설정
         ========================================= */
+
         :root {
-            --bg-color: #f4f8fe; 
+            --navy: #071c39;
+            --navy-light: #123b6b;
+            --blue: #2875d6;
+            --blue-dark: #104b91;
+            --blue-light: #eaf4ff;
+
+            --text: #16263b;
+            --text-light: #6b7a8c;
+
+            --line: rgba(10, 50, 100, 0.12);
+
             --white: #ffffff;
-            --navy: #192b4d;
-            --text-dark: #2d3748;
-            --text-light: #718096;
-            --blue-primary: #3b82f6;
-            --blue-light: #eff6ff;
-            --mint: #10b981;
-            --mint-light: #ecfdf5;
-            --border-light: #e2e8f0;
-            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+            --max-width: 1180px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Pretendard, "Noto Sans KR", sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            font-family:
+                Pretendard,
+                "Noto Sans KR",
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: var(--text);
+
+            /*
+            페이지 전체 기준 배경 흐름
+            맨 위 → 맨 아래로 갈수록 점점 깊어짐
+            */
+            background:
+                linear-gradient(
+                    to bottom,
+                    #ffffff 0%,
+                    #ffffff 14%,
+                    #f2f9ff 24%,
+                    #d9efff 38%,
+                    #9fd3f5 52%,
+                    #4f91d3 68%,
+                    #215b9a 84%,
+                    #071c39 100%
+                );
+
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            overflow-x: hidden;
         }
 
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
+        main, footer {
+            position: relative;
+            z-index: 2;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(
+                var(--max-width),
+                calc(100% - 48px)
+            );
+            margin: 0 auto;
+        }
+
 
         /* =========================================
-           HEADER (상단 네비게이션)
+           ✨ 초고화질 배경 이펙트 V2 (Ultra Flashy)
         ========================================= */
-        header {
-            height: 70px;
-            background-color: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            border-bottom: 1px solid var(--border-light);
-            z-index: 100;
+
+        .background-effects {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, rgba(10, 50, 100, 0.05), transparent 60%);
         }
 
-        .header-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--blue-primary);
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 40px;
-            height: 100%;
-        }
-
-        .nav-item {
-            position: relative;
-            display: flex;
-            align-items: center;
-            height: 100%;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-dark);
-            cursor: pointer;
-        }
-
-        .nav-item i {
-            margin-left: 5px;
-            font-size: 10px;
-            color: var(--text-light);
-        }
-
-        .dropdown {
+        /* 1. 오로라 & 딥 글로우 (회전하고 교차하는 거대한 빛) */
+        .bg-orb {
             position: absolute;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--white);
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            box-shadow: var(--shadow-sm);
-            width: 180px;
-            padding: 10px 0;
-            display: none; 
-            flex-direction: column;
-        }
-
-        .nav-item:hover .dropdown { display: flex; }
-
-        .dropdown li {
-            padding: 12px 20px;
-            font-size: 13px;
-            color: var(--text-light);
-            transition: 0.2s;
-        }
-
-        .dropdown li:hover {
-            color: var(--blue-primary);
-            background-color: var(--blue-light);
-            font-weight: 600;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .icon-bell {
-            width: 20px; height: 20px;
-            fill: none; stroke: var(--text-dark); stroke-width: 2;
-            cursor: pointer; transition: 0.2s;
-        }
-        .icon-bell:hover { stroke: var(--blue-primary); transform: scale(1.1); }
-
-        .user-profile {
-            width: 36px; height: 36px;
-            background-color: var(--blue-light);
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--blue-primary);
-            cursor: pointer; transition: 0.2s;
+            filter: blur(120px);
+            opacity: 0.6;
+            animation: orb-complex-float linear infinite alternate;
         }
-        .user-profile:hover { background-color: var(--blue-primary); color: white; }
+        .orb-1 { width: 60vw; height: 60vw; background: rgba(40, 117, 214, 0.35); top: -20%; left: -10%; animation-duration: 18s; }
+        .orb-2 { width: 50vw; height: 50vw; background: rgba(159, 211, 245, 0.25); bottom: -10%; right: -10%; animation-duration: 22s; animation-delay: -5s; }
+        .orb-3 { width: 70vw; height: 40vw; background: rgba(16, 75, 145, 0.4); top: 30%; left: 15%; filter: blur(150px); transform-origin: center; animation: orb-spin 30s linear infinite; }
 
-        /* =========================================
-           MAIN CONTENT AREA
-        ========================================= */
-        main {
-            flex: 1;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        @keyframes orb-complex-float {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            50% { transform: translate(5vw, 5vh) scale(1.15); opacity: 0.8; }
+            100% { transform: translate(-5vw, 8vh) scale(0.9); opacity: 0.4; }
+        }
+        @keyframes orb-spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
         }
 
-        /* --- 좌측 플로팅 캘린더 --- */
-        .left-sidebar {
+        /* 2. 다이내믹 3D 하이퍼스페이스 그리드 */
+        .bg-grid-container {
             position: absolute;
-            left: 0;
-            top: 40px;
-            display: flex;
-            align-items: flex-start;
-            z-index: 10;
+            bottom: -30%; left: -50%;
+            width: 200%; height: 100%;
+            transform: perspective(800px) rotateX(70deg);
+            transform-origin: bottom center;
+            opacity: 0.45;
+            mask-image: linear-gradient(to top, black 10%, transparent 80%);
+            -webkit-mask-image: linear-gradient(to top, black 10%, transparent 80%);
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 200%;
+            background-image:
+                linear-gradient(rgba(159, 211, 245, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(159, 211, 245, 0.5) 1px, transparent 1px);
+            background-size: 80px 80px;
+            animation: grid-forward 10s linear infinite;
+        }
+        @keyframes grid-forward {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(80px); }
         }
 
-        .tab-left {
-            width: 50px;
-            background-color: #5b8def;
-            color: var(--white);
-            border-radius: 0 16px 16px 0;
-            padding: 20px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            box-shadow: var(--shadow-sm);
-            cursor: pointer;
-            transition: 0.3s;
+        /* 3. 유성우 쏟아지는 효과 (Shooting Data Meteors) */
+        .meteor-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            transform: rotate(-25deg) scale(1.5);
         }
-        .tab-left:hover { background-color: var(--blue-primary); padding-left: 5px; }
-
-        .tab-left span {
-            writing-mode: vertical-rl;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        .calendar-card {
-            background: var(--white);
-            width: 300px;
-            margin-left: 20px;
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            padding: 30px 25px;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            transform-origin: left center;
-        }
-
-        .calendar-card.hidden {
+        .meteor {
+            position: absolute;
+            width: 2px; height: 180px;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.9), #fff);
+            animation: meteor-fall linear infinite;
             opacity: 0;
-            transform: scaleX(0);
-            margin-left: 0;
-            width: 0;
-            padding-left: 0;
-            padding-right: 0;
+            border-radius: 4px;
+            box-shadow: 0 0 25px 2px rgba(97, 170, 255, 0.8);
         }
-
-        .cal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 25px;
-        }
-
-        .cal-month {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .cal-arrow {
-            color: #a0aec0; cursor: pointer; padding: 5px; font-weight: bold; transition: 0.2s;
-        }
-        .cal-arrow:hover { color: var(--blue-primary); }
-
-        .cal-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px 0;
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-dark);
-        }
-
-        .cal-grid .day-name {
-            color: var(--text-light);
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .cal-grid .date {
-            position: relative;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
+        /* 유성의 머리부분 (눈부신 빛망울) */
+        .meteor::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: -2px; width: 6px; height: 6px;
+            background: #fff;
             border-radius: 50%;
+            box-shadow: 0 0 30px 10px rgba(159, 211, 245, 1);
         }
-
-        .cal-grid .date:hover {
-            background-color: #f1f5f9;
-        }
-
-        .cal-grid .date.active {
-            background-color: var(--blue-light);
-            color: var(--blue-primary);
-            font-weight: 800;
-            box-shadow: inset 0 0 0 1px var(--blue-primary);
-        }
-
-        .cal-grid .date.has-event-blue::after {
-            content: ""; position: absolute; bottom: 0;
-            width: 4px; height: 4px; border-radius: 50%; background: var(--blue-primary);
-        }
-        .cal-grid .date.has-event-mint::after {
-            content: ""; position: absolute; bottom: 0;
-            width: 4px; height: 4px; border-radius: 50%; background: var(--mint);
-        }
-
-        .cal-schedule {
-            margin-top: 30px;
-            border-top: 1px solid var(--border-light);
-            padding-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .schedule-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 6px;
-            transition: 0.2s;
-        }
-        .schedule-item:hover { background-color: #f8fafc; }
+        .m-1 { left: 20%; animation-duration: 3.5s; animation-delay: 0.5s; }
+        .m-2 { left: 40%; animation-duration: 5s; animation-delay: 2s; height: 280px; }
+        .m-3 { left: 60%; animation-duration: 4s; animation-delay: 1.5s; }
+        .m-4 { left: 80%; animation-duration: 6s; animation-delay: 3.5s; height: 200px; }
+        .m-5 { left: 90%; animation-duration: 4.5s; animation-delay: 1s; }
         
-        .schedule-item span:first-child {
-            display: flex; align-items: center; gap: 8px;
-        }
-        .schedule-item span:first-child::before {
-            content: ""; display: block; width: 6px; height: 6px; border-radius: 50%;
-        }
-        .item-blue span:first-child::before { background: var(--blue-primary); }
-        .item-mint span:first-child::before { background: var(--mint); }
-
-        .schedule-item .s-date {
-            color: var(--text-light);
-            font-weight: 500;
-            font-size: 12px;
+        @keyframes meteor-fall {
+            0% { transform: translateY(-500px); opacity: 0; }
+            10% { opacity: 1; }
+            50% { opacity: 1; }
+            100% { transform: translateY(150vh); opacity: 0; }
         }
 
-        /* --- 중앙 코칭 섹션 --- */
-        .center-panel {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: 0.4s;
+        /* 4. 반짝이는 보케(Bokeh) & 입자 (Twinkling Particles) */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: #fff;
+            animation: float-up linear infinite, twinkle ease-in-out infinite alternate;
+        }
+        /* 흐릿하게 빛나는 보케 덩어리 */
+        .p-glow {
+            box-shadow: 0 0 25px 8px rgba(159, 211, 245, 0.9);
+            opacity: 0.5;
+        }
+        /* 선명하게 반짝이는 별빛 입자 */
+        .p-sparkle {
+            box-shadow: 0 0 10px 2px #fff;
         }
 
-        .greeting h1 {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--navy);
-            line-height: 1.4;
-            margin-bottom: 10px;
+        .pt-1 { width: 5px; height: 5px; left: 15%; top: 90%; animation-duration: 12s, 2s; animation-delay: 0s, 0s; }
+        .pt-2 { width: 3px; height: 3px; left: 35%; top: 95%; animation-duration: 16s, 1.5s; animation-delay: 4s, 1s; }
+        .pt-3 { width: 7px; height: 7px; left: 55%; top: 85%; animation-duration: 14s, 3s; animation-delay: 2s, 0.5s; }
+        .pt-4 { width: 4px; height: 4px; left: 75%; top: 90%; animation-duration: 18s, 2.5s; animation-delay: 7s, 1.5s; }
+        .pt-5 { width: 5px; height: 5px; left: 85%; top: 95%; animation-duration: 15s, 3.5s; animation-delay: 3s, 2s; }
+        .pt-6 { width: 14px; height: 14px; left: 25%; top: 90%; animation-duration: 20s, 5s; animation-delay: 5s, 0s; filter: blur(3px); }
+        .pt-7 { width: 18px; height: 18px; left: 65%; top: 80%; animation-duration: 22s, 4.5s; animation-delay: 1s, 2s; filter: blur(4px); }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) translateX(0) scale(1); }
+            100% { transform: translateY(-120vh) translateX(60px) scale(1.5); }
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.1; }
+            100% { opacity: 1; }
         }
 
-        .greeting p {
-            font-size: 15px;
-            color: var(--text-light);
-            margin-bottom: 25px;
-        }
 
-        .progress-badge {
-            background: var(--white);
-            border: 1px solid var(--border-light);
-            padding: 10px 24px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-light);
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 40px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .progress-badge:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        /* =========================================
+           공통 섹션
+        ========================================= */
 
-        .progress-badge .blue { color: var(--blue-primary); }
-        .progress-badge .mint { color: var(--mint); }
-
-        /* 집 짓기 일러스트 영역 (SVG 컨테이너) */
-        .illustration-placeholder {
-            width: 380px;
-            height: 250px;
-            margin-bottom: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .status-bar {
-            display: flex;
-            align-items: center;
-            gap: 40px;
+        .section {
+            position: relative;
+            padding: 150px 0;
             background: transparent;
         }
 
-        .status-item {
-            display: flex;
+        .section-label {
+            display: inline-flex;
             align-items: center;
             gap: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-dark);
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .status-item:hover { color: var(--blue-primary); }
-
-        .status-item svg {
-            width: 20px; height: 20px;
-            stroke: var(--text-light); fill: none; stroke-width: 2;
-            transition: 0.2s;
-        }
-        .status-item:hover svg { stroke: var(--blue-primary); transform: translateY(-2px); }
-        
-        .status-item span.count { color: var(--blue-primary); }
-        .status-item span.count-mint { color: var(--mint); }
-
-        /* --- 우측 플로팅 서랍 탭 --- */
-        .right-sidebar {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            align-items: center;
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 10;
-        }
-
-        .right-sidebar.closed {
-            transform: translate(320px, -50%); 
-        }
-
-        .tab-right {
-            background-color: #e6fcf5;
-            border: 1px solid #a7f3d0;
-            border-right: none;
-            border-radius: 20px 0 0 20px;
-            padding: 25px 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            box-shadow: -4px 4px 15px rgba(16, 185, 129, 0.1);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .tab-right:hover { background-color: var(--mint-light); padding-right: 20px; }
-
-        .tab-right svg {
-            width: 24px; height: 24px; stroke: var(--mint); fill: none; stroke-width: 2;
-        }
-
-        .tab-right .tab-text {
-            color: var(--mint);
+            color: var(--blue-dark);
             font-size: 12px;
-            font-weight: 700;
-            text-align: center;
-            line-height: 1.4;
+            font-weight: 800;
+            letter-spacing: 0.14em;
         }
 
-        .todo-panel {
-            width: 320px;
-            height: 500px;
-            background: var(--white);
-            border-left: 1px solid var(--border-light);
-            box-shadow: var(--shadow-lg);
-            padding: 30px;
+        .section-label::before {
+            content: "";
+            width: 30px;
+            height: 2px;
+            background: var(--blue);
+        }
+
+        .section-title {
+            margin-top: 24px;
+            font-size: clamp(44px, 5vw, 78px);
+            line-height: 1.12;
+            letter-spacing: -0.07em;
+            font-weight: 850;
+            color: var(--navy);
+            word-break: keep-all;
+        }
+
+        .section-title .blue {
+            color: var(--blue);
+        }
+
+        .section-description {
+            max-width: 700px;
+            margin-top: 26px;
+            color: var(--text-light);
+            font-size: 17px;
+            line-height: 1.9;
+            letter-spacing: -0.03em;
+            word-break: keep-all;
+        }
+
+
+        /* =========================================
+           NAVIGATION
+        ========================================= */
+
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: min(
+                1120px,
+                calc(100% - 32px)
+            );
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 68px;
+            padding: 0 22px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(10, 50, 100, 0.08);
+            backdrop-filter: blur(18px);
+            transition: 0.3s ease;
+        }
+
+        nav.scrolled .nav-inner {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 12px 40px rgba(9, 42, 84, 0.1);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--navy);
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+
+        /* 로고 이미지 스타일 */
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(7, 28, 57, 0.15);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            color: #657589;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .nav-links a {
+            transition: 0.25s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--blue);
+        }
+
+        .nav-button {
+            padding: 11px 18px;
+            border-radius: 10px;
+            background: var(--navy);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            transition: 0.25s ease;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            background: var(--blue-dark);
+        }
+
+
+        /* =========================================
+           HERO
+           첫 화면
+        ========================================= */
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 140px 30px 100px;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 650px;
+            height: 650px;
+            right: -380px;
+            top: -320px;
+            border-radius: 50%;
+            border: 1px solid rgba(40, 117, 214, 0.08);
+            box-shadow:
+                0 0 0 80px rgba(40, 117, 214, 0.025),
+                0 0 0 160px rgba(40, 117, 214, 0.015);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(1100px, 80%);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(40, 117, 214, 0.18), transparent);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .hero-title {
+            color: var(--navy);
+            font-size: clamp(58px, 7.2vw, 118px);
+            font-weight: 850;
+            line-height: 1.1;
+            letter-spacing: -0.09em;
+            word-break: keep-all;
+        }
+
+        .hero-title-line {
+            position: relative;
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(38px);
+            filter: blur(10px);
+            animation: hero-title-reveal 1.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            will-change: transform, opacity, filter;
+        }
+
+        .hero-title-line:first-child {
+            animation-delay: 0.05s;
+        }
+
+        .hero-title-line.blue {
+            animation-delay: 0.22s;
+        }
+
+        .hero-title-line::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -15%;
+            width: 30%;
+            pointer-events: none;
+            opacity: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+            transform: skewX(-18deg) translateX(-180%);
+            animation: hero-title-shine 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation-delay: 0.65s;
+        }
+
+        .hero-title-line.blue::after {
+            animation-delay: 0.82s;
+        }
+
+        .hero-title .blue {
+            color: var(--blue);
+        }
+
+        .hero-description {
+            max-width: 700px;
+            margin: 42px auto 0;
+            color: var(--text-light);
+            font-size: clamp(17px, 1.5vw, 22px);
+            font-weight: 400;
+            line-height: 1.85;
+            letter-spacing: -0.035em;
+            word-break: keep-all;
+            animation: hero-description-in 1s 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .hero-description strong {
+            color: var(--blue-dark);
+            font-weight: 850;
+        }
+
+        .scroll-down {
+            position: absolute;
+            left: 50%;
+            bottom: 45px;
+            transform: translateX(-50%);
             display: flex;
             flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: #8a9aad;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            animation: hero-description-in 1s 0.5s ease both;
         }
 
-        .todo-header {
-            font-size: 18px;
+        .scroll-line {
+            width: 1px;
+            height: 35px;
+            background: linear-gradient(to bottom, var(--blue), transparent);
+            animation: scroll-move 1.8s infinite ease-in-out;
+        }
+
+
+        /* =========================================
+           문제 제기
+        ========================================= */
+
+        .problem-section {
+            background: transparent;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 100px;
+        }
+
+        .problem-left {
+            position: sticky;
+            top: 140px;
+            align-self: start;
+        }
+
+        .problem-list {
+            border-top: 1px solid var(--line);
+        }
+
+        .problem-item {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            gap: 25px;
+            padding: 35px 0;
+            border-bottom: 1px solid var(--line);
+            transition: 0.3s ease;
+        }
+
+        .problem-item:hover {
+            padding-left: 15px;
+        }
+
+        .problem-number {
+            color: rgba(40, 117, 214, 0.35);
+            font-size: 13px;
             font-weight: 800;
+        }
+
+        .problem-item h3 {
+            margin-bottom: 10px;
             color: var(--navy);
-            margin-bottom: 20px;
+            font-size: 22px;
+            letter-spacing: -0.045em;
+        }
+
+        .problem-item p {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.85;
+            letter-spacing: -0.02em;
+        }
+
+
+        /* =========================================
+           솔루션
+        ========================================= */
+
+        .solution-section {
+            background: transparent;
+        }
+
+        .solution-flow {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 18px;
+            margin-top: 80px;
+        }
+
+        .solution-step {
+            position: relative;
+            padding-top: 75px;
+        }
+
+        .solution-step::before {
+            content: "";
+            position: absolute;
+            top: 24px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: rgba(40, 117, 214, 0.25);
+        }
+
+        .solution-number {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--blue-dark);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .solution-step h3 {
+            margin-bottom: 10px;
+            color: var(--navy);
+            font-size: 17px;
+            letter-spacing: -0.04em;
+        }
+
+        .solution-step p {
+            color: var(--text-light);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+
+        /* =========================================
+           핵심 기능 (디자인 수정됨: 글래스모피즘 카드)
+        ========================================= */
+
+        .features-section {
+            background: transparent;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px; /* 간격 추가 */
+            margin-top: 80px;
+        }
+
+        .feature {
+            min-height: 300px;
+            padding: 40px 35px;
+            background: rgba(255, 255, 255, 0.45); /* 부드러운 반투명 배경 */
+            border: 1px solid rgba(255, 255, 255, 0.6); /* 은은한 테두리 */
+            border-radius: 24px; /* 모서리 둥글게 */
+            box-shadow: 0 10px 30px rgba(7, 28, 57, 0.06); /* 부드러운 그림자 */
+            backdrop-filter: blur(16px); /* 글래스모피즘 블러 효과 */
+            -webkit-backdrop-filter: blur(16px);
+            /* 트랜지션을 좀 더 탄력있고 부드럽게 수정 */
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .feature:hover {
+            background: rgba(255, 255, 255, 0.85);
+            /* 카드가 확실하게 위로 뜨면서 살짝 커지는 다이내믹한 효과 */
+            transform: translateY(-12px) scale(1.02);
+            /* 푸른빛이 도는 깊은 그림자와 안쪽으로 살짝 빛나는 테두리 효과 추가 */
+            box-shadow: 0 25px 50px rgba(40, 117, 214, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+            border-color: rgba(255, 255, 255, 1);
+        }
+
+        .feature.large { grid-column: span 7; }
+        .feature.medium { grid-column: span 5; }
+        .feature.small { grid-column: span 4; }
+
+        .feature-number {
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.13em;
+        }
+
+        .feature h3 {
+            margin: 38px 0 15px;
+            color: var(--navy);
+            font-size: 26px;
+            letter-spacing: -0.055em;
+        }
+
+        .feature p {
+            max-width: 420px;
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.9;
+            letter-spacing: -0.02em;
+        }
+
+
+        /* =========================================
+           서비스 로드맵
+        ========================================= */
+
+        .roadmap-section {
+            position: relative;
+            overflow: hidden;
+            padding: 200px 0 150px;
+            background: transparent;
+            color: white;
+        }
+
+        .roadmap-section::before {
+            content: "";
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            right: -250px;
+            top: 30%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(97, 170, 255, 0.18), transparent 70%);
+            pointer-events: none;
+        }
+
+        .roadmap-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .roadmap-section .section-label { color: #b8d8ff; }
+        .roadmap-section .section-label::before { background: #a7d0ff; }
+        .roadmap-section .section-title { color: white; }
+        .roadmap-section .section-description { color: rgba(228, 240, 255, 0.75); }
+
+        .timeline {
+            position: relative;
+            margin-top: 80px;
+            padding-left: 45px;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            bottom: 20px;
+            width: 1px;
+            background: linear-gradient(to bottom, #9bcaff, rgba(155, 202, 255, 0.08));
+        }
+
+        .timeline-item {
+            position: relative;
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 60px;
+            margin-bottom: 55px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 4px;
+            left: -45px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 4px solid #24568f;
+            background: #b9dbff;
+        }
+
+        .timeline-period {
+            color: #9ac9ff;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+        }
+
+        .timeline-content {
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(190, 220, 255, 0.14);
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 12px;
+            color: white;
+            font-size: 26px;
+            letter-spacing: -0.05em;
+        }
+
+        .timeline-content p {
+            color: rgba(226, 238, 255, 0.7);
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+
+        /* =========================================
+           마지막 CTA
+        ========================================= */
+
+        .cta-section {
+            padding: 150px 0 180px;
+            background: transparent;
+            text-align: center; 
+        }
+
+        .cta {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cta::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            max-width: 900px;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(40, 117, 214, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .cta h2 {
+            color: white;
+            font-size: clamp(42px, 6vw, 78px);
+            line-height: 1.2;
+            letter-spacing: -0.05em;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
+        }
+
+        .cta p {
+            max-width: 580px;
+            margin: 30px 0 45px;
+            color: rgba(235, 244, 255, 0.75);
+            font-size: 17px;
+            line-height: 1.9;
+            word-break: keep-all;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 45px;
+            border-radius: 50px; 
+            background: linear-gradient(135deg, #2875d6, #104b91);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            box-shadow: 0 10px 25px rgba(40, 117, 214, 0.3);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, #3a8cf0, #145cae);
+            box-shadow: 0 15px 40px rgba(40, 117, 214, 0.6);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+            padding: 50px 0 70px;
+            background: transparent;
+        }
+
+        .footer-inner {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-        }
-        
-        .todo-header span {
-            color: var(--mint);
-            font-size: 14px;
-        }
-
-        .todo-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            align-items: flex-end;
+            gap: 30px;
+            padding-top: 30px;
+            border-top: 1px solid var(--line);
+            color: rgba(220, 235, 255, 0.65);
+            font-size: 12px;
         }
 
-        .todo-item {
+        .footer-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-dark);
-            cursor: pointer;
-            padding: 10px;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .footer-logo {
+            width: 32px;
+            height: 32px;
             border-radius: 8px;
-            transition: 0.2s;
-        }
-        .todo-item:hover { background-color: #f8fafc; }
-
-        .todo-item input[type="checkbox"] {
-            width: 18px; height: 18px;
-            accent-color: var(--mint);
-            cursor: pointer;
+            object-fit: cover;
         }
         
-        .todo-item.done {
+        .footer-right {
+            text-align: right;
+        }
+
+        .footer-links {
+            margin-bottom: 12px;
+        }
+
+        .tos-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            color: rgba(220, 235, 255, 0.9);
+            font-size: 11px;
+            font-weight: 600;
+            font-family: inherit;
+            padding: 6px 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tos-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .copyright {
+            line-height: 1.6;
+        }
+        
+        /* 추가됨: 팀원 이니셜 텍스트 스타일 */
+        .team-initials {
+            margin-top: 14px;
+            display: inline-block;
+            color: #9bcaff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+        }
+
+
+        /* =========================================
+           이용약관 모달 팝업 스타일
+        ========================================= */
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(4, 15, 30, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 650px;
+            max-height: 85vh;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            color: var(--text);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: none;
+            border: none;
+            font-size: 28px;
             color: var(--text-light);
-            text-decoration: line-through;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--navy);
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            color: var(--navy);
+            margin-bottom: 25px;
+            letter-spacing: -0.03em;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .modal-body {
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+
+        .modal-body h4 {
+            color: var(--navy);
+            font-size: 15px;
+            margin: 28px 0 10px;
+            letter-spacing: -0.02em;
+        }
+        
+        .modal-body h4:first-child {
+            margin-top: 0;
+        }
+
+        .modal-body p {
+            margin-bottom: 15px;
+            word-break: keep-all;
+        }
+        
+        .modal-body ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .modal-body li {
+            margin-bottom: 6px;
+        }
+
+
+        /* =========================================
+           스크롤 등장 애니메이션
+        ========================================= */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* =========================================
+           KEYFRAMES
+        ========================================= */
+
+        @keyframes hero-title-in {
+            from { opacity: 0; transform: translateY(28px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes hero-title-reveal {
+            0% { opacity: 0; transform: translateY(38px); filter: blur(10px); }
+            65% { opacity: 1; filter: blur(1px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        @keyframes hero-title-shine {
+            0% { opacity: 0; transform: skewX(-18deg) translateX(-180%); }
+            15% { opacity: 0.65; }
+            65% { opacity: 0.35; }
+            100% { opacity: 0; transform: skewX(-18deg) translateX(520%); }
+        }
+
+        @keyframes hero-description-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scroll-move {
+            0% { opacity: 0.3; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(8px); }
+            100% { opacity: 0.3; transform: translateY(0); }
+        }
+
+
+        /* =========================================
+           태블릿
+        ========================================= */
+
+        @media (max-width: 1050px) {
+            .problem-grid {
+                grid-template-columns: 1fr;
+                gap: 70px;
+            }
+            .problem-left { position: static; }
+            .solution-flow {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 50px 25px;
+            }
+            .feature.large, .feature.medium, .feature.small {
+                grid-column: span 6;
+            }
+        }
+
+
+        /* =========================================
+           모바일
+        ========================================= */
+
+        @media (max-width: 700px) {
+            .container { width: calc(100% - 32px); }
+            .section { padding: 100px 0; }
+            .nav-links { display: none; }
+            .nav-inner { min-height: 60px; }
+            .hero { padding: 130px 22px 100px; }
+            .hero-title {
+                font-size: clamp(48px, 13vw, 72px);
+                line-height: 1.16;
+                letter-spacing: -0.08em;
+            }
+            .hero-description {
+                margin-top: 30px;
+                font-size: 16px;
+                line-height: 1.8;
+            }
+            .hero-description br { display: none; }
+            .scroll-down { bottom: 30px; }
+            .solution-flow {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 50px 20px;
+            }
+            .solution-step::before { display: none; }
+            .feature.large, .feature.medium, .feature.small {
+                grid-column: span 12;
+            }
+            .feature { min-height: 250px; }
+            .timeline { padding-left: 30px; }
+            .timeline::before { left: 7px; }
+            .timeline-item {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                margin-bottom: 45px;
+            }
+            .timeline-dot { left: -30px; }
+            
+            .cta-section { padding: 100px 0 120px; }
+            .cta h2 { line-height: 1.25; }
+            
+            .footer-inner { 
+                flex-direction: column; 
+                align-items: flex-start;
+            }
+            .footer-right {
+                text-align: left;
+                margin-top: 20px;
+            }
+            
+            .modal-content {
+                padding: 30px 20px;
+            }
         }
 
     </style>
 </head>
+
 <body>
 
-    <header>
-        <a href="index.html" class="header-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            청춘비서
-        </a>
-
-        <ul class="nav-menu">
-            <li class="nav-item">
-                공지사항 <i>▼</i>
-                <ul class="dropdown">
-                    <li>주거 지원정책 공지</li>
-                    <li>청약 및 임대주택 공지</li>
-                    <li>청년 정책</li>
-                    <li>지원금 일정</li>
-                </ul>
-            </li>
-            <li class="nav-item">청춘비서 도서관 <i>▼</i></li>
-            <li class="nav-item" onclick="alert('준비 중인 기능입니다.')">주거비 계산기</li>
-            <li class="nav-item">마이페이지 <i>▼</i></li>
-        </ul>
-
-        <div class="header-actions">
-            <svg class="icon-bell" id="btn-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-            <div class="user-profile" id="btn-profile">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
+    <!-- =========================================================
+         ✨ 초고화질 3D & 파티클 배경 이펙트 (Startup Vibe V2) 
+    ========================================================== -->
+    <div class="background-effects">
+        <!-- 1. 3D 입체 그리드 -->
+        <div class="bg-grid-container">
+            <div class="bg-grid"></div>
         </div>
-    </header>
+
+        <!-- 2. 오로라 & 딥 글로우 -->
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <div class="bg-orb orb-3"></div>
+
+        <!-- 3. 대각선 유성우 (데이터 흐름) -->
+        <div class="meteor-container">
+            <div class="meteor m-1"></div>
+            <div class="meteor m-2"></div>
+            <div class="meteor m-3"></div>
+            <div class="meteor m-4"></div>
+            <div class="meteor m-5"></div>
+        </div>
+
+        <!-- 4. 보케(Bokeh) & 별빛 입자 -->
+        <div class="particle p-sparkle pt-1"></div>
+        <div class="particle p-sparkle pt-2"></div>
+        <div class="particle p-sparkle pt-3"></div>
+        <div class="particle p-sparkle pt-4"></div>
+        <div class="particle p-sparkle pt-5"></div>
+        <div class="particle p-glow pt-6"></div>
+        <div class="particle p-glow pt-7"></div>
+    </div>
+    <!-- ========================================================= -->
+
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="#home" class="brand">
+                <!-- 텍스트 로고 대신 이미지 로고 삽입 -->
+                <img src="image_794eed.jpg" alt="청춘비서 로고" class="brand-logo">
+                청춘비서
+            </a>
+            <div class="nav-links">
+                <a href="#problem">문제</a>
+                <a href="#solution">솔루션</a>
+                <a href="#features">기능</a>
+                <a href="#roadmap">로드맵</a>
+            </div>
+            <!-- 👉 수정됨: 네비게이션 대시보드 링크 -->
+            <a href="dashboard.html" class="nav-button">청춘비서 시작하기</a>
+        </div>
+    </nav>
 
     <main>
-        <!-- 좌측 캘린더 영역 -->
-        <aside class="left-sidebar" id="left-sidebar">
-            <div class="tab-left" id="btn-cal-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                <span>캘린더</span>
-            </div>
-            
-            <div class="calendar-card" id="calendar-card">
-                <div class="cal-header">
-                    나의 캘린더 
-                    <span class="cal-arrow" onclick="alert('월간 일정을 확인합니다.')">&lt;</span>
-                </div>
-                
-                <div class="cal-month">
-                    <span class="cal-arrow">&lt;</span>
-                    2026년 8월
-                    <span class="cal-arrow">&gt;</span>
-                </div>
 
-                <div class="cal-grid" id="cal-grid">
-                    <div class="day-name">일</div><div class="day-name">월</div><div class="day-name">화</div><div class="day-name">수</div><div class="day-name">목</div><div class="day-name">금</div><div class="day-name">토</div>
-                    <div class="date" style="color:#cbd5e0;">26</div><div class="date" style="color:#cbd5e0;">27</div><div class="date" style="color:#cbd5e0;">28</div><div class="date" style="color:#cbd5e0;">29</div><div class="date" style="color:#cbd5e0;">30</div><div class="date" style="color:#cbd5e0;">31</div><div class="date">1</div>
-                    <div class="date">2</div><div class="date">3</div><div class="date">4</div><div class="date">5</div><div class="date">6</div><div class="date">7</div><div class="date has-event-blue">8</div>
-                    <div class="date">9</div><div class="date">10</div><div class="date">11</div><div class="date">12</div><div class="date">13</div><div class="date">14</div><div class="date">15</div>
-                    <div class="date">16</div><div class="date">17</div><div class="date">18</div><div class="date active has-event-mint">19</div><div class="date">20</div><div class="date">21</div><div class="date">22</div>
-                    <div class="date">23</div><div class="date">24</div><div class="date">25</div><div class="date">26</div><div class="date">27</div><div class="date">28</div><div class="date">29</div>
-                    <div class="date">30</div><div class="date">31</div><div class="date" style="color:#cbd5e0;">1</div><div class="date" style="color:#cbd5e0;">2</div><div class="date" style="color:#cbd5e0;">3</div><div class="date" style="color:#cbd5e0;">4</div><div class="date" style="color:#cbd5e0;">5</div>
-                </div>
-
-                <div class="cal-schedule">
-                    <div class="schedule-item item-blue" onclick="alert('체크리스트 창으로 이동합니다.')">
-                        <span>이사 준비 체크리스트</span>
-                        <span class="s-date">8.8(토)</span>
-                    </div>
-                    <div class="schedule-item item-mint" onclick="alert('전월세 상담 화면으로 이동합니다.')">
-                        <span>전월세 계약 상담</span>
-                        <span class="s-date">8.19(수)</span>
-                    </div>
-                </div>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="hero-title-line">청춘의 앞길에도</span><br>
+                    <span class="hero-title-line blue">비서가 필요하다.</span>
+                </h1>
+                <p class="hero-description">
+                    청춘의 막막한 앞길을 혼자 헤매지 않도록,<br>
+                    필요한 길을 찾아주는 비서 —
+                    <strong>청춘비서</strong>
+                </p>
             </div>
-        </aside>
+            <a href="#problem" class="scroll-down">
+                SCROLL
+                <span class="scroll-line"></span>
+            </a>
+        </section>
 
-        <!-- 중앙 메인 코칭 영역 -->
-        <section class="center-panel">
-            <div class="greeting">
-                <h1>지안님, 오늘도<br>독립에 한 걸음 가까워졌어요</h1>
-                <p>필요한 일정과 할 일을 가볍게 확인해 보세요</p>
-            </div>
-            
-            <div class="progress-badge" onclick="alert('전체 자립 로드맵을 확인합니다.')">
-                독립까지 <span class="blue">87일</span> · 오늘 진행률 <span class="mint" id="main-progress">0%</span>
-            </div>
-
-            <!-- 코드로 짠 '집 지어지는 SVG 그래픽' 영역 -->
-            <div class="illustration-placeholder" id="house-illustration">
-                <svg id="house-svg" viewBox="0 0 380 250" style="width:100%; height:100%; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
-                    <!-- 0. 공터/설계도 (항상 표시) -->
-                    <g id="house-blueprint" stroke="#cbd5e0" stroke-width="2" fill="none" stroke-dasharray="6,4">
-                        <polyline points="110,105 190,40 270,105" />
-                        <rect x="130" y="105" width="120" height="85" />
-                        <rect x="115" y="190" width="150" height="10" />
-                        <rect x="175" y="150" width="30" height="40" />
-                        <rect x="145" y="125" width="20" height="20" />
-                    </g>
-                    <!-- 바닥 지지선 -->
-                    <line x1="40" y1="200" x2="340" y2="200" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" />
-            
-                    <!-- 1. 기초 공사 (20%+) -->
-                    <g id="house-foundation" style="opacity:0; transition: opacity 0.5s ease-in-out;">
-                        <rect x="115" y="190" width="150" height="10" fill="#94a3b8" rx="3" />
-                    </g>
-            
-                    <!-- 2. 골조 및 벽면 (40%+) -->
-                    <g id="house-walls" style="opacity:0; transition: opacity 0.5s ease-in-out;">
-                        <rect x="130" y="105" width="120" height="85" fill="#eff6ff" stroke="#3b82f6" stroke-width="3" />
-                    </g>
-            
-                    <!-- 3. 지붕 완성 (60%+) -->
-                    <g id="house-roof" style="opacity:0; transition: opacity 0.5s ease-in-out;">
-                        <polygon points="105,105 190,35 275,105" fill="#3b82f6" stroke="#2563eb" stroke-width="3" stroke-linejoin="round" />
-                        <!-- 지붕 음영 디테일 -->
-                        <polygon points="190,35 275,105 190,105" fill="#2563eb" opacity="0.2" />
-                    </g>
-            
-                    <!-- 4. 인테리어/디테일 (80%+) -->
-                    <g id="house-details" style="opacity:0; transition: opacity 0.5s ease-in-out;">
-                        <!-- 문 -->
-                        <rect x="175" y="150" width="30" height="40" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2" rx="2" />
-                        <circle cx="200" cy="170" r="2.5" fill="#2563eb" />
-                        <!-- 창문 -->
-                        <rect x="145" y="125" width="20" height="20" fill="#ffffff" stroke="#3b82f6" stroke-width="2" rx="2" />
-                        <line x1="155" y1="125" x2="155" y2="145" stroke="#3b82f6" stroke-width="2" />
-                        <line x1="145" y1="135" x2="165" y2="135" stroke="#3b82f6" stroke-width="2" />
-                    </g>
-            
-                    <!-- 5. 조경 및 완공 효과 (100%) -->
-                    <g id="house-deco" style="opacity:0; transition: opacity 0.5s ease-in-out;">
-                        <!-- 해 -->
-                        <circle cx="90" cy="60" r="18" fill="#fcd34d" />
-                        <!-- 구름 -->
-                        <path d="M 270 60 Q 280 50 290 60 Q 305 55 310 70 Q 320 80 300 80 L 270 80 Q 255 80 260 65 Q 255 55 270 60 Z" fill="#e0e7ff" opacity="0.8" />
-                        <!-- 나무 -->
-                        <rect x="295" y="165" width="8" height="35" fill="#8B4513" rx="2" />
-                        <circle cx="299" cy="145" r="22" fill="#10b981" />
-                        <circle cx="285" cy="160" r="14" fill="#059669" />
-                        <circle cx="313" cy="160" r="14" fill="#34d399" />
-                        <!-- 바닥 풀 장식 -->
-                        <path d="M 100 200 Q 105 190 110 200" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
-                        <path d="M 280 200 Q 285 192 290 200" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
-                    </g>
-                </svg>
-            </div>
-
-            <div class="status-bar">
-                <div class="status-item">
-                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    예정 일정 <span class="count">3</span>
+        <section class="section problem-section" id="problem">
+            <div class="container problem-grid">
+                <div class="problem-left reveal">
+                    <div class="section-label">THE PROBLEM</div>
+                    <h2 class="section-title">
+                        청춘의 앞길은<br>생각보다 <span class="blue">막막합니다.</span>
+                    </h2>
+                    <p class="section-description">
+                        독립, 주거, 취업, 경제, 진로.
+                        청춘은 한 번에 수많은 선택을 해야 합니다.
+                        하지만 어디서부터 시작해야 하는지, 무엇이 나에게 필요한지 스스로 판단하기는 쉽지 않습니다.
+                    </p>
                 </div>
-                <div style="color:var(--border-light);">•</div>
-                <div class="status-item" id="btn-status-todo">
-                    <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                    오늘 할 일 <span class="count-mint" id="main-todo-count">0/5</span>
-                </div>
-                <div style="color:var(--border-light);">•</div>
-                <div class="status-item">
-                    <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    새 공고 <span class="count">2</span>
+                <div class="problem-list">
+                    <article class="problem-item reveal">
+                        <div class="problem-number">01</div>
+                        <div>
+                            <h3>무엇부터 해야 할지 모릅니다.</h3>
+                            <p>해야 할 일은 많지만 지금 나에게 가장 필요한 일이 무엇인지 판단하기 어렵습니다.</p>
+                        </div>
+                    </article>
+                    <article class="problem-item reveal">
+                        <div class="problem-number">02</div>
+                        <div>
+                            <h3>필요한 정보가 흩어져 있습니다.</h3>
+                            <p>주거, 취업, 금융, 복지 등 필요한 정보가 여러 곳에 흩어져 있어 청년이 직접 찾아야 합니다.</p>
+                        </div>
+                    </article>
+                    <article class="problem-item reveal">
+                        <div class="problem-number">03</div>
+                        <div>
+                            <h3>나에게 맞는 답을 찾기 어렵습니다.</h3>
+                            <p>같은 청년이라도 지역과 상황, 경제적 조건과 목표가 다르기 때문에 필요한 길도 달라집니다.</p>
+                        </div>
+                    </article>
+                    <article class="problem-item reveal">
+                        <div class="problem-number">04</div>
+                        <div>
+                            <h3>중요한 선택을 혼자 해야 합니다.</h3>
+                            <p>청춘의 중요한 선택 앞에서 단순한 정보가 아니라 함께 방향을 정리해줄 존재가 필요합니다.</p>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <!-- 우측 플로팅 서랍 탭 (기본 닫힘 상태) -->
-        <aside class="right-sidebar closed" id="right-sidebar">
-            <div class="tab-right" id="btn-todo-toggle">
-                <svg viewBox="0 0 24 24" style="stroke-width: 2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                <svg viewBox="0 0 24 24" style="margin-top: 10px;"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                <div class="tab-text" id="tab-todo-count">오늘 할 일<br>0/5</div>
-            </div>
-            
-            <!-- 투두리스트 패널 (항목 5개로 확장) -->
-            <div class="todo-panel">
-                <div class="todo-header">
-                    오늘의 로드맵
-                    <span id="panel-todo-ratio">0/5 완료</span>
+        <section class="section solution-section" id="solution">
+            <div class="container">
+                <div class="reveal">
+                    <div class="section-label">THE SOLUTION</div>
+                    <h2 class="section-title">
+                        청춘비서는<br><span class="blue">길을 대신 정하지 않습니다.</span>
+                    </h2>
+                    <p class="section-description">
+                        대신 지금 어디에 있는지 함께 살피고, 앞으로 갈 수 있는 길을 정리하며, 
+                        실제로 다음 행동까지 이어질 수 있도록 필요한 정보와 계획을 연결합니다.
+                    </p>
                 </div>
-                <div class="todo-list" id="todo-list">
-                    <label class="todo-item">
-                        <input type="checkbox">
-                        <span>독립 예산 계획 세우기</span>
-                    </label>
-                    <label class="todo-item">
-                        <input type="checkbox">
-                        <span>청년 맞춤형 전세대출 확인</span>
-                    </label>
-                    <label class="todo-item">
-                        <input type="checkbox">
-                        <span>마음에 드는 매물 임장가기</span>
-                    </label>
-                    <label class="todo-item">
-                        <input type="checkbox">
-                        <span>전월세 계약서 및 확정일자</span>
-                    </label>
-                    <label class="todo-item">
-                        <input type="checkbox">
-                        <span>전입신고 14일 이내 완료</span>
-                    </label>
+                <div class="solution-flow">
+                    <article class="solution-step reveal">
+                        <div class="solution-number">01</div>
+                        <h3>현재 진단</h3>
+                        <p>지금의 상황과 고민을 먼저 확인합니다.</p>
+                    </article>
+                    <article class="solution-step reveal">
+                        <div class="solution-number">02</div>
+                        <h3>상황 분석</h3>
+                        <p>개인의 조건과 목표를 분석합니다.</p>
+                    </article>
+                    <article class="solution-step reveal">
+                        <div class="solution-number">03</div>
+                        <h3>길 찾기</h3>
+                        <p>나에게 필요한 선택지와 정보를 찾습니다.</p>
+                    </article>
+                    <article class="solution-step reveal">
+                        <div class="solution-number">04</div>
+                        <h3>계획 만들기</h3>
+                        <p>실제로 실행 가능한 계획을 세웁니다.</p>
+                    </article>
+                    <article class="solution-step reveal">
+                        <div class="solution-number">05</div>
+                        <h3>하나씩 실행</h3>
+                        <p>해야 할 일을 차근차근 진행합니다.</p>
+                    </article>
+                    <article class="solution-step reveal">
+                        <div class="solution-number">06</div>
+                        <h3>다음 길</h3>
+                        <p>변화한 상황에 맞춰 다시 나아갑니다.</p>
+                    </article>
                 </div>
             </div>
-        </aside>
+        </section>
+
+        <section class="section features-section" id="features">
+            <div class="container">
+                <div class="reveal">
+                    <div class="section-label">CORE FEATURES</div>
+                    <h2 class="section-title">
+                        막막한 질문을<br><span class="blue">구체적인 다음 행동으로.</span>
+                    </h2>
+                    <p class="section-description">
+                        청춘비서는 단순히 정보를 보여주는 것을 넘어, 사용자의 상황을 바탕으로 
+                        필요한 길을 찾고 실제 행동으로 이어질 수 있도록 돕습니다.
+                    </p>
+                </div>
+                <div class="feature-grid">
+                    <article class="feature large reveal">
+                        <div class="feature-number">01 / PERSONAL GUIDE</div>
+                        <h3>개인 맞춤형 청춘 로드맵</h3>
+                        <p>사용자의 현재 상황과 목표를 바탕으로 앞으로 준비해야 할 과정과 필요한 정보를 개인별로 정리합니다.</p>
+                    </article>
+                    <article class="feature medium reveal">
+                        <div class="feature-number">02 / AI GUIDE</div>
+                        <h3>AI 기반 맞춤 안내</h3>
+                        <p>막연한 질문을 현재 상황에 맞는 구체적인 다음 단계로 안내합니다.</p>
+                    </article>
+                    <article class="feature small reveal">
+                        <div class="feature-number">03 / ROADMAP</div>
+                        <h3>단계별 계획</h3>
+                        <p>앞으로 무엇을 준비해야 하는지 순서에 맞춰 확인합니다.</p>
+                    </article>
+                    <article class="feature small reveal">
+                        <div class="feature-number">04 / TO-DO</div>
+                        <h3>실행 관리</h3>
+                        <p>생각에서 끝나지 않도록 실제 행동으로 연결합니다.</p>
+                    </article>
+                    <article class="feature small reveal">
+                        <div class="feature-number">05 / SUPPORT</div>
+                        <h3>필요한 정보 연결</h3>
+                        <p>필요한 지원과 제도를 상황에 맞게 찾아봅니다.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="roadmap-section" id="roadmap">
+            <div class="container roadmap-content">
+                <div class="reveal">
+                    <div class="section-label">YOUR ROADMAP</div>
+                    <h2 class="section-title">막막했던 앞길을<br>하나씩 선명하게.</h2>
+                    <p class="section-description">
+                        청춘비서는 거창한 답을 대신 정해주지 않습니다. 
+                        지금의 위치에서 다음 한 걸음을 찾을 수 있도록 필요한 길을 함께 정리합니다.
+                    </p>
+                </div>
+                <div class="timeline">
+                    <article class="timeline-item reveal">
+                        <span class="timeline-dot"></span>
+                        <div class="timeline-period">STEP 01 · NOW</div>
+                        <div class="timeline-content">
+                            <h3>나는 지금 어디에 있을까?</h3>
+                            <p>현재 상황과 고민을 정리하고 지금 가장 먼저 생각해야 할 문제를 찾습니다.</p>
+                        </div>
+                    </article>
+                    <article class="timeline-item reveal">
+                        <span class="timeline-dot"></span>
+                        <div class="timeline-period">STEP 02 · FIND</div>
+                        <div class="timeline-content">
+                            <h3>나에게 필요한 길 찾기</h3>
+                            <p>나의 목표와 조건에 따라 가능한 선택지와 필요한 정보를 확인합니다.</p>
+                        </div>
+                    </article>
+                    <article class="timeline-item reveal">
+                        <span class="timeline-dot"></span>
+                        <div class="timeline-period">STEP 03 · PLAN</div>
+                        <div class="timeline-content">
+                            <h3>나만의 계획 만들기</h3>
+                            <p>막연했던 고민을 실제로 실행 가능한 단계와 계획으로 정리합니다.</p>
+                        </div>
+                    </article>
+                    <article class="timeline-item reveal">
+                        <span class="timeline-dot"></span>
+                        <div class="timeline-period">STEP 04 · GO</div>
+                        <div class="timeline-content">
+                            <h3>그리고, 다음 한 걸음</h3>
+                            <p>변화하는 청춘의 상황에 맞춰 계속해서 다음 길을 찾아갑니다.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section" id="start">
+            <div class="container">
+                <div class="cta reveal">
+                    <div class="cta-content">
+                        <h2>청춘의 앞길,<br>혼자 헤매지 않아도 됩니다.</h2>
+                        <p>
+                            무엇부터 해야 할지 모르겠는 순간에도, 어디로 가야 할지 막막한 순간에도.
+                            청춘비서는 당신의 앞길에서 다음 한 걸음을 함께 찾습니다.
+                        </p>
+                        <!-- 👉 수정됨: 하단 CTA 대시보드 링크 -->
+                        <a href="dashboard.html" class="cta-button">청춘비서와 함께하기 →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- 인터랙션 자바스크립트 -->
+    <!-- 푸터 영역 -->
+    <footer>
+        <div class="container footer-inner">
+            <div>
+                <div class="footer-brand">
+                    청춘비서
+                </div>
+                <div>청춘의 막막한 앞길을 혼자 헤매지 않도록.</div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-links">
+                    <button type="button" id="btn-tos" class="tos-btn">이용약관</button>
+                </div>
+                <div class="copyright">
+                    © 2026 WAYLiB. All rights reserved.<br>
+                    crafted by WAYLiB from Mohyeon<br>
+                    <div class="team-initials">LCY · LGH · LJA · KJE</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 이용약관 모달 팝업 -->
+    <div class="modal-overlay" id="tos-modal">
+        <div class="modal-content">
+            <button type="button" class="modal-close" id="btn-close-tos">&times;</button>
+            <div class="modal-header">
+                <h2>청춘비서 이용약관 및 책임제한 고지</h2>
+            </div>
+            <div class="modal-body">
+                <p><strong>시행일: 2026년 8월 27일</strong></p>
+
+                <h4>제1조 (목적)</h4>
+                <p>본 약관은 WAYLiB(이하 '회사')이 제공하는 '청춘비서' 서비스(이하 '서비스')의 이용과 관련하여 회사와 사용자 간의 권리, 의무, 책임사항 및 기타 필요한 사항을 규정함을 목적으로 합니다.</p>
+
+                <h4>제2조 (약관의 효력 및 변경)</h4>
+                <p>1. 회사는 본 약관의 내용을 사용자가 쉽게 알 수 있도록 서비스 화면 내에 게시합니다.<br>
+                2. 회사는 관련 법령을 위배하지 않는 범위 내에서 본 약관을 개정할 수 있으며, 개정된 약관은 공지한 적용 일자부터 효력이 발생합니다. 사용자가 개정된 약관의 효력 발생일 이후에도 서비스를 계속 이용할 경우 이에 동의한 것으로 간주합니다.</p>
+                
+                <h4>제3조 (정보의 비보증 및 면책 사항)</h4>
+                <p>1. 본 서비스가 제공하는 모든 자립 로드맵, 정부 정책, 행정 절차, 법률, 금융 및 예산 관련 정보는 사용자 편의를 위해 수집된 <strong>'참고용' 자료</strong>입니다.<br>
+                2. 회사는 해당 정보의 완전성, 정확성, 최신성 및 합법성을 어떠한 경우에도 보증하지 않습니다.<br>
+                3. 사용자는 본 서비스에서 제공하는 정보를 바탕으로 한 모든 최종 의사결정(지원금 신청, 부동산 계약, 금융 상품 가입 등)을 본인의 책임 하에 해당 기관이나 전문가를 통해 직접 교차 검증해야 합니다.<br>
+                4. 회사는 사용자가 본 서비스의 정보를 맹신하거나 활용하여 발생한 어떠한 직·간접적 손해(지원금 미수령, 계약 사기, 금전적 손실 등)에 대해서도 민·형사상 법적 책임을 지지 않습니다.</p>
+
+                <h4>제4조 (인공지능(AI) 기반 서비스의 한계 및 책임 제한)</h4>
+                <p>1. 본 서비스의 일부 기능(AI 질의응답, 맞춤형 To-do 생성 등)은 생성형 인공지능(AI) 기술을 기반으로 작동합니다.<br>
+                2. AI 기술의 특성상 사실과 다르거나, 편향되거나, 법적 근거가 부족한 정보(할루시네이션)가 생성될 수 있습니다. 회사는 AI가 생성한 결과물의 정확성과 신뢰성을 보증하지 않으며, 이로 인해 발생한 문제에 대한 일체의 배상 책임을 면제받습니다.</p>
+
+                <h4>제5조 (제3자 서비스 및 제휴사 링크에 대한 면책)</h4>
+                <p>1. 회사는 사용자의 편의를 위해 외부 제휴사(이사, 청소, 부동산 중개, 금융기관, 통신사 등)의 웹사이트 링크나 정보를 제공할 수 있습니다.<br>
+                2. 회사는 단순 정보 중개 역할만 수행하며, 제3자가 제공하는 상품, 서비스의 품질, 거래의 이행 여부 등에 대해 어떠한 통제권이나 보증 의무도 갖지 않습니다.<br>
+                3. 사용자가 제3자와 체결한 계약이나 거래로 인해 발생한 분쟁과 손해에 대해 회사는 일절 개입하거나 책임지지 않습니다.</p>
+
+                <h4>제6조 (서비스의 제공, 중단 및 데이터 보관)</h4>
+                <p>1. 본 서비스는 회사의 운영상, 기술상 필요에 따라 사전 고지 없이 일부 또는 전체 기능이 변경, 업데이트, 중단될 수 있습니다.<br>
+                2. 회사는 시스템 오류, 정기 점검, 통신 장애, 기타 불가항력 사유로 인해 발생한 서비스 중단이나 사용자의 데이터 유실(To-do 기록, 캘린더 일정 삭제 등)로 인한 간접적, 부수적 피해에 대해 배상할 책임을 지지 않습니다.</p>
+
+                <h4>제7조 (사용자의 의무)</h4>
+                <p>사용자는 다음 행위를 하여서는 안 됩니다.<br>
+                - 회사가 제공하는 정보나 데이터를 무단으로 복제, 크롤링(Crawling), 스크래핑(Scraping)하여 상업적으로 이용하는 행위<br>
+                - 서비스의 서버나 네트워크에 과부하를 일으키는 해킹 및 악성코드 유포 행위<br>
+                - 기타 관련 법령이나 회사의 규정을 위반하는 불법적 행위</p>
+
+                <h4>제8조 (지적재산권)</h4>
+                <p>본 서비스 내 포함된 모든 AI 생성 로드맵, 기획, UI/UX, 디자인, 소스코드 및 데이터베이스에 대한 지적재산권은 전적으로 회사(WAYLiB)에 귀속됩니다. 사용자는 서비스를 이용함으로써 얻은 정보를 회사의 사전 승낙 없이 타 사업에 도용하거나 배포할 수 없습니다.</p>
+
+                <h4>제9조 (준거법 및 재판관할)</h4>
+                <p>본 약관의 해석 및 회사와 사용자 간의 분쟁에 대해서는 대한민국의 법률을 적용하며, 분쟁 발생 시 관할 법원은 회사의 본점 소재지를 관할하는 법원 또는 서울중앙지방법원으로 합니다.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.getElementById('btn-bell').addEventListener('click', () => alert('도착한 새로운 알림이 없습니다.'));
-        document.getElementById('btn-profile').addEventListener('click', () => alert('지안님의 마이페이지로 이동합니다.'));
-
-        const btnCalToggle = document.getElementById('btn-cal-toggle');
-        const calendarCard = document.getElementById('calendar-card');
-        btnCalToggle.addEventListener('click', () => {
-            calendarCard.classList.toggle('hidden');
-        });
-
-        const dates = document.querySelectorAll('.cal-grid .date');
-        dates.forEach(date => {
-            date.addEventListener('click', function() {
-                if(this.style.color === 'rgb(203, 213, 224)') return; 
-                dates.forEach(d => d.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        const btnTodoToggle = document.getElementById('btn-todo-toggle');
-        const btnStatusTodo = document.getElementById('btn-status-todo');
-        const rightSidebar = document.getElementById('right-sidebar');
-
-        const toggleTodoSidebar = () => {
-            rightSidebar.classList.toggle('closed');
-        };
-        btnTodoToggle.addEventListener('click', toggleTodoSidebar);
-        btnStatusTodo.addEventListener('click', toggleTodoSidebar);
-
-        // SVG 애니메이션 컨트롤 로직
-        const checkboxes = document.querySelectorAll('#todo-list input[type="checkbox"]');
-        const textMainTodo = document.getElementById('main-todo-count');
-        const textTabTodo = document.getElementById('tab-todo-count');
-        const textPanelRatio = document.getElementById('panel-todo-ratio');
-        const mainProgress = document.getElementById('main-progress');
-
-        // 퍼센트에 맞춰 SVG 투명도(opacity) 조절
-        const updateHouseSVG = (percent) => {
-            document.getElementById('house-foundation').style.opacity = percent >= 20 ? 1 : 0;
-            document.getElementById('house-walls').style.opacity = percent >= 40 ? 1 : 0;
-            document.getElementById('house-roof').style.opacity = percent >= 60 ? 1 : 0;
-            document.getElementById('house-details').style.opacity = percent >= 80 ? 1 : 0;
-            document.getElementById('house-deco').style.opacity = percent >= 100 ? 1 : 0;
-            
-            // 100% 달성 시 살짝 튀어오르는(Bounce) 효과
-            const svgHouse = document.getElementById('house-svg');
-            if(percent === 100) {
-                svgHouse.style.transform = 'scale(1.08)';
+        // 네비게이션 스크롤 효과
+        const navbar = document.getElementById("navbar");
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 30) {
+                navbar.classList.add("scrolled");
             } else {
-                svgHouse.style.transform = 'scale(1)';
+                navbar.classList.remove("scrolled");
             }
-        };
-
-        const updateTodoProgress = () => {
-            const total = checkboxes.length;
-            const checked = document.querySelectorAll('#todo-list input[type="checkbox"]:checked').length;
-            const currentPercent = Math.round((checked / total) * 100); 
-            
-            const ratioText = `${checked}/${total}`;
-            textMainTodo.innerText = ratioText;
-            textTabTodo.innerHTML = `오늘 할 일<br>${ratioText}`;
-            textPanelRatio.innerText = `${ratioText} 완료`;
-            mainProgress.innerText = `${currentPercent}%`;
-
-            updateHouseSVG(currentPercent);
-        };
-
-        checkboxes.forEach(box => {
-            box.addEventListener('change', function() {
-                if(this.checked) {
-                    this.parentElement.classList.add('done');
-                } else {
-                    this.parentElement.classList.remove('done');
-                }
-                updateTodoProgress();
-            });
         });
 
-        // 로드 시 초기 상태 세팅
-        updateTodoProgress();
+        // 스크롤 등장 애니메이션
+        const revealElements = document.querySelectorAll(".reveal");
+        const observer = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                    }
+                });
+            },
+            { threshold: 0.12 }
+        );
+        revealElements.forEach(function (element) {
+            observer.observe(element);
+        });
+
+        // 이용약관 모달 제어 스크립트
+        const btnTos = document.getElementById('btn-tos');
+        const btnCloseTos = document.getElementById('btn-close-tos');
+        const tosModal = document.getElementById('tos-modal');
+
+        // 모달 열기
+        btnTos.addEventListener('click', function() {
+            tosModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+        });
+
+        // X 버튼으로 모달 닫기
+        btnCloseTos.addEventListener('click', function() {
+            tosModal.classList.remove('active');
+            document.body.style.overflow = ''; // 배경 스크롤 복구
+        });
+
+        // 모달 바깥 영역(배경) 클릭 시 닫기
+        tosModal.addEventListener('click', function(e) {
+            if(e.target === tosModal) {
+                tosModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
     </script>
+
 </body>
 </html>
