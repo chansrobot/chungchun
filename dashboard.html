@@ -21,485 +21,235 @@
             --border-light: #e2e8f0;
             --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --premium-gold: #f59e0b;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Pretendard, "Noto Sans KR", sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Pretendard, "Noto Sans KR", sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-dark); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
 
         /* =========================================
-           HEADER (상단 네비게이션)
+           HEADER (상단 네비게이션) - 완벽 복원
         ========================================= */
         header {
-            height: 70px;
-            background-color: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            border-bottom: 1px solid var(--border-light);
-            z-index: 100;
+            height: 70px; background-color: var(--white); display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; border-bottom: 1px solid var(--border-light); z-index: 100;
         }
 
-        .header-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--blue-primary);
-        }
+        .header-logo { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 800; color: var(--blue-primary); }
+        .nav-menu { display: flex; gap: 40px; height: 100%; }
+        .nav-item { position: relative; display: flex; align-items: center; height: 100%; font-size: 15px; font-weight: 600; cursor: pointer; }
+        .nav-item i { margin-left: 5px; font-size: 10px; color: var(--text-light); }
 
-        .nav-menu {
-            display: flex;
-            gap: 40px;
-            height: 100%;
-        }
-
-        .nav-item {
-            position: relative;
-            display: flex;
-            align-items: center;
-            height: 100%;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-dark);
-            cursor: pointer;
-        }
-
-        .nav-item i {
-            margin-left: 5px;
-            font-size: 10px;
-            color: var(--text-light);
-        }
-
-        .dropdown {
-            position: absolute;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--white);
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            box-shadow: var(--shadow-sm);
-            width: 180px;
-            padding: 10px 0;
-            display: none; 
-            flex-direction: column;
-        }
-
+        .dropdown { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); background: var(--white); border: 1px solid var(--border-light); border-radius: 8px; box-shadow: var(--shadow-lg); width: 200px; padding: 10px 0; display: none; flex-direction: column; }
         .nav-item:hover .dropdown { display: flex; }
+        .dropdown li { padding: 12px 20px; font-size: 14px; color: var(--text-dark); transition: 0.2s; }
+        .dropdown li:hover { color: var(--blue-primary); background-color: var(--blue-light); font-weight: 700; }
 
-        .dropdown li {
-            padding: 12px 20px;
-            font-size: 13px;
-            color: var(--text-light);
-            transition: 0.2s;
-        }
+        .mega-dropdown { position: absolute; top: 70px; left: -100px; width: 450px; background: var(--white); border: 1px solid var(--border-light); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 20px; display: none; grid-template-columns: 1fr 1fr; gap: 20px; cursor: default; }
+        .nav-item:hover .mega-dropdown { display: grid; }
+        .mega-col h4 { font-size: 13px; color: var(--mint); margin-bottom: 10px; border-bottom: 1px solid var(--border-light); padding-bottom: 5px;}
+        .mega-col ul li { padding: 6px 0; font-size: 13px; color: var(--text-dark); cursor: pointer; transition: 0.2s;}
+        .mega-col ul li:hover { color: var(--blue-primary); font-weight: 700; transform: translateX(5px);}
 
-        .dropdown li:hover {
-            color: var(--blue-primary);
-            background-color: var(--blue-light);
-            font-weight: 600;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .icon-bell {
-            width: 20px; height: 20px;
-            fill: none; stroke: var(--text-dark); stroke-width: 2;
-            cursor: pointer; transition: 0.2s;
-        }
+        .header-actions { display: flex; align-items: center; gap: 20px; }
+        .icon-bell { width: 20px; height: 20px; fill: none; stroke: var(--text-dark); stroke-width: 2; cursor: pointer; transition: 0.2s; }
         .icon-bell:hover { stroke: var(--blue-primary); transform: scale(1.1); }
-
-        .user-profile {
-            width: 36px; height: 36px;
-            background-color: var(--blue-light);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--blue-primary);
-            cursor: pointer; transition: 0.2s;
-        }
+        .user-profile { width: 36px; height: 36px; background-color: var(--blue-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--blue-primary); cursor: pointer; transition: 0.2s; }
         .user-profile:hover { background-color: var(--blue-primary); color: white; }
 
         /* =========================================
            MAIN CONTENT AREA
         ========================================= */
-        main {
-            flex: 1;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        main { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; }
 
-        /* --- 좌측 플로팅 캘린더 --- */
-        .left-sidebar {
-            position: absolute;
-            left: 0;
-            top: 40px;
-            display: flex;
-            align-items: flex-start;
-            z-index: 10;
-        }
-
-        .tab-left {
-            width: 50px;
-            background-color: #5b8def;
-            color: var(--white);
-            border-radius: 0 16px 16px 0;
-            padding: 20px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            box-shadow: var(--shadow-sm);
-            cursor: pointer;
-            transition: 0.3s;
-        }
+        /* 좌측 플로팅 캘린더 */
+        .left-sidebar { position: absolute; left: 0; top: 40px; display: flex; align-items: flex-start; z-index: 10; }
+        .tab-left { width: 50px; background-color: #5b8def; color: var(--white); border-radius: 0 16px 16px 0; padding: 20px 0; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: var(--shadow-sm); cursor: pointer; transition: 0.3s; }
         .tab-left:hover { background-color: var(--blue-primary); padding-left: 5px; }
+        .tab-left span { writing-mode: vertical-rl; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
 
-        .tab-left span {
-            writing-mode: vertical-rl;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        .calendar-card {
-            background: var(--white);
-            width: 300px;
-            margin-left: 20px;
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            padding: 30px 25px;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            transform-origin: left center;
-        }
-
-        .calendar-card.hidden {
-            opacity: 0;
-            transform: scaleX(0);
-            margin-left: 0;
-            width: 0;
-            padding-left: 0;
-            padding-right: 0;
-        }
-
-        .cal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 25px;
-        }
-
-        .cal-month {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .cal-arrow {
-            color: #a0aec0; cursor: pointer; padding: 5px; font-weight: bold; transition: 0.2s;
-        }
+        .calendar-card { background: var(--white); width: 320px; margin-left: 20px; border-radius: 20px; box-shadow: var(--shadow-lg); padding: 30px 25px; overflow: hidden; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: left center; }
+        .calendar-card.hidden { opacity: 0; transform: scaleX(0); margin-left: 0; width: 0; padding: 0; }
+        .cal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 16px; margin-bottom: 25px; color: var(--navy);}
+        .premium-badge { background-color: #fef3c7; color: #b45309; font-size: 11px; padding: 4px 8px; border-radius: 12px; display: flex; align-items: center; gap: 4px; cursor: pointer; transition: 0.2s; border: 1px solid #fde68a; }
+        .premium-badge:hover { background-color: #fde68a; }
+        .cal-month { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 700; margin-bottom: 20px; }
+        .cal-arrow { color: var(--text-light); cursor: pointer; padding: 5px; transition: 0.2s; }
         .cal-arrow:hover { color: var(--blue-primary); }
-
-        .cal-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px 0;
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-dark);
-        }
-
-        .cal-grid .day-name {
-            color: var(--text-light);
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .cal-grid .date {
-            position: relative;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-            border-radius: 50%;
-        }
-
-        .cal-grid .date:hover {
-            background-color: #f1f5f9;
-        }
-
-        .cal-grid .date.active {
-            background-color: var(--blue-light);
-            color: var(--blue-primary);
-            font-weight: 800;
-            box-shadow: inset 0 0 0 1px var(--blue-primary);
-        }
-
-        .cal-grid .date.has-event-blue::after {
-            content: ""; position: absolute; bottom: 0;
-            width: 4px; height: 4px; border-radius: 50%; background: var(--blue-primary);
-        }
-        .cal-grid .date.has-event-mint::after {
-            content: ""; position: absolute; bottom: 0;
-            width: 4px; height: 4px; border-radius: 50%; background: var(--mint);
-        }
-
-        .cal-schedule {
-            margin-top: 30px;
-            border-top: 1px solid var(--border-light);
-            padding-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .schedule-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 6px;
-            transition: 0.2s;
-        }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px 0; text-align: center; font-size: 13px; color: var(--text-dark); }
+        .cal-grid .day-name { color: var(--text-light); font-weight: 700; margin-bottom: 10px; }
+        .cal-grid .date { position: relative; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 500; cursor: pointer; border-radius: 50%; }
+        .cal-grid .date.today { background-color: var(--blue-light); color: var(--blue-primary); font-weight: 800; box-shadow: inset 0 0 0 1px var(--blue-primary); }
+        .cal-grid .date.has-event-blue::after { content: ""; position: absolute; bottom: 2px; width: 4px; height: 4px; border-radius: 50%; background: var(--blue-primary); }
+        .cal-grid .date.has-event-mint::after { content: ""; position: absolute; bottom: 2px; width: 4px; height: 4px; border-radius: 50%; background: var(--mint); }
+        .cal-schedule { margin-top: 25px; border-top: 1px solid var(--border-light); padding-top: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .schedule-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px; border-radius: 6px; }
         .schedule-item:hover { background-color: #f8fafc; }
-        
-        .schedule-item span:first-child {
-            display: flex; align-items: center; gap: 8px;
-        }
-        .schedule-item span:first-child::before {
-            content: ""; display: block; width: 6px; height: 6px; border-radius: 50%;
-        }
+        .schedule-item span:first-child { display: flex; align-items: center; gap: 8px; }
+        .schedule-item span:first-child::before { content: ""; display: block; width: 6px; height: 6px; border-radius: 50%; }
         .item-blue span:first-child::before { background: var(--blue-primary); }
         .item-mint span:first-child::before { background: var(--mint); }
+        .schedule-item .s-date { color: var(--text-light); font-weight: 500; font-size: 12px; }
 
-        .schedule-item .s-date {
-            color: var(--text-light);
-            font-weight: 500;
-            font-size: 12px;
-        }
-
-        /* --- 중앙 코칭 섹션 --- */
-        .center-panel {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: 0.4s;
-        }
-
-        .greeting h1 {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--navy);
-            line-height: 1.4;
-            margin-bottom: 10px;
-        }
-
-        .greeting p {
-            font-size: 15px;
-            color: var(--text-light);
-            margin-bottom: 25px;
-        }
-
-        .progress-badge {
-            background: var(--white);
-            border: 1px solid var(--border-light);
-            padding: 10px 24px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-light);
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 40px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .progress-badge:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-
-        .progress-badge .blue { color: var(--blue-primary); }
-        .progress-badge .mint { color: var(--mint); }
-
-        /* 집 짓기 일러스트 영역 (SVG 컨테이너) */
-        .illustration-placeholder {
-            width: 380px;
-            height: 250px;
-            margin-bottom: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .status-bar {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-            background: transparent;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-dark);
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .status-item:hover { color: var(--blue-primary); }
-
-        .status-item svg {
-            width: 20px; height: 20px;
-            stroke: var(--text-light); fill: none; stroke-width: 2;
-            transition: 0.2s;
-        }
-        .status-item:hover svg { stroke: var(--blue-primary); transform: translateY(-2px); }
+        /* 중앙 코칭 섹션 */
+        .center-panel { display: flex; flex-direction: column; align-items: center; text-align: center; }
         
+        .mini-profile { background: var(--white); border: 1px solid var(--border-light); border-radius: 30px; padding: 8px 20px; display: flex; gap: 15px; box-shadow: var(--shadow-sm); margin-bottom: 20px; font-size: 13px; font-weight: 600; color: var(--navy); }
+        .mini-profile span { display: flex; align-items: center; gap: 5px; }
+        .mini-profile i { color: var(--blue-primary); }
+
+        .greeting h1 { font-size: 32px; font-weight: 800; color: var(--navy); line-height: 1.4; margin-bottom: 10px; }
+        .greeting p { font-size: 15px; color: var(--text-light); margin-bottom: 20px; }
+        .progress-badge { background: var(--navy); color: var(--white); padding: 10px 24px; border-radius: 30px; font-size: 14px; font-weight: 700; box-shadow: var(--shadow-lg); margin-bottom: 30px; }
+        .progress-badge .highlight { color: #fcd34d; }
+
+        /* 퀴즈 위젯 */
+        .quiz-card { background: var(--white); border: 1px solid var(--border-light); border-radius: 16px; padding: 20px; width: 450px; box-shadow: var(--shadow-sm); margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .quiz-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--mint); }
+        .quiz-question { font-size: 16px; font-weight: 800; color: var(--navy); }
+        .quiz-buttons { display: flex; gap: 10px; width: 100%; }
+        .quiz-btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; border: 1px solid var(--border-light); background: var(--white); color: var(--text-dark);}
+        .quiz-btn.know:hover { background: var(--mint-light); border-color: var(--mint); color: var(--mint);}
+        .quiz-btn.dont-know:hover { background: #fee2e2; border-color: #ef4444; color: #ef4444;}
+
+        .illustration-placeholder { width: 300px; height: 180px; margin-bottom: 40px; display: flex; justify-content: center; align-items: center; }
+        
+        .status-bar { display: flex; align-items: center; gap: 40px; }
+        .status-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .status-item svg { width: 20px; height: 20px; stroke: var(--text-light); fill: none; stroke-width: 2; transition: 0.2s; }
+        .status-item:hover svg { stroke: var(--blue-primary); transform: translateY(-2px); }
         .status-item span.count { color: var(--blue-primary); }
         .status-item span.count-mint { color: var(--mint); }
 
-        /* --- 우측 플로팅 서랍 탭 --- */
-        .right-sidebar {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            align-items: center;
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 10;
-        }
-
-        .right-sidebar.closed {
-            transform: translate(320px, -50%); 
-        }
-
-        .tab-right {
-            background-color: #e6fcf5;
-            border: 1px solid #a7f3d0;
-            border-right: none;
-            border-radius: 20px 0 0 20px;
-            padding: 25px 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            box-shadow: -4px 4px 15px rgba(16, 185, 129, 0.1);
-            cursor: pointer;
-            transition: 0.3s;
-        }
+        /* 우측 플로팅 서랍 탭 */
+        .right-sidebar { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; align-items: center; transition: 0.4s; z-index: 10; }
+        .right-sidebar.closed { transform: translate(320px, -50%); }
+        .tab-right { background-color: #e6fcf5; border: 1px solid #a7f3d0; border-right: none; border-radius: 20px 0 0 20px; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; box-shadow: -4px 4px 15px rgba(16, 185, 129, 0.1); transition: 0.3s; }
         .tab-right:hover { background-color: var(--mint-light); padding-right: 20px; }
-
-        .tab-right svg {
-            width: 24px; height: 24px; stroke: var(--mint); fill: none; stroke-width: 2;
-        }
-
-        .tab-right .tab-text {
-            color: var(--mint);
-            font-size: 12px;
-            font-weight: 700;
-            text-align: center;
-            line-height: 1.4;
-        }
-
-        .todo-panel {
-            width: 320px;
-            height: 500px;
-            background: var(--white);
-            border-left: 1px solid var(--border-light);
-            box-shadow: var(--shadow-lg);
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .todo-header {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--navy);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .tab-right svg { width: 24px; height: 24px; stroke: var(--mint); fill: none; stroke-width: 2; }
+        .tab-right .tab-text { color: var(--mint); font-size: 12px; font-weight: 800; text-align: center; }
         
-        .todo-header span {
-            color: var(--mint);
-            font-size: 14px;
-        }
+        .todo-panel { width: 320px; height: 500px; background: var(--white); border-left: 1px solid var(--border-light); box-shadow: var(--shadow-lg); padding: 30px; display: flex; flex-direction: column; }
+        .todo-header { font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .todo-header span { color: var(--mint); font-size: 13px; background: var(--mint-light); padding: 4px 10px; border-radius: 12px; }
+        .todo-list { display: flex; flex-direction: column; gap: 12px; }
+        .todo-item { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; cursor: pointer; padding: 10px; border-radius: 8px; border: 1px solid transparent; transition: 0.2s;}
+        .todo-item:hover { background-color: #f8fafc; border-color: var(--border-light);}
+        .todo-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--mint); cursor: pointer; }
+        .todo-item.done { color: var(--text-light); text-decoration: line-through; background: #f8fafc;}
 
-        .todo-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        /* =========================================
+           모달 오버레이 (계산기 전용)
+        ========================================= */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 999;
         }
-
-        .todo-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-dark);
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 8px;
-            transition: 0.2s;
+        .modal-content {
+            background: var(--white); width: 400px; border-radius: 24px; padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; animation: popIn 0.3s ease;
         }
-        .todo-item:hover { background-color: #f8fafc; }
-
-        .todo-item input[type="checkbox"] {
-            width: 18px; height: 18px;
-            accent-color: var(--mint);
-            cursor: pointer;
-        }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         
-        .todo-item.done {
-            color: var(--text-light);
-            text-decoration: line-through;
-        }
+        .modal-close { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px; color: var(--text-light); transition: 0.2s;}
+        .modal-close:hover { color: var(--navy); transform: rotate(90deg);}
+        
+        .calc-header h2 { font-size: 20px; color: var(--navy); margin-bottom: 5px; }
+        .calc-header p { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+        .input-group input { width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 15px; outline: none; transition: 0.2s; background: #f8fafc;}
+        .input-group input:focus { border-color: var(--blue-primary); box-shadow: 0 0 0 3px var(--blue-light); background: #fff;}
+        .result-box { margin-top: 25px; padding: 20px; background: var(--blue-light); border-radius: 12px; text-align: center; }
+        .result-box h3 { font-size: 14px; color: var(--text-light); font-weight: 600; margin-bottom: 5px; }
+        .result-box .amount { font-size: 28px; font-weight: 800; color: var(--blue-primary); }
+        .result-box .status { display: inline-block; margin-top: 10px; padding: 4px 12px; font-size: 12px; font-weight: 700; border-radius: 12px; background: var(--white); color: var(--mint); }
+        .btn-calc { width: 100%; padding: 15px; margin-top: 15px; background: var(--navy); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-calc:hover { background: var(--blue-primary); }
 
+        /* =========================================
+           1. 첫 접속 "팝업(Modal)" (진단 할래 말래)
+        ========================================= */
+        .welcome-modal { width: 420px; text-align: center; }
+        .welcome-modal h2 { font-size: 24px; color: var(--navy); margin-bottom: 15px; line-height: 1.4; font-weight: 800;}
+        .welcome-modal p { font-size: 15px; color: var(--text-light); margin-bottom: 35px; line-height: 1.6; }
+        .btn-start-diag { width: 100%; padding: 16px; background: var(--blue-primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.2s; margin-bottom: 12px;}
+        .btn-start-diag:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);}
+        .btn-skip-diag { width: 100%; padding: 12px; background: transparent; color: var(--text-light); border: none; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: underline; transition: 0.2s;}
+        .btn-skip-diag:hover { color: var(--text-dark); }
+
+        /* =========================================
+           2. 자가진단 전체화면 (질문 20개 전체 복원)
+        ========================================= */
+        .fullscreen-survey {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color); z-index: 9998;
+            display: none; flex-direction: column; align-items: center; justify-content: flex-start;
+            padding-top: 5vh; padding-bottom: 40px; overflow-y: auto;
+        }
+        .survey-card {
+            background: var(--white); width: 100%; max-width: 650px; border-radius: 20px;
+            box-shadow: var(--shadow-lg); padding: 40px; position: relative; margin-bottom: 50px;
+            animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .survey-header { text-align: center; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid var(--border-light);}
+        .survey-header h1 { font-size: 22px; color: var(--navy); font-weight: 800; margin-bottom: 8px; }
+        .survey-header p { font-size: 14px; color: var(--text-light); }
+        
+        .progress-container { width: 100%; height: 8px; background: var(--border-light); border-radius: 4px; margin-bottom: 30px; overflow: hidden;}
+        .progress-bar { height: 100%; background: var(--mint); width: 20%; transition: width 0.4s ease; }
+
+        .step { display: none; animation: fadeIn 0.4s ease; }
+        .step.active { display: block; }
+        .step-title { font-size: 18px; color: var(--blue-primary); font-weight: 800; margin-bottom: 25px; }
+        
+        .question { margin-bottom: 30px; }
+        .question label.q-title { display: block; font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 12px; line-height: 1.4; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .options-grid.single { grid-template-columns: 1fr; }
+        .option-label { display: flex; align-items: center; justify-content: center; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; transition: 0.2s; text-align: center; background: var(--white);}
+        .option-label input { display: none; }
+        .option-label:hover { background: var(--bg-color); }
+        .option-label:has(input:checked) { background: var(--blue-light); border-color: var(--blue-primary); color: var(--blue-primary); }
+
+        input[type="number"], input[type="text"], select {
+            width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: 0.2s;
+        }
+        input:focus, select:focus { border-color: var(--blue-primary); background: var(--white); box-shadow: 0 0 0 3px var(--blue-light); }
+
+        .region-group { display: flex; gap: 8px; margin-bottom: 10px;}
+        .money-group { display: flex; align-items: center; gap: 8px; margin-bottom: 10px;}
+        .money-group span { font-size: 14px; color: var(--text-dark); font-weight: 600; white-space: nowrap;}
+        
+        .expense-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px;}
+        .expense-item { display: flex; flex-direction: column; gap: 5px; }
+        .expense-item span { font-size: 13px; font-weight: 600; color: var(--text-light); }
+        .expense-item input { padding: 10px; }
+
+        .etc-input { margin-top: 8px; display: none; }
+        .etc-input.show { display: block; animation: fadeIn 0.3s ease; }
+
+        .survey-footer { display: flex; justify-content: space-between; gap: 10px; margin-top: 40px; }
+        .btn-step { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; transition: 0.2s;}
+        .btn-prev { background: var(--border-light); color: var(--text-dark); display: none; }
+        .btn-prev:hover { background: #cbd5e0; }
+        .btn-next { background: var(--navy); color: var(--white); }
+        .btn-next:hover { background: var(--blue-primary); }
     </style>
 </head>
 <body>
 
+    <!-- =========================================
+         복구된 헤더 (버튼 전부 다 있음!)
+    ========================================= -->
     <header>
-        <a href="index.html" class="header-logo">
+        <a href="#" class="header-logo">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
             청춘비서
         </a>
@@ -510,13 +260,49 @@
                 <ul class="dropdown">
                     <li>주거 지원정책 공지</li>
                     <li>청약 및 임대주택 공지</li>
-                    <li>청년 정책</li>
-                    <li>지원금 일정</li>
+                    <li>청년 정책 안내</li>
+                    <li>지원금 일정 캘린더</li>
                 </ul>
             </li>
-            <li class="nav-item">청춘비서 도서관 <i>▼</i></li>
-            <li class="nav-item" onclick="alert('준비 중인 기능입니다.')">주거비 계산기</li>
-            <li class="nav-item">마이페이지 <i>▼</i></li>
+            <li class="nav-item mega-hover">
+                청춘비서 도서관 <i>▼</i>
+                <div class="mega-dropdown">
+                    <div class="mega-col">
+                        <h4>📖 개념 이해</h4>
+                        <ul>
+                            <li>월세 vs 전세 vs 반전세</li>
+                            <li>보증금과 관리비 구조</li>
+                            <li>등기부등본 보는 법</li>
+                        </ul>
+                    </div>
+                    <div class="mega-col">
+                        <h4>🔍 실전 탐색</h4>
+                        <ul>
+                            <li>허위매물 거르는 방법</li>
+                            <li>부동산 방문 시 체크리스트</li>
+                            <li>안전한 매물 고르기</li>
+                        </ul>
+                    </div>
+                    <div class="mega-col">
+                        <h4>✍️ 계약 및 행정</h4>
+                        <ul>
+                            <li>계약서 특약사항 작성법</li>
+                            <li>전세보증보험 가입 안내</li>
+                            <li>확정일자 및 전입신고</li>
+                        </ul>
+                    </div>
+                    <div class="mega-col">
+                        <h4>🏠 입주 및 유지관리</h4>
+                        <ul>
+                            <li>공과금 종류별 납부 방법</li>
+                            <li>임대차 갱신 및 분쟁 대처</li>
+                            <li>이사 시 원상복구 가이드</li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item" id="btn-open-calc">주거비 계산기</li>
+            <li class="nav-item" onclick="alert('가입 페이지로 이동합니다.')">회원가입</li>
         </ul>
 
         <div class="header-actions">
@@ -534,107 +320,75 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 <span>캘린더</span>
             </div>
-            
             <div class="calendar-card" id="calendar-card">
-                <div class="cal-header">
-                    나의 캘린더 
-                    <span class="cal-arrow" onclick="alert('월간 일정을 확인합니다.')">&lt;</span>
-                </div>
-                
-                <div class="cal-month">
-                    <span class="cal-arrow">&lt;</span>
-                    2026년 8월
-                    <span class="cal-arrow">&gt;</span>
-                </div>
-
-                <div class="cal-grid" id="cal-grid">
-                    <div class="day-name">일</div><div class="day-name">월</div><div class="day-name">화</div><div class="day-name">수</div><div class="day-name">목</div><div class="day-name">금</div><div class="day-name">토</div>
-                    <div class="date" style="color:#cbd5e0;">26</div><div class="date" style="color:#cbd5e0;">27</div><div class="date" style="color:#cbd5e0;">28</div><div class="date" style="color:#cbd5e0;">29</div><div class="date" style="color:#cbd5e0;">30</div><div class="date" style="color:#cbd5e0;">31</div><div class="date">1</div>
-                    <div class="date">2</div><div class="date">3</div><div class="date">4</div><div class="date">5</div><div class="date">6</div><div class="date">7</div><div class="date has-event-blue">8</div>
-                    <div class="date">9</div><div class="date">10</div><div class="date">11</div><div class="date">12</div><div class="date">13</div><div class="date">14</div><div class="date">15</div>
-                    <div class="date">16</div><div class="date">17</div><div class="date">18</div><div class="date active has-event-mint">19</div><div class="date">20</div><div class="date">21</div><div class="date">22</div>
-                    <div class="date">23</div><div class="date">24</div><div class="date">25</div><div class="date">26</div><div class="date">27</div><div class="date">28</div><div class="date">29</div>
-                    <div class="date">30</div><div class="date">31</div><div class="date" style="color:#cbd5e0;">1</div><div class="date" style="color:#cbd5e0;">2</div><div class="date" style="color:#cbd5e0;">3</div><div class="date" style="color:#cbd5e0;">4</div><div class="date" style="color:#cbd5e0;">5</div>
-                </div>
-
+                <div class="cal-header">나의 캘린더 <span class="premium-badge btn-premium-lock">🔒 외부 연동</span></div>
+                <div class="cal-month" id="cal-month-header"><span class="cal-arrow">&lt;</span><span id="month-title">2026년 9월</span><span class="cal-arrow">&gt;</span></div>
+                <div class="cal-grid" id="cal-grid"></div>
                 <div class="cal-schedule">
-                    <div class="schedule-item item-blue" onclick="alert('체크리스트 창으로 이동합니다.')">
-                        <span>이사 준비 체크리스트</span>
-                        <span class="s-date">8.8(토)</span>
-                    </div>
-                    <div class="schedule-item item-mint" onclick="alert('전월세 상담 화면으로 이동합니다.')">
-                        <span>전월세 계약 상담</span>
-                        <span class="s-date">8.19(수)</span>
-                    </div>
+                    <div class="schedule-item item-blue"><span>청년주택 서류 마감일</span><span class="s-date" id="event-date-1">9.15(화)</span></div>
+                    <div class="schedule-item item-mint btn-premium-lock"><span>🔒 나만의 일정 추가하기</span><span class="s-date">+</span></div>
                 </div>
             </div>
         </aside>
 
         <!-- 중앙 메인 코칭 영역 -->
         <section class="center-panel">
-            <div class="greeting">
-                <h1>지안님, 오늘도<br>독립에 한 걸음 가까워졌어요</h1>
-                <p>필요한 일정과 할 일을 가볍게 확인해 보세요</p>
-            </div>
-            
-            <div class="progress-badge" onclick="alert('전체 자립 로드맵을 확인합니다.')">
-                독립까지 <span class="blue">87일</span> · 오늘 진행률 <span class="mint" id="main-progress">0%</span>
+            <div class="mini-profile">
+                <span><i>📍</i> 희망 지역: 서초구</span>
+                <span style="color:var(--border-light);">|</span>
+                <span><i>💰</i> 예산: 1천 / 월 50</span>
+                <span style="color:var(--border-light);">|</span>
+                <span><i>🏷️</i> 첫 독립 3개월 패키지</span>
             </div>
 
-            <!-- 코드로 짠 '집 지어지는 SVG 그래픽' 영역 -->
+            <div class="greeting">
+                <h1>세상에 첫발을 내딛는 청춘님, 오늘도<br>독립에 한 걸음 가까워졌어요!</h1>
+                <p>1개월차 [준비 단계] 미션을 차근차근 달성해 보세요.</p>
+            </div>
+            <div class="progress-badge">목표 D-Day <span class="highlight">87일</span> · 패키지 진행률 <span class="highlight" id="main-progress">0%</span></div>
+            
+            <div class="quiz-card" id="quiz-card">
+                <div class="quiz-header">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    오늘의 주거 지식
+                </div>
+                <div class="quiz-question" id="quiz-q">Q. '전입신고'와 '확정일자'의 차이를 아시나요?</div>
+                <div class="quiz-buttons">
+                    <button class="quiz-btn know" onclick="alert('훌륭해요! 보증금을 지키는 아주 중요한 지식입니다.')">잘 알고 있어요!</button>
+                    <button class="quiz-btn dont-know" onclick="alert('청춘비서 도서관의 [확정일자 및 전입신고] 페이지로 이동합니다!')">잘 모르겠어요 🤔</button>
+                </div>
+            </div>
+
             <div class="illustration-placeholder" id="house-illustration">
                 <svg id="house-svg" viewBox="0 0 380 250" style="width:100%; height:100%; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
-                    <!-- 0. 공터/설계도 (항상 표시) -->
-                    <g id="house-blueprint" stroke="#cbd5e0" stroke-width="2" fill="none" stroke-dasharray="6,4">
+                    <g stroke="#cbd5e0" stroke-width="2" fill="none" stroke-dasharray="6,4">
                         <polyline points="110,105 190,40 270,105" />
                         <rect x="130" y="105" width="120" height="85" />
                         <rect x="115" y="190" width="150" height="10" />
                         <rect x="175" y="150" width="30" height="40" />
                         <rect x="145" y="125" width="20" height="20" />
                     </g>
-                    <!-- 바닥 지지선 -->
                     <line x1="40" y1="200" x2="340" y2="200" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" />
-            
-                    <!-- 1. 기초 공사 (20%+) -->
-                    <g id="house-foundation" style="opacity:0; transition: opacity 0.5s ease-in-out;">
-                        <rect x="115" y="190" width="150" height="10" fill="#94a3b8" rx="3" />
-                    </g>
-            
-                    <!-- 2. 골조 및 벽면 (40%+) -->
-                    <g id="house-walls" style="opacity:0; transition: opacity 0.5s ease-in-out;">
-                        <rect x="130" y="105" width="120" height="85" fill="#eff6ff" stroke="#3b82f6" stroke-width="3" />
-                    </g>
-            
-                    <!-- 3. 지붕 완성 (60%+) -->
+                    <g id="house-foundation" style="opacity:0; transition: opacity 0.5s ease-in-out;"><rect x="115" y="190" width="150" height="10" fill="#94a3b8" rx="3" /></g>
+                    <g id="house-walls" style="opacity:0; transition: opacity 0.5s ease-in-out;"><rect x="130" y="105" width="120" height="85" fill="#eff6ff" stroke="#3b82f6" stroke-width="3" /></g>
                     <g id="house-roof" style="opacity:0; transition: opacity 0.5s ease-in-out;">
                         <polygon points="105,105 190,35 275,105" fill="#3b82f6" stroke="#2563eb" stroke-width="3" stroke-linejoin="round" />
-                        <!-- 지붕 음영 디테일 -->
                         <polygon points="190,35 275,105 190,105" fill="#2563eb" opacity="0.2" />
                     </g>
-            
-                    <!-- 4. 인테리어/디테일 (80%+) -->
                     <g id="house-details" style="opacity:0; transition: opacity 0.5s ease-in-out;">
-                        <!-- 문 -->
                         <rect x="175" y="150" width="30" height="40" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2" rx="2" />
                         <circle cx="200" cy="170" r="2.5" fill="#2563eb" />
-                        <!-- 창문 -->
                         <rect x="145" y="125" width="20" height="20" fill="#ffffff" stroke="#3b82f6" stroke-width="2" rx="2" />
                         <line x1="155" y1="125" x2="155" y2="145" stroke="#3b82f6" stroke-width="2" />
                         <line x1="145" y1="135" x2="165" y2="135" stroke="#3b82f6" stroke-width="2" />
                     </g>
-            
-                    <!-- 5. 조경 및 완공 효과 (100%) -->
                     <g id="house-deco" style="opacity:0; transition: opacity 0.5s ease-in-out;">
-                        <!-- 해 -->
                         <circle cx="90" cy="60" r="18" fill="#fcd34d" />
-                        <!-- 구름 -->
                         <path d="M 270 60 Q 280 50 290 60 Q 305 55 310 70 Q 320 80 300 80 L 270 80 Q 255 80 260 65 Q 255 55 270 60 Z" fill="#e0e7ff" opacity="0.8" />
-                        <!-- 나무 -->
                         <rect x="295" y="165" width="8" height="35" fill="#8B4513" rx="2" />
                         <circle cx="299" cy="145" r="22" fill="#10b981" />
                         <circle cx="285" cy="160" r="14" fill="#059669" />
                         <circle cx="313" cy="160" r="14" fill="#34d399" />
-                        <!-- 바닥 풀 장식 -->
                         <path d="M 100 200 Q 105 190 110 200" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
                         <path d="M 280 200 Q 285 192 290 200" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
                     </g>
@@ -642,143 +396,521 @@
             </div>
 
             <div class="status-bar">
-                <div class="status-item">
-                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    예정 일정 <span class="count">3</span>
-                </div>
+                <div class="status-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 예정 일정 <span class="count">1</span></div>
                 <div style="color:var(--border-light);">•</div>
-                <div class="status-item" id="btn-status-todo">
-                    <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                    오늘 할 일 <span class="count-mint" id="main-todo-count">0/5</span>
-                </div>
-                <div style="color:var(--border-light);">•</div>
-                <div class="status-item">
-                    <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    새 공고 <span class="count">2</span>
-                </div>
+                <div class="status-item" id="btn-status-todo"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg> 이번 주 미션 <span class="count-mint" id="main-todo-count">0/5</span></div>
             </div>
         </section>
 
-        <!-- 우측 플로팅 서랍 탭 (기본 닫힘 상태) -->
+        <!-- 우측 플로팅 서랍 탭 -->
         <aside class="right-sidebar closed" id="right-sidebar">
             <div class="tab-right" id="btn-todo-toggle">
                 <svg viewBox="0 0 24 24" style="stroke-width: 2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                <svg viewBox="0 0 24 24" style="margin-top: 10px;"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                <div class="tab-text" id="tab-todo-count">오늘 할 일<br>0/5</div>
+                <div class="tab-text" id="tab-todo-count">이번 주 미션<br>0/5</div>
             </div>
-            
-            <!-- 투두리스트 패널 (항목 5개로 확장) -->
             <div class="todo-panel">
-                <div class="todo-header">
-                    오늘의 로드맵
-                    <span id="panel-todo-ratio">0/5 완료</span>
-                </div>
+                <div class="todo-header">1개월차 로드맵 <span id="panel-todo-ratio">0/5 완료</span></div>
                 <div class="todo-list" id="todo-list">
-                    <label class="todo-item">
-                        <input type="checkbox">
-                        <span>독립 예산 계획 세우기</span>
-                    </label>
-                    <label class="todo-item">
-                        <input type="checkbox">
-                        <span>청년 맞춤형 전세대출 확인</span>
-                    </label>
-                    <label class="todo-item">
-                        <input type="checkbox">
-                        <span>마음에 드는 매물 임장가기</span>
-                    </label>
-                    <label class="todo-item">
-                        <input type="checkbox">
-                        <span>전월세 계약서 및 확정일자</span>
-                    </label>
-                    <label class="todo-item">
-                        <input type="checkbox">
-                        <span>전입신고 14일 이내 완료</span>
-                    </label>
+                    <label class="todo-item"><input type="checkbox"><span>초기 주거 예산 설정하기</span></label>
+                    <label class="todo-item"><input type="checkbox"><span>청년 주거지원제도 대상 확인</span></label>
+                    <label class="todo-item"><input type="checkbox"><span>서초구 내 희망 지역 구체화</span></label>
+                    <label class="todo-item"><input type="checkbox"><span>월세/전세 주거 유형 1차 결정</span></label>
+                    <label class="todo-item"><input type="checkbox"><span>AI 비서와 첫 자립 방향 상담</span></label>
                 </div>
             </div>
         </aside>
     </main>
 
+    <!-- =========================================
+         1. 접속 시 묻는 "팝업(Modal)"
+    ========================================= -->
+    <div class="modal-overlay" id="welcome-modal" style="display:flex;">
+        <div class="modal-content welcome-modal">
+            <h2>세상에 첫발을 내딛는 당신,<br>어떤 독립을 꿈꾸시나요?</h2>
+            <p>1분 자가진단을 통해 현재 경제 상황과<br>목표에 딱 맞는 자립 패키지를 추천해 드릴게요!</p>
+            <button class="btn-start-diag" id="btn-open-survey">1분 자가진단 시작하기</button>
+            <button class="btn-skip-diag" id="btn-skip-survey">나중에 할게요 (건너뛰기)</button>
+        </div>
+    </div>
+
+    <!-- =========================================
+         2. 주거비 계산기 모달 팝업
+    ========================================= -->
+    <div class="modal-overlay" id="calc-modal">
+        <div class="modal-content">
+            <span class="modal-close" id="btn-close-calc">&times;</span>
+            <div class="calc-header">
+                <h2>💰 스마트 주거비 계산기</h2>
+                <p>소득과 고정 지출을 입력하면 여유 자금을 알려드려요.</p>
+            </div>
+            <div class="input-group">
+                <label>월 평균 소득 (단위: 만 원)</label>
+                <input type="number" id="input-income" placeholder="예: 200">
+            </div>
+            <div style="display:flex; gap:10px;">
+                <div class="input-group" style="flex:1;"><label>예상 월세</label><input type="number" id="input-rent" placeholder="예: 50"></div>
+                <div class="input-group" style="flex:1;"><label>관리비·공과금</label><input type="number" id="input-util" placeholder="예: 10"></div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <div class="input-group" style="flex:1;"><label>고정 교통비</label><input type="number" id="input-trans" placeholder="예: 10"></div>
+                <div class="input-group" style="flex:1;"><label>기본 식비</label><input type="number" id="input-food" placeholder="예: 40"></div>
+            </div>
+            <button class="btn-calc" id="btn-do-calc">잔여 예산 계산하기</button>
+            <div class="result-box">
+                <h3>주거비 및 고정지출 차감 후 생활비</h3>
+                <div class="amount" id="result-amount">0 만원</div>
+                <div class="status" id="result-status" style="color:var(--text-light);">입력 대기 중</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================
+         3. 자가진단 전체화면 (20문항 전부 포함)
+    ========================================= -->
+    <div class="fullscreen-survey" id="fullscreen-survey">
+        <div class="survey-card">
+            <div class="progress-container"><div class="progress-bar" id="survey-progress"></div></div>
+            <div class="survey-header">
+                <h1>청춘비서 1분 자가진단</h1>
+                <p>나에게 딱 맞는 자립 로드맵을 위해 정확히 답해주세요.</p>
+            </div>
+
+            <!-- [1단계. 독립 목표] -->
+            <div class="step active" id="step-1">
+                <div class="step-title">1단계. 독립 목표</div>
+                <div class="question">
+                    <label class="q-title">Q1. 현재 나이를 입력해주세요.</label>
+                    <div class="money-group"><span>만</span><input type="number" placeholder="예: 21"><span>세</span></div>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q2. 독립을 희망하는 지역을 입력해주세요.</label>
+                    <div class="region-group">
+                        <select><option>시/도 선택</option><option>서울특별시</option></select>
+                        <select><option>시/군/구 선택</option><option>서초구</option></select>
+                        <select><option>읍/면/동 선택</option><option>서초3동</option></select>
+                    </div>
+                    <label style="font-size: 13px; color: var(--text-light);"><input type="checkbox"> 아직 정하지 못함</label>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q3. 언제까지 독립하고 싶나요?</label>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q3"> 1개월 이내</label>
+                        <label class="option-label"><input type="radio" name="q3"> 3개월 이내</label>
+                        <label class="option-label"><input type="radio" name="q3"> 6개월 이내</label>
+                        <label class="option-label"><input type="radio" name="q3"> 1년 이내</label>
+                        <label class="option-label" style="grid-column: 1 / -1;"><input type="radio" name="q3"> 아직 정하지 못함</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- [2단계. 희망 주거 조건] -->
+            <div class="step" id="step-2">
+                <div class="step-title">2단계. 희망 주거 조건</div>
+                <div class="question">
+                    <label class="q-title">Q4. 누구와 함께 거주할 예정인가요?</label>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q4"> 혼자</label>
+                        <label class="option-label"><input type="radio" name="q4"> 가족</label>
+                        <label class="option-label"><input type="radio" name="q4"> 친구·지인</label>
+                        <label class="option-label"><input type="radio" name="q4"> 연인·배우자</label>
+                        <label class="option-label"><input type="radio" name="q4"> 아직 정하지 못함</label>
+                        <label class="option-label" onclick="toggleEtc('etc-q4', this)"><input type="radio" name="q4" class="etc-trigger"> 기타</label>
+                    </div>
+                    <input type="text" id="etc-q4" class="etc-input" placeholder="기타 사유를 적어주세요.">
+                </div>
+                <div class="question">
+                    <label class="q-title">Q5. 희망하는 주거 형태는 무엇인가요? (복수 선택)</label>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="checkbox"> 월세</label>
+                        <label class="option-label"><input type="checkbox"> 전세</label>
+                        <label class="option-label"><input type="checkbox"> 공공임대주택</label>
+                        <label class="option-label"><input type="checkbox"> 행복/청년주택</label>
+                        <label class="option-label"><input type="checkbox"> 쉐어하우스</label>
+                        <label class="option-label"><input type="checkbox"> 고시원</label>
+                        <label class="option-label"><input type="checkbox"> 기숙사</label>
+                        <label class="option-label"><input type="checkbox"> 아직 정하지 못함</label>
+                        <label class="option-label" style="grid-column: 1 / -1;" onclick="toggleEtc('etc-q5', this)"><input type="checkbox" class="etc-trigger"> 기타</label>
+                    </div>
+                    <input type="text" id="etc-q5" class="etc-input" placeholder="원하시는 형태를 적어주세요.">
+                </div>
+                <div class="question">
+                    <label class="q-title">Q6. 주거에 사용할 수 있는 예산을 입력해주세요.</label>
+                    <div class="money-group"><span>보증금: 약</span><input type="number" placeholder="0"><span>만 원</span></div>
+                    <div class="money-group"><span>월세: 최대</span><input type="number" placeholder="0"><span>만 원</span></div>
+                    <div class="money-group"><span>월 관리비: 최대</span><input type="number" placeholder="0"><span>만 원</span></div>
+                    <label style="font-size: 13px; color: var(--text-light);"><input type="checkbox"> 아직 예산을 정하지 못함</label>
+                </div>
+            </div>
+
+            <!-- [3단계. 현재 준비 상태] -->
+            <div class="step" id="step-3">
+                <div class="step-title">3단계. 현재 준비 상태</div>
+                <div class="question">
+                    <label class="q-title">Q7. 현재 독립 준비 단계는 어디에 해당하나요?</label>
+                    <div class="options-grid single">
+                        <label class="option-label"><input type="radio" name="q7"> 독립을 처음 고민하는 단계</label>
+                        <label class="option-label"><input type="radio" name="q7"> 희망 지역과 주거 형태를 알아보는 단계</label>
+                        <label class="option-label"><input type="radio" name="q7"> 예산과 자금계획을 세우는 단계</label>
+                        <label class="option-label"><input type="radio" name="q7"> 매물이나 공공주택을 알아보는 단계</label>
+                        <label class="option-label"><input type="radio" name="q7"> 대출과 지원정책을 알아보는 단계</label>
+                        <label class="option-label"><input type="radio" name="q7"> 계약할 주거지를 결정한 단계</label>
+                        <label class="option-label"><input type="radio" name="q7"> 계약 및 이사를 준비하는 단계</label>
+                        <label class="option-label"><input type="radio" name="q7"> 이미 독립하여 생활하는 단계</label>
+                    </div>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q8. 현재 거주 형태는 무엇인가요?</label>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q8"> 부모님·보호자와 거주</label>
+                        <label class="option-label"><input type="radio" name="q8"> 기숙사</label>
+                        <label class="option-label"><input type="radio" name="q8"> 월세</label>
+                        <label class="option-label"><input type="radio" name="q8"> 전세</label>
+                        <label class="option-label"><input type="radio" name="q8"> 공공임대주택</label>
+                        <label class="option-label"><input type="radio" name="q8"> 쉐어하우스·고시원</label>
+                        <label class="option-label"><input type="radio" name="q8"> 자가</label>
+                        <label class="option-label" onclick="toggleEtc('etc-q8', this)"><input type="radio" name="q8" class="etc-trigger"> 기타</label>
+                    </div>
+                    <input type="text" id="etc-q8" class="etc-input" placeholder="거주 형태를 적어주세요.">
+                </div>
+                <div class="question">
+                    <label class="q-title">Q9. 현재 무주택자인가요?</label>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q9"> 예</label>
+                        <label class="option-label"><input type="radio" name="q9"> 아니요</label>
+                        <label class="option-label" style="grid-column: 1 / -1;"><input type="radio" name="q9"> 잘 모르겠음</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- [4단계. 소득 및 자금 상황] -->
+            <div class="step" id="step-4">
+                <div class="step-title">4단계. 소득 및 자금 상황</div>
+                <div class="question">
+                    <label class="q-title">Q10. 현재 경제활동 상태를 선택해주세요.</label>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q10"> 대학생·대학원생</label>
+                        <label class="option-label"><input type="radio" name="q10"> 취업준비생</label>
+                        <label class="option-label"><input type="radio" name="q10"> 직장인</label>
+                        <label class="option-label"><input type="radio" name="q10"> 아르바이트·단기근로자</label>
+                        <label class="option-label"><input type="radio" name="q10"> 프리랜서·자영업자</label>
+                        <label class="option-label"><input type="radio" name="q10"> 현재 소득활동 없음</label>
+                        <label class="option-label" style="grid-column: 1 / -1;" onclick="toggleEtc('etc-q10', this)"><input type="radio" name="q10" class="etc-trigger"> 기타</label>
+                    </div>
+                    <input type="text" id="etc-q10" class="etc-input" placeholder="상태를 적어주세요.">
+                </div>
+                <div class="question">
+                    <label class="q-title">Q11. 월평균 세전소득은 얼마인가요?</label>
+                    <div class="options-grid single">
+                        <label class="option-label"><input type="radio" name="q11"> 소득 없음</label>
+                        <label class="option-label"><input type="radio" name="q11"> 100만 원 미만</label>
+                        <label class="option-label"><input type="radio" name="q11"> 100만 원 이상 ~ 200만 원 미만</label>
+                        <label class="option-label"><input type="radio" name="q11"> 200만 원 이상 ~ 300만 원 미만</label>
+                        <label class="option-label"><input type="radio" name="q11"> 300만 원 이상 ~ 400만 원 미만</label>
+                        <label class="option-label"><input type="radio" name="q11"> 400만 원 이상</label>
+                        <label class="option-label"><input type="radio" name="q11"> 정확히 알지 못함</label>
+                    </div>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q12. 독립에 바로 사용할 수 있는 자금은 얼마인가요?</label>
+                    <div class="options-grid single">
+                        <label class="option-label"><input type="radio" name="q12"> 500만 원 미만</label>
+                        <label class="option-label"><input type="radio" name="q12"> 500만 원 이상 ~ 1,000만 원 미만</label>
+                        <label class="option-label"><input type="radio" name="q12"> 1,000만 원 이상 ~ 3,000만 원 미만</label>
+                        <label class="option-label"><input type="radio" name="q12"> 3,000만 원 이상 ~ 5,000만 원 미만</label>
+                        <label class="option-label"><input type="radio" name="q12"> 5,000만 원 이상</label>
+                        <label class="option-label"><input type="radio" name="q12"> 사용 가능한 자금 없음</label>
+                        <label class="option-label"><input type="radio" name="q12"> 아직 계산하지 못함</label>
+                    </div>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q13. 정부 주거지원 정책 확인을 위한 소득·자산 정보를 알고 있나요?</label>
+                    <div class="options-grid single">
+                        <label class="option-label"><input type="radio" name="q13"> 소득과 자산 모두 알고 있음</label>
+                        <label class="option-label"><input type="radio" name="q13"> 소득만 알고 있음</label>
+                        <label class="option-label"><input type="radio" name="q13"> 자산만 알고 있음</label>
+                        <label class="option-label"><input type="radio" name="q13"> 모두 정확히 알지 못함</label>
+                        <label class="option-label"><input type="radio" name="q13"> 나중에 입력하겠음</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- [5단계. 청약·대출 및 지출] -->
+            <div class="step" id="step-5">
+                <div class="step-title">5단계. 청약·대출 및 지출</div>
+                <div class="question">
+                    <label class="q-title">Q14. 주택청약종합저축을 보유하고 있나요?</label>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q14"> 있음</label>
+                        <label class="option-label"><input type="radio" name="q14"> 없음</label>
+                        <label class="option-label" style="grid-column: 1 / -1;"><input type="radio" name="q14"> 잘 모르겠음</label>
+                    </div>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q14-1. (청약통장이 있다면) 납입 정보를 입력해주세요.</label>
+                    <div class="money-group"><span>총 납입 횟수:</span><input type="number" placeholder="예: 24"><span>회</span></div>
+                    <div class="money-group"><span>월 납입 금액:</span><input type="number" placeholder="예: 10"><span>만 원</span></div>
+                    <label style="font-size: 13px; color: var(--text-light);"><input type="checkbox"> 정확히 알지 못함</label>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q15. 현재 보유한 대출이 있나요? (복수 선택)</label>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="checkbox"> 없음</label>
+                        <label class="option-label"><input type="checkbox"> 학자금대출</label>
+                        <label class="option-label"><input type="checkbox"> 신용대출</label>
+                        <label class="option-label"><input type="checkbox"> 전월세대출</label>
+                        <label class="option-label"><input type="checkbox"> 자동차대출</label>
+                        <label class="option-label"><input type="checkbox"> 기타 대출</label>
+                        <label class="option-label" style="grid-column: 1 / -1;"><input type="checkbox"> 정확히 알지 못함</label>
+                    </div>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q16. 현재 대출 잔액과 월 상환금액을 입력해주세요.</label>
+                    <div class="money-group"><span>총 대출 잔액: 약</span><input type="number" placeholder="0"><span>만 원</span></div>
+                    <div class="money-group"><span>월 상환 금액: 약</span><input type="number" placeholder="0"><span>만 원</span></div>
+                    <label style="font-size: 13px; color: var(--text-light);"><input type="checkbox"> 나중에 입력하겠음</label>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q17. 독립을 위해 주거자금 대출을 이용할 의향이 있나요?</label>
+                    <div class="options-grid single">
+                        <label class="option-label"><input type="radio" name="q17"> 있음</label>
+                        <label class="option-label"><input type="radio" name="q17"> 조건이 적합하다면 이용할 의향이 있음</label>
+                        <label class="option-label"><input type="radio" name="q17"> 없음</label>
+                        <label class="option-label"><input type="radio" name="q17"> 아직 결정하지 못함</label>
+                    </div>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q18. 현재 신용점수 구간을 선택해주세요. (선택)</label>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q18"> 900점 이상</label>
+                        <label class="option-label"><input type="radio" name="q18"> 800~899점</label>
+                        <label class="option-label"><input type="radio" name="q18"> 700~799점</label>
+                        <label class="option-label"><input type="radio" name="q18"> 600~699점</label>
+                        <label class="option-label"><input type="radio" name="q18"> 600점 미만</label>
+                        <label class="option-label"><input type="radio" name="q18"> 정확히 알지 못함</label>
+                    </div>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q19. 현재 월 고정지출을 입력해주세요.</label>
+                    <div class="expense-grid">
+                        <div class="expense-item"><span>보험료</span><input type="number" placeholder="만 원"></div>
+                        <div class="expense-item"><span>통신비</span><input type="number" placeholder="만 원"></div>
+                        <div class="expense-item"><span>적금·저축</span><input type="number" placeholder="만 원"></div>
+                        <div class="expense-item"><span>대출 원리금·이자</span><input type="number" placeholder="만 원"></div>
+                        <div class="expense-item"><span>현재 주거비</span><input type="number" placeholder="만 원"></div>
+                        <div class="expense-item"><span>교통비·차량 유지비</span><input type="number" placeholder="만 원"></div>
+                        <div class="expense-item"><span>기타 고정지출</span><input type="number" placeholder="만 원"></div>
+                    </div>
+                    <div class="money-group" style="margin-top:10px;">
+                        <span>월 고정지출 합계: 약</span><input type="number" placeholder="자동 계산 혹은 입력" style="font-weight:bold;"><span>만 원</span>
+                    </div>
+                </div>
+                <div class="question">
+                    <label class="q-title">Q20. 로드맵에서 가장 먼저 도움받고 싶은 분야는 무엇인가요?</label>
+                    <div class="options-grid single">
+                        <label class="option-label"><input type="radio" name="q20"> 독립 예산 설정</label>
+                        <label class="option-label"><input type="radio" name="q20"> 희망 지역 및 주거 형태 결정</label>
+                        <label class="option-label"><input type="radio" name="q20"> 전월세 매물 탐색</label>
+                        <label class="option-label"><input type="radio" name="q20"> 공공임대주택 탐색</label>
+                        <label class="option-label"><input type="radio" name="q20"> 청년 주거지원 정책 추천</label>
+                        <label class="option-label"><input type="radio" name="q20"> 전월세대출 비교</label>
+                        <label class="option-label"><input type="radio" name="q20"> 안전한 부동산 계약</label>
+                        <label class="option-label"><input type="radio" name="q20"> 이사 및 전입신고 등 행정 절차</label>
+                        <label class="option-label"><input type="radio" name="q20"> 독립 후 생활비 관리</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="survey-footer">
+                <button class="btn-step btn-prev" id="btn-survey-prev">이전 단계</button>
+                <button class="btn-step btn-next" id="btn-survey-next">다음 단계</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 인터랙션 자바스크립트 -->
     <script>
-        document.getElementById('btn-bell').addEventListener('click', () => alert('도착한 새로운 알림이 없습니다.'));
-        document.getElementById('btn-profile').addEventListener('click', () => alert('지안님의 마이페이지로 이동합니다.'));
+        // --- 0. 헤더 기능 연동 (복구 완료) ---
+        document.getElementById('btn-bell').addEventListener('click', () => alert('새로운 알림이 없습니다.'));
+        document.getElementById('btn-profile').addEventListener('click', () => alert('가입 후 마이페이지를 이용할 수 있습니다.'));
 
-        const btnCalToggle = document.getElementById('btn-cal-toggle');
-        const calendarCard = document.getElementById('calendar-card');
-        btnCalToggle.addEventListener('click', () => {
-            calendarCard.classList.toggle('hidden');
+        // --- 1. 팝업(모달) -> 자가진단 로직 ---
+        const welcomeModal = document.getElementById('welcome-modal');
+        const fullscreenSurvey = document.getElementById('fullscreen-survey');
+        
+        // 시작하기 버튼 -> 팝업 닫고 자가진단 풀스크린 오픈
+        document.getElementById('btn-open-survey').addEventListener('click', () => {
+            welcomeModal.style.display = 'none';
+            fullscreenSurvey.style.display = 'flex';
         });
 
-        const dates = document.querySelectorAll('.cal-grid .date');
-        dates.forEach(date => {
-            date.addEventListener('click', function() {
-                if(this.style.color === 'rgb(203, 213, 224)') return; 
-                dates.forEach(d => d.classList.remove('active'));
-                this.classList.add('active');
-            });
+        // 건너뛰기 버튼 -> 팝업 닫고 대시보드 바로 진입
+        document.getElementById('btn-skip-survey').addEventListener('click', () => {
+            welcomeModal.style.display = 'none';
         });
 
-        const btnTodoToggle = document.getElementById('btn-todo-toggle');
-        const btnStatusTodo = document.getElementById('btn-status-todo');
-        const rightSidebar = document.getElementById('right-sidebar');
+        // --- 2. 주거비 계산기 연동 ---
+        const calcModal = document.getElementById('calc-modal');
+        document.getElementById('btn-open-calc').addEventListener('click', () => calcModal.style.display = 'flex');
+        document.getElementById('btn-close-calc').addEventListener('click', () => calcModal.style.display = 'none');
+        
+        document.getElementById('btn-do-calc').addEventListener('click', () => {
+            const income = Number(document.getElementById('input-income').value) || 0;
+            const rent = Number(document.getElementById('input-rent').value) || 0;
+            const util = Number(document.getElementById('input-util').value) || 0;
+            const trans = Number(document.getElementById('input-trans').value) || 0;
+            const food = Number(document.getElementById('input-food').value) || 0;
 
-        const toggleTodoSidebar = () => {
-            rightSidebar.classList.toggle('closed');
+            const totalExpense = rent + util + trans + food;
+            const remain = income - totalExpense;
+            const ratio = income > 0 ? (rent + util) / income : 0;
+
+            document.getElementById('result-amount').innerText = remain.toLocaleString() + ' 만원';
+            
+            const statusBadge = document.getElementById('result-status');
+            if(income === 0) {
+                statusBadge.innerText = '소득을 입력해주세요';
+                statusBadge.style.color = 'var(--text-light)';
+            } else if(ratio > 0.35) {
+                statusBadge.innerText = '⚠️ 주거비 부담 과다 (위험)';
+                statusBadge.style.color = '#ef4444';
+            } else {
+                statusBadge.innerText = '✅ 주거비 비율 적정 (안정)';
+                statusBadge.style.color = 'var(--mint)';
+            }
+        });
+
+        // --- 3. 5단계 설문 전환 로직 ---
+        let currentStep = 1;
+        const totalSteps = 5;
+        const steps = document.querySelectorAll('.step');
+        const btnSurveyPrev = document.getElementById('btn-survey-prev');
+        const btnSurveyNext = document.getElementById('btn-survey-next');
+        const surveyProgress = document.getElementById('survey-progress');
+
+        function updateSurveyStep(direction) {
+            steps[currentStep - 1].classList.remove('active');
+            if (direction === 'next') currentStep++;
+            else if (direction === 'prev') currentStep--;
+
+            btnSurveyPrev.style.display = currentStep === 1 ? 'none' : 'block';
+            if (currentStep === totalSteps) {
+                btnSurveyNext.innerText = '맞춤형 결과 확인하기';
+                btnSurveyNext.style.backgroundColor = 'var(--mint)';
+            } else {
+                btnSurveyNext.innerText = '다음 단계';
+                btnSurveyNext.style.backgroundColor = 'var(--navy)';
+            }
+            surveyProgress.style.width = `${(currentStep / totalSteps) * 100}%`;
+            steps[currentStep - 1].classList.add('active');
+            
+            // 다음 스텝으로 넘어갈 때 스크롤 맨 위로
+            fullscreenSurvey.scrollTop = 0;
+        }
+
+        btnSurveyNext.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                updateSurveyStep('next');
+            } else {
+                alert('수고하셨습니다! 입력해주신 20개 문항을 바탕으로 나만의 대시보드가 세팅되었습니다.');
+                fullscreenSurvey.style.display = 'none'; // 진단 완료 시 대시보드 오픈
+            }
+        });
+        btnSurveyPrev.addEventListener('click', () => {
+            if (currentStep > 1) updateSurveyStep('prev');
+        });
+
+        // '기타' 입력창 나타나기 로직
+        function toggleEtc(inputId, labelElement) {
+            const input = document.getElementById(inputId);
+            const radioOrCheck = labelElement.querySelector('.etc-trigger');
+            setTimeout(() => {
+                if(radioOrCheck.checked) input.classList.add('show');
+                else { input.classList.remove('show'); input.value = ''; }
+            }, 10);
+        }
+
+        // --- 4. 프리미엄 기능 잠금 알림 ---
+        document.querySelectorAll('.btn-premium-lock').forEach(btn => {
+            btn.addEventListener('click', () => alert('🔒 [첫 독립 3개월 패키지] 이상 구독 시 이용할 수 있는 프리미엄 기능입니다.'));
+        });
+
+        // --- 5. 캘린더 자동 생성 로직 (현재 날짜 연동) ---
+        const renderCalendar = () => {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth(); 
+            const currentDate = today.getDate();
+
+            document.getElementById('month-title').innerText = `${year}년 ${month + 1}월`;
+            const firstDayIndex = new Date(year, month, 1).getDay(); 
+            const lastDayDate = new Date(year, month + 1, 0).getDate(); 
+            const prevLastDayDate = new Date(year, month, 0).getDate(); 
+
+            const calGrid = document.getElementById('cal-grid');
+            const dayNamesHTML = '<div class="day-name">일</div><div class="day-name">월</div><div class="day-name">화</div><div class="day-name">수</div><div class="day-name">목</div><div class="day-name">금</div><div class="day-name">토</div>';
+            let daysHTML = '';
+
+            for(let x = firstDayIndex; x > 0; x--) {
+                daysHTML += `<div class="date" style="color:#cbd5e0;">${prevLastDayDate - x + 1}</div>`;
+            }
+            for(let i = 1; i <= lastDayDate; i++) {
+                let classes = 'date';
+                if(i === currentDate) classes += ' today';
+                if(i === Math.min(currentDate + 3, lastDayDate)) classes += ' has-event-blue';
+                if(i === Math.min(currentDate + 7, lastDayDate)) classes += ' has-event-mint';
+                daysHTML += `<div class="${classes}">${i}</div>`;
+            }
+            const totalCells = firstDayIndex + lastDayDate;
+            let nextDays = 1;
+            while((totalCells + nextDays - 1) % 7 !== 0) {
+                daysHTML += `<div class="date" style="color:#cbd5e0;">${nextDays}</div>`;
+                nextDays++;
+            }
+            calGrid.innerHTML = dayNamesHTML + daysHTML;
+            document.getElementById('event-date-1').innerText = `${month+1}.${Math.min(currentDate+3, lastDayDate)}`;
         };
-        btnTodoToggle.addEventListener('click', toggleTodoSidebar);
-        btnStatusTodo.addEventListener('click', toggleTodoSidebar);
+        renderCalendar(); 
 
-        // SVG 애니메이션 컨트롤 로직
+        // --- 6. 사이드바 & SVG 연동 로직 ---
+        document.getElementById('btn-cal-toggle').addEventListener('click', () => document.getElementById('calendar-card').classList.toggle('hidden'));
+        const rightSidebar = document.getElementById('right-sidebar');
+        const toggleTodoSidebar = () => rightSidebar.classList.toggle('closed');
+        document.getElementById('btn-todo-toggle').addEventListener('click', toggleTodoSidebar);
+        document.getElementById('btn-status-todo').addEventListener('click', toggleTodoSidebar);
+
         const checkboxes = document.querySelectorAll('#todo-list input[type="checkbox"]');
-        const textMainTodo = document.getElementById('main-todo-count');
-        const textTabTodo = document.getElementById('tab-todo-count');
-        const textPanelRatio = document.getElementById('panel-todo-ratio');
-        const mainProgress = document.getElementById('main-progress');
-
-        // 퍼센트에 맞춰 SVG 투명도(opacity) 조절
         const updateHouseSVG = (percent) => {
             document.getElementById('house-foundation').style.opacity = percent >= 20 ? 1 : 0;
             document.getElementById('house-walls').style.opacity = percent >= 40 ? 1 : 0;
             document.getElementById('house-roof').style.opacity = percent >= 60 ? 1 : 0;
             document.getElementById('house-details').style.opacity = percent >= 80 ? 1 : 0;
             document.getElementById('house-deco').style.opacity = percent >= 100 ? 1 : 0;
-            
-            // 100% 달성 시 살짝 튀어오르는(Bounce) 효과
             const svgHouse = document.getElementById('house-svg');
-            if(percent === 100) {
-                svgHouse.style.transform = 'scale(1.08)';
-            } else {
-                svgHouse.style.transform = 'scale(1)';
-            }
+            if(percent === 100) svgHouse.style.transform = 'scale(1.08)';
+            else svgHouse.style.transform = 'scale(1)';
         };
 
         const updateTodoProgress = () => {
             const total = checkboxes.length;
             const checked = document.querySelectorAll('#todo-list input[type="checkbox"]:checked').length;
             const currentPercent = Math.round((checked / total) * 100); 
-            
             const ratioText = `${checked}/${total}`;
-            textMainTodo.innerText = ratioText;
-            textTabTodo.innerHTML = `오늘 할 일<br>${ratioText}`;
-            textPanelRatio.innerText = `${ratioText} 완료`;
-            mainProgress.innerText = `${currentPercent}%`;
+            
+            document.getElementById('main-todo-count').innerText = ratioText;
+            document.getElementById('tab-todo-count').innerHTML = `이번 주 미션<br>${ratioText}`;
+            document.getElementById('panel-todo-ratio').innerText = `${ratioText} 완료`;
+            document.getElementById('main-progress').innerText = `${currentPercent}%`;
 
             updateHouseSVG(currentPercent);
         };
 
         checkboxes.forEach(box => {
             box.addEventListener('change', function() {
-                if(this.checked) {
-                    this.parentElement.classList.add('done');
-                } else {
-                    this.parentElement.classList.remove('done');
-                }
+                if(this.checked) this.parentElement.classList.add('done');
+                else this.parentElement.classList.remove('done');
                 updateTodoProgress();
             });
         });
-
-        // 로드 시 초기 상태 세팅
         updateTodoProgress();
     </script>
 </body>
