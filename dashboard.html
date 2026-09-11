@@ -241,6 +241,15 @@
         .btn-prev:hover { background: #cbd5e0; }
         .btn-next { background: var(--navy); color: var(--white); }
         .btn-next:hover { background: var(--blue-primary); }
+
+        /* =========================================
+           4. 진단 완료 감동 팝업 (새로 추가됨)
+        ========================================= */
+        .completion-modal-content { text-align: center; padding: 50px 40px; width: 450px; }
+        .completion-icon { font-size: 48px; margin-bottom: 20px; animation: float 2s infinite ease-in-out; }
+        .completion-modal-content h2 { font-size: 26px; color: var(--navy); margin-bottom: 20px; font-weight: 800; line-height: 1.4; }
+        .completion-modal-content p { font-size: 15px; color: var(--text-dark); margin-bottom: 35px; line-height: 1.6; word-break: keep-all; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 <body>
@@ -727,6 +736,18 @@
         </div>
     </div>
 
+    <!-- =========================================
+         4. 진단 완료 감동 팝업 (새로 추가됨)
+    ========================================= -->
+    <div class="modal-overlay" id="completion-modal" style="z-index: 9999;">
+        <div class="modal-content completion-modal-content">
+            <div class="completion-icon">🏠💙</div>
+            <h2>이제, 혼자가 아니에요.</h2>
+            <p>처음 해보는 독립 준비, 어디서부터 시작해야 할지 막막하고 두려웠죠?<br><br>작성해주신 20개의 답변을 바탕으로 <strong>당신만의 맞춤형 자립 지도</strong>가 완성되었습니다.<br><br>당신이 목표를 이루고 온전히 자립하는 그날까지, 청춘비서가 늘 곁에서 든든한 길잡이가 되어 줄게요. 세상에 혼자 남겨진 것 같은 순간에도, 당신의 발걸음 뒤엔 언제나 우리가 버티고 서 있을게요.</p>
+            <button class="btn-start-diag" id="btn-go-dashboard">나만의 대시보드로 이동하기</button>
+        </div>
+    </div>
+
     <!-- 인터랙션 자바스크립트 -->
     <script>
         // --- 0. 헤더 기능 연동 (복구 완료) ---
@@ -811,10 +832,17 @@
             if (currentStep < totalSteps) {
                 updateSurveyStep('next');
             } else {
-                alert('수고하셨습니다! 입력해주신 20개 문항을 바탕으로 나만의 대시보드가 세팅되었습니다.');
-                fullscreenSurvey.style.display = 'none'; // 진단 완료 시 대시보드 오픈
+                // 기존의 투박한 alert() 대신 감동 팝업 띄우기
+                document.getElementById('completion-modal').style.display = 'flex';
             }
         });
+
+        // 진단 완료 팝업 -> 대시보드 이동 로직
+        document.getElementById('btn-go-dashboard').addEventListener('click', () => {
+            document.getElementById('completion-modal').style.display = 'none';
+            fullscreenSurvey.style.display = 'none'; // 진단 완료 시 대시보드 오픈
+        });
+
         btnSurveyPrev.addEventListener('click', () => {
             if (currentStep > 1) updateSurveyStep('prev');
         });
