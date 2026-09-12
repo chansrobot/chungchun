@@ -117,7 +117,7 @@
         .illustration-placeholder { width: 300px; height: 180px; margin-bottom: 40px; display: flex; justify-content: center; align-items: center; }
         
         .status-bar { display: flex; align-items: center; gap: 40px; }
-        .status-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .status-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; }
         .status-item svg { width: 20px; height: 20px; stroke: var(--text-light); fill: none; stroke-width: 2; transition: 0.2s; }
         .status-item:hover svg { stroke: var(--blue-primary); transform: translateY(-2px); }
         .status-item span.count { color: var(--blue-primary); }
@@ -182,13 +182,16 @@
         .btn-skip-diag:hover { color: var(--text-dark); }
 
         /* =========================================
-           2. 자가진단 전체화면 (질문 20개 전체 복원)
+           2. 자가진단 전체화면 (방법 1 적용: 스크롤바 영역 확보로 가로 흔들림 차단)
         ========================================= */
         .fullscreen-survey {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--bg-color); z-index: 9998;
             display: none; flex-direction: column; align-items: center; justify-content: flex-start;
-            padding-top: 5vh; padding-bottom: 40px; overflow-y: auto;
+            padding-top: 5vh; padding-bottom: 40px; 
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-gutter: stable;
         }
         .survey-card {
             background: var(--white); width: 100%; max-width: 650px; border-radius: 20px;
@@ -211,12 +214,37 @@
         .question { margin-bottom: 30px; }
         .question label.q-title { display: block; font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 12px; line-height: 1.4; }
 
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .options-grid.single { grid-template-columns: 1fr; }
-        .option-label { display: flex; align-items: center; justify-content: center; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; transition: 0.2s; text-align: center; background: var(--white);}
-        .option-label input { display: none; }
-        .option-label:hover { background: var(--bg-color); }
-        .option-label:has(input:checked) { background: var(--blue-light); border-color: var(--blue-primary); color: var(--blue-primary); }
+        /* 부드러운 아코디언 드롭다운 */
+        .custom-select-wrap { position: relative; width: 100%; margin-bottom: 10px; }
+        .custom-select-trigger {
+            width: 100%; padding: 14px 16px; border: 1px solid var(--border-light); border-radius: 12px;
+            font-size: 14px; color: var(--text-dark); background: var(--white); cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; transition: 0.3s; font-weight: 600;
+        }
+        .custom-select-trigger:hover { border-color: var(--blue-primary); }
+        .custom-select-trigger i { font-style: normal; font-size: 12px; color: var(--text-light); transition: transform 0.45s ease; }
+        
+        .custom-select-options {
+            max-height: 0; opacity: 0; overflow: hidden;
+            transition: max-height 0.65s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, padding 0.5s ease;
+            display: flex; flex-direction: column; padding: 0 10px; margin-top: -6px;
+            background: var(--white); border: 1px solid var(--border-light); border-top: none;
+            border-radius: 0 0 12px 12px; box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+        .custom-select-wrap.open .custom-select-options {
+            max-height: 480px;
+            opacity: 1; padding: 12px 10px;
+        }
+        .custom-select-wrap.open .custom-select-trigger { border-radius: 12px 12px 0 0; border-color: var(--border-light); }
+        .custom-select-wrap.open .custom-select-trigger i { transform: rotate(180deg); }
+
+        .custom-option {
+            padding: 12px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 10px; transition: 0.2s; color: var(--text-dark);
+        }
+        .custom-option:hover { background: var(--bg-color); }
+        .custom-option input { accent-color: var(--mint); width: 16px; height: 16px; cursor: pointer; }
+        .custom-option:has(input:checked) { background: var(--blue-light); color: var(--blue-primary); }
 
         input[type="number"], input[type="text"], select {
             width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: 0.2s;
@@ -227,12 +255,20 @@
         .money-group { display: flex; align-items: center; gap: 8px; margin-bottom: 10px;}
         .money-group span { font-size: 14px; color: var(--text-dark); font-weight: 600; white-space: nowrap;}
         
+        /* Q6 예산 디자인 동기화 */
+        .money-input-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 5px 0; }
+        .money-input-row label { font-size: 14px; font-weight: 700; color: var(--navy); width: 100px; }
+        .money-input-row input { flex: 1; padding: 12px 16px; border: 1px solid var(--border-light); border-radius: 8px; background: #f8fafc; outline: none; text-align: left; margin: 0 15px; transition: 0.2s; }
+        .money-input-row input:focus { border-color: var(--blue-primary); box-shadow: 0 0 0 3px var(--blue-light); background: #fff;}
+        .money-input-row span { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+
         .expense-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px;}
         .expense-item { display: flex; flex-direction: column; gap: 5px; }
         .expense-item span { font-size: 13px; font-weight: 600; color: var(--text-light); }
         .expense-item input { padding: 10px; }
 
-        .etc-input { margin-top: 8px; display: none; }
+        .etc-input { margin-top: 8px; display: none; width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: 0.2s;}
+        .etc-input:focus { border-color: var(--blue-primary); background: var(--white); box-shadow: 0 0 0 3px var(--blue-light); }
         .etc-input.show { display: block; animation: fadeIn 0.3s ease; }
 
         .survey-footer { display: flex; justify-content: space-between; gap: 10px; margin-top: 40px; }
@@ -342,14 +378,6 @@
 
         <!-- 중앙 메인 코칭 영역 -->
         <section class="center-panel">
-            <div class="mini-profile">
-                <span><i>📍</i> 희망 지역: 서초구</span>
-                <span style="color:var(--border-light);">|</span>
-                <span><i>💰</i> 예산: 1천 / 월 50</span>
-                <span style="color:var(--border-light);">|</span>
-                <span><i>🏷️</i> 첫 독립 3개월 패키지</span>
-            </div>
-
             <div class="greeting">
                 <h1>세상에 첫발을 내딛는 청춘님, 오늘도<br>독립에 한 걸음 가까워졌어요!</h1>
                 <p>1개월차 [준비 단계] 미션을 차근차근 달성해 보세요.</p>
@@ -404,10 +432,13 @@
                 </svg>
             </div>
 
-            <div class="status-bar">
-                <div class="status-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 예정 일정 <span class="count">1</span></div>
-                <div style="color:var(--border-light);">•</div>
-                <div class="status-item" id="btn-status-todo"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg> 이번 주 미션 <span class="count-mint" id="main-todo-count">0/5</span></div>
+            <!-- 하단으로 이동한 미니 프로필 -->
+            <div class="mini-profile" style="margin-top: 10px; margin-bottom: 0;">
+                <span><i>📍</i> 희망 지역: 서초구</span>
+                <span style="color:var(--border-light);">|</span>
+                <span><i>💰</i> 예산: 1천 / 월 50</span>
+                <span style="color:var(--border-light);">|</span>
+                <span><i>🏷️</i> 첫 독립 3개월 패키지</span>
             </div>
         </section>
 
@@ -430,9 +461,7 @@
         </aside>
     </main>
 
-    <!-- =========================================
-         1. 접속 시 묻는 "팝업(Modal)"
-    ========================================= -->
+    <!-- 1. 첫 접속 모달 (온보딩 질문) -->
     <div class="modal-overlay" id="welcome-modal" style="display:flex;">
         <div class="modal-content welcome-modal">
             <h2>세상에 첫발을 내딛는 당신,<br>어떤 독립을 꿈꾸시나요?</h2>
@@ -442,9 +471,7 @@
         </div>
     </div>
 
-    <!-- =========================================
-         2. 주거비 계산기 모달 팝업
-    ========================================= -->
+    <!-- 2. 주거비 계산기 모달 팝업 -->
     <div class="modal-overlay" id="calc-modal">
         <div class="modal-content">
             <span class="modal-close" id="btn-close-calc">&times;</span>
@@ -473,9 +500,7 @@
         </div>
     </div>
 
-    <!-- =========================================
-         3. 자가진단 전체화면 (20문항 전부 포함)
-    ========================================= -->
+    <!-- 3. 자가진단 전체화면 -->
     <div class="fullscreen-survey" id="fullscreen-survey">
         <div class="survey-card">
             <div class="progress-container"><div class="progress-bar" id="survey-progress"></div></div>
@@ -491,23 +516,27 @@
                     <label class="q-title">Q1. 현재 나이를 입력해주세요.</label>
                     <div class="money-group"><span>만</span><input type="number" placeholder="예: 21"><span>세</span></div>
                 </div>
+                <!-- 전국 단위 지역 정보 셀렉트 -->
                 <div class="question">
                     <label class="q-title">Q2. 독립을 희망하는 지역을 입력해주세요.</label>
                     <div class="region-group">
-                        <select><option>시/도 선택</option><option>서울특별시</option></select>
-                        <select><option>시/군/구 선택</option><option>서초구</option></select>
-                        <select><option>읍/면/동 선택</option><option>서초3동</option></select>
+                        <select id="sido-select"><option value="">시/도 선택</option></select>
+                        <select id="sigungu-select" disabled><option value="">시/군/구 선택</option></select>
+                        <select id="dong-select" disabled><option value="">읍/면/동 선택</option></select>
                     </div>
                     <label style="font-size: 13px; color: var(--text-light);"><input type="checkbox"> 아직 정하지 못함</label>
                 </div>
                 <div class="question">
                     <label class="q-title">Q3. 언제까지 독립하고 싶나요?</label>
-                    <div class="options-grid">
-                        <label class="option-label"><input type="radio" name="q3"> 1개월 이내</label>
-                        <label class="option-label"><input type="radio" name="q3"> 3개월 이내</label>
-                        <label class="option-label"><input type="radio" name="q3"> 6개월 이내</label>
-                        <label class="option-label"><input type="radio" name="q3"> 1년 이내</label>
-                        <label class="option-label" style="grid-column: 1 / -1;"><input type="radio" name="q3"> 아직 정하지 못함</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q3" value="1개월 이내"> 1개월 이내</label>
+                            <label class="custom-option"><input type="radio" name="q3" value="3개월 이내"> 3개월 이내</label>
+                            <label class="custom-option"><input type="radio" name="q3" value="6개월 이내"> 6개월 이내</label>
+                            <label class="custom-option"><input type="radio" name="q3" value="1년 이내"> 1년 이내</label>
+                            <label class="custom-option"><input type="radio" name="q3" value="아직 정하지 못함"> 아직 정하지 못함</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -517,37 +546,50 @@
                 <div class="step-title">2단계. 희망 주거 조건</div>
                 <div class="question">
                     <label class="q-title">Q4. 누구와 함께 거주할 예정인가요?</label>
-                    <div class="options-grid">
-                        <label class="option-label"><input type="radio" name="q4"> 혼자</label>
-                        <label class="option-label"><input type="radio" name="q4"> 가족</label>
-                        <label class="option-label"><input type="radio" name="q4"> 친구·지인</label>
-                        <label class="option-label"><input type="radio" name="q4"> 연인·배우자</label>
-                        <label class="option-label"><input type="radio" name="q4"> 아직 정하지 못함</label>
-                        <label class="option-label" onclick="toggleEtc('etc-q4', this)"><input type="radio" name="q4" class="etc-trigger"> 기타</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q4" value="혼자"> 혼자</label>
+                            <label class="custom-option"><input type="radio" name="q4" value="가족"> 가족</label>
+                            <label class="custom-option"><input type="radio" name="q4" value="친구·지인"> 친구·지인</label>
+                            <label class="custom-option"><input type="radio" name="q4" value="연인·배우자"> 연인·배우자</label>
+                            <label class="custom-option"><input type="radio" name="q4" value="아직 정하지 못함"> 아직 정하지 못함</label>
+                            <label class="custom-option"><input type="radio" name="q4" class="etc-trigger" value="기타"> 기타</label>
+                        </div>
                     </div>
-                    <input type="text" id="etc-q4" class="etc-input" placeholder="기타 사유를 적어주세요.">
+                    <input type="text" id="etc-q4" class="etc-input" placeholder="기타 사유를 직접 적어주세요.">
                 </div>
                 <div class="question">
                     <label class="q-title">Q5. 희망하는 주거 형태는 무엇인가요? (복수 선택)</label>
-                    <div class="options-grid">
-                        <label class="option-label"><input type="checkbox"> 월세</label>
-                        <label class="option-label"><input type="checkbox"> 전세</label>
-                        <label class="option-label"><input type="checkbox"> 공공임대주택</label>
-                        <label class="option-label"><input type="checkbox"> 행복/청년주택</label>
-                        <label class="option-label"><input type="checkbox"> 쉐어하우스</label>
-                        <label class="option-label"><input type="checkbox"> 고시원</label>
-                        <label class="option-label"><input type="checkbox"> 기숙사</label>
-                        <label class="option-label"><input type="checkbox"> 아직 정하지 못함</label>
-                        <label class="option-label" style="grid-column: 1 / -1;" onclick="toggleEtc('etc-q5', this)"><input type="checkbox" class="etc-trigger"> 기타</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 (복수 선택) <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="checkbox" value="월세"> 월세</label>
+                            <label class="custom-option"><input type="checkbox" value="전세"> 전세</label>
+                            <label class="custom-option"><input type="checkbox" value="공공임대주택"> 공공임대주택</label>
+                            <label class="custom-option"><input type="checkbox" value="행복/청년주택"> 행복/청년주택</label>
+                            <label class="custom-option"><input type="checkbox" value="쉐어하우스"> 쉐어하우스</label>
+                            <label class="custom-option"><input type="checkbox" value="고시원"> 고시원</label>
+                            <label class="custom-option"><input type="checkbox" value="기숙사"> 기숙사</label>
+                            <label class="custom-option"><input type="checkbox" value="아직 정하지 못함"> 아직 정하지 못함</label>
+                            <label class="custom-option"><input type="checkbox" class="etc-trigger" value="기타"> 기타</label>
+                        </div>
                     </div>
-                    <input type="text" id="etc-q5" class="etc-input" placeholder="원하시는 형태를 적어주세요.">
+                    <input type="text" id="etc-q5" class="etc-input" placeholder="원하시는 형태를 직접 적어주세요.">
                 </div>
-                <div class="question">
+                <!-- 예산 입력 칸 -->
+                <div class="question" style="margin-top: 40px;">
                     <label class="q-title">Q6. 주거에 사용할 수 있는 예산을 입력해주세요.</label>
-                    <div class="money-group"><span>보증금: 약</span><input type="number" placeholder="0"><span>만 원</span></div>
-                    <div class="money-group"><span>월세: 최대</span><input type="number" placeholder="0"><span>만 원</span></div>
-                    <div class="money-group"><span>월 관리비: 최대</span><input type="number" placeholder="0"><span>만 원</span></div>
-                    <label style="font-size: 13px; color: var(--text-light);"><input type="checkbox"> 아직 예산을 정하지 못함</label>
+                    <div class="money-input-row">
+                        <label>보증금: 약</label><input type="number" placeholder="0"><span>만원</span>
+                    </div>
+                    <div class="money-input-row">
+                        <label>월세: 최대</label><input type="number" placeholder="0"><span>만원</span>
+                    </div>
+                    <div class="money-input-row">
+                        <label>월 관리비: 최대</label><input type="number" placeholder="0"><span>만원</span>
+                    </div>
+                    <label style="font-size: 13px; color: var(--text-light); display: block; margin-top: 10px;"><input type="checkbox"> 아직 예산을 정하지 못함</label>
                 </div>
             </div>
 
@@ -556,37 +598,46 @@
                 <div class="step-title">3단계. 현재 준비 상태</div>
                 <div class="question">
                     <label class="q-title">Q7. 현재 독립 준비 단계는 어디에 해당하나요?</label>
-                    <div class="options-grid single">
-                        <label class="option-label"><input type="radio" name="q7"> 독립을 처음 고민하는 단계</label>
-                        <label class="option-label"><input type="radio" name="q7"> 희망 지역과 주거 형태를 알아보는 단계</label>
-                        <label class="option-label"><input type="radio" name="q7"> 예산과 자금계획을 세우는 단계</label>
-                        <label class="option-label"><input type="radio" name="q7"> 매물이나 공공주택을 알아보는 단계</label>
-                        <label class="option-label"><input type="radio" name="q7"> 대출과 지원정책을 알아보는 단계</label>
-                        <label class="option-label"><input type="radio" name="q7"> 계약할 주거지를 결정한 단계</label>
-                        <label class="option-label"><input type="radio" name="q7"> 계약 및 이사를 준비하는 단계</label>
-                        <label class="option-label"><input type="radio" name="q7"> 이미 독립하여 생활하는 단계</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q7" value="독립을 처음 고민하는 단계"> 독립을 처음 고민하는 단계</label>
+                            <label class="custom-option"><input type="radio" name="q7" value="희망 지역과 주거 형태를 알아보는 단계"> 희망 지역과 주거 형태를 알아보는 단계</label>
+                            <label class="custom-option"><input type="radio" name="q7" value="예산과 자금계획을 세우는 단계"> 예산과 자금계획을 세우는 단계</label>
+                            <label class="custom-option"><input type="radio" name="q7" value="매물이나 공공주택을 알아보는 단계"> 매물이나 공공주택을 알아보는 단계</label>
+                            <label class="custom-option"><input type="radio" name="q7" value="대출과 지원정책을 알아보는 단계"> 대출과 지원정책을 알아보는 단계</label>
+                            <label class="custom-option"><input type="radio" name="q7" value="계약할 주거지를 결정한 단계"> 계약할 주거지를 결정한 단계</label>
+                            <label class="custom-option"><input type="radio" name="q7" value="계약 및 이사를 준비하는 단계"> 계약 및 이사를 준비하는 단계</label>
+                            <label class="custom-option"><input type="radio" name="q7" value="이미 독립하여 생활하는 단계"> 이미 독립하여 생활하는 단계</label>
+                        </div>
                     </div>
                 </div>
                 <div class="question">
                     <label class="q-title">Q8. 현재 거주 형태는 무엇인가요?</label>
-                    <div class="options-grid">
-                        <label class="option-label"><input type="radio" name="q8"> 부모님·보호자와 거주</label>
-                        <label class="option-label"><input type="radio" name="q8"> 기숙사</label>
-                        <label class="option-label"><input type="radio" name="q8"> 월세</label>
-                        <label class="option-label"><input type="radio" name="q8"> 전세</label>
-                        <label class="option-label"><input type="radio" name="q8"> 공공임대주택</label>
-                        <label class="option-label"><input type="radio" name="q8"> 쉐어하우스·고시원</label>
-                        <label class="option-label"><input type="radio" name="q8"> 자가</label>
-                        <label class="option-label" onclick="toggleEtc('etc-q8', this)"><input type="radio" name="q8" class="etc-trigger"> 기타</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q8" value="부모님·보호자와 거주"> 부모님·보호자와 거주</label>
+                            <label class="custom-option"><input type="radio" name="q8" value="기숙사"> 기숙사</label>
+                            <label class="custom-option"><input type="radio" name="q8" value="월세"> 월세</label>
+                            <label class="custom-option"><input type="radio" name="q8" value="전세"> 전세</label>
+                            <label class="custom-option"><input type="radio" name="q8" value="공공임대주택"> 공공임대주택</label>
+                            <label class="custom-option"><input type="radio" name="q8" value="쉐어하우스·고시원"> 쉐어하우스·고시원</label>
+                            <label class="custom-option"><input type="radio" name="q8" value="자가"> 자가</label>
+                            <label class="custom-option"><input type="radio" name="q8" class="etc-trigger" value="기타"> 기타</label>
+                        </div>
                     </div>
-                    <input type="text" id="etc-q8" class="etc-input" placeholder="거주 형태를 적어주세요.">
+                    <input type="text" id="etc-q8" class="etc-input" placeholder="거주 형태를 직접 적어주세요.">
                 </div>
                 <div class="question">
                     <label class="q-title">Q9. 현재 무주택자인가요?</label>
-                    <div class="options-grid">
-                        <label class="option-label"><input type="radio" name="q9"> 예</label>
-                        <label class="option-label"><input type="radio" name="q9"> 아니요</label>
-                        <label class="option-label" style="grid-column: 1 / -1;"><input type="radio" name="q9"> 잘 모르겠음</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q9" value="예 (무주택자)"> 예 (무주택자)</label>
+                            <label class="custom-option"><input type="radio" name="q9" value="아니오"> 아니오</label>
+                            <label class="custom-option"><input type="radio" name="q9" value="잘 모르겠음"> 잘 모르겠음</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -596,49 +647,61 @@
                 <div class="step-title">4단계. 소득 및 자금 상황</div>
                 <div class="question">
                     <label class="q-title">Q10. 현재 경제활동 상태를 선택해주세요.</label>
-                    <div class="options-grid">
-                        <label class="option-label"><input type="radio" name="q10"> 대학생·대학원생</label>
-                        <label class="option-label"><input type="radio" name="q10"> 취업준비생</label>
-                        <label class="option-label"><input type="radio" name="q10"> 직장인</label>
-                        <label class="option-label"><input type="radio" name="q10"> 아르바이트·단기근로자</label>
-                        <label class="option-label"><input type="radio" name="q10"> 프리랜서·자영업자</label>
-                        <label class="option-label"><input type="radio" name="q10"> 현재 소득활동 없음</label>
-                        <label class="option-label" style="grid-column: 1 / -1;" onclick="toggleEtc('etc-q10', this)"><input type="radio" name="q10" class="etc-trigger"> 기타</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q10" value="대학생·대학원생"> 대학생·대학원생</label>
+                            <label class="custom-option"><input type="radio" name="q10" value="취업준비생"> 취업준비생</label>
+                            <label class="custom-option"><input type="radio" name="q10" value="직장인"> 직장인</label>
+                            <label class="custom-option"><input type="radio" name="q10" value="아르바이트·단기근로자"> 아르바이트·단기근로자</label>
+                            <label class="custom-option"><input type="radio" name="q10" value="프리랜서·자영업자"> 프리랜서·자영업자</label>
+                            <label class="custom-option"><input type="radio" name="q10" value="현재 소득활동 없음"> 현재 소득활동 없음</label>
+                            <label class="custom-option"><input type="radio" name="q10" class="etc-trigger" value="기타"> 기타</label>
+                        </div>
                     </div>
-                    <input type="text" id="etc-q10" class="etc-input" placeholder="상태를 적어주세요.">
+                    <input type="text" id="etc-q10" class="etc-input" placeholder="상태를 직접 적어주세요.">
                 </div>
                 <div class="question">
                     <label class="q-title">Q11. 월평균 세전소득은 얼마인가요?</label>
-                    <div class="options-grid single">
-                        <label class="option-label"><input type="radio" name="q11"> 소득 없음</label>
-                        <label class="option-label"><input type="radio" name="q11"> 100만 원 미만</label>
-                        <label class="option-label"><input type="radio" name="q11"> 100만 원 이상 ~ 200만 원 미만</label>
-                        <label class="option-label"><input type="radio" name="q11"> 200만 원 이상 ~ 300만 원 미만</label>
-                        <label class="option-label"><input type="radio" name="q11"> 300만 원 이상 ~ 400만 원 미만</label>
-                        <label class="option-label"><input type="radio" name="q11"> 400만 원 이상</label>
-                        <label class="option-label"><input type="radio" name="q11"> 정확히 알지 못함</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q11" value="소득 없음"> 소득 없음</label>
+                            <label class="custom-option"><input type="radio" name="q11" value="100만 원 미만"> 100만 원 미만</label>
+                            <label class="custom-option"><input type="radio" name="q11" value="100만 원 이상 ~ 200만 원 미만"> 100만 원 이상 ~ 200만 원 미만</label>
+                            <label class="custom-option"><input type="radio" name="q11" value="200만 원 이상 ~ 300만 원 미만"> 200만 원 이상 ~ 300만 원 미만</label>
+                            <label class="custom-option"><input type="radio" name="q11" value="300만 원 이상 ~ 400만 원 미만"> 300만 원 이상 ~ 400만 원 미만</label>
+                            <label class="custom-option"><input type="radio" name="q11" value="400만 원 이상"> 400만 원 이상</label>
+                            <label class="custom-option"><input type="radio" name="q11" value="정확히 알지 못함"> 정확히 알지 못함</label>
+                        </div>
                     </div>
                 </div>
                 <div class="question">
                     <label class="q-title">Q12. 독립에 바로 사용할 수 있는 자금은 얼마인가요?</label>
-                    <div class="options-grid single">
-                        <label class="option-label"><input type="radio" name="q12"> 500만 원 미만</label>
-                        <label class="option-label"><input type="radio" name="q12"> 500만 원 이상 ~ 1,000만 원 미만</label>
-                        <label class="option-label"><input type="radio" name="q12"> 1,000만 원 이상 ~ 3,000만 원 미만</label>
-                        <label class="option-label"><input type="radio" name="q12"> 3,000만 원 이상 ~ 5,000만 원 미만</label>
-                        <label class="option-label"><input type="radio" name="q12"> 5,000만 원 이상</label>
-                        <label class="option-label"><input type="radio" name="q12"> 사용 가능한 자금 없음</label>
-                        <label class="option-label"><input type="radio" name="q12"> 아직 계산하지 못함</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q12" value="500만 원 미만"> 500만 원 미만</label>
+                            <label class="custom-option"><input type="radio" name="q12" value="500만 원 이상 ~ 1,000만 원 미만"> 500만 원 이상 ~ 1,000만 원 미만</label>
+                            <label class="custom-option"><input type="radio" name="q12" value="1,000만 원 이상 ~ 3,000만 원 미만"> 1,000만 원 이상 ~ 3,000만 원 미만</label>
+                            <label class="custom-option"><input type="radio" name="q12" value="3,000만 원 이상 ~ 5,000만 원 미만"> 3,000만 원 이상 ~ 5,000만 원 미만</label>
+                            <label class="custom-option"><input type="radio" name="q12" value="5,000만 원 이상"> 5,000만 원 이상</label>
+                            <label class="custom-option"><input type="radio" name="q12" value="사용 가능한 자금 없음"> 사용 가능한 자금 없음</label>
+                            <label class="custom-option"><input type="radio" name="q12" value="아직 계산하지 못함"> 아직 계산하지 못함</label>
+                        </div>
                     </div>
                 </div>
                 <div class="question">
                     <label class="q-title">Q13. 정부 주거지원 정책 확인을 위한 소득·자산 정보를 알고 있나요?</label>
-                    <div class="options-grid single">
-                        <label class="option-label"><input type="radio" name="q13"> 소득과 자산 모두 알고 있음</label>
-                        <label class="option-label"><input type="radio" name="q13"> 소득만 알고 있음</label>
-                        <label class="option-label"><input type="radio" name="q13"> 자산만 알고 있음</label>
-                        <label class="option-label"><input type="radio" name="q13"> 모두 정확히 알지 못함</label>
-                        <label class="option-label"><input type="radio" name="q13"> 나중에 입력하겠음</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q13" value="소득과 자산 모두 알고 있음"> 소득과 자산 모두 알고 있음</label>
+                            <label class="custom-option"><input type="radio" name="q13" value="소득만 알고 있음"> 소득만 알고 있음</label>
+                            <label class="custom-option"><input type="radio" name="q13" value="자산만 알고 있음"> 자산만 알고 있음</label>
+                            <label class="custom-option"><input type="radio" name="q13" value="모두 정확히 알지 못함"> 모두 정확히 알지 못함</label>
+                            <label class="custom-option"><input type="radio" name="q13" value="나중에 입력하겠음"> 나중에 입력하겠음</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -648,10 +711,13 @@
                 <div class="step-title">5단계. 청약·대출 및 지출</div>
                 <div class="question">
                     <label class="q-title">Q14. 주택청약종합저축을 보유하고 있나요?</label>
-                    <div class="options-grid">
-                        <label class="option-label"><input type="radio" name="q14"> 있음</label>
-                        <label class="option-label"><input type="radio" name="q14"> 없음</label>
-                        <label class="option-label" style="grid-column: 1 / -1;"><input type="radio" name="q14"> 잘 모르겠음</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q14" value="있음"> 있음</label>
+                            <label class="custom-option"><input type="radio" name="q14" value="없음"> 없음</label>
+                            <label class="custom-option"><input type="radio" name="q14" value="잘 모르겠음"> 잘 모르겠음</label>
+                        </div>
                     </div>
                 </div>
                 <div class="question">
@@ -662,14 +728,17 @@
                 </div>
                 <div class="question">
                     <label class="q-title">Q15. 현재 보유한 대출이 있나요? (복수 선택)</label>
-                    <div class="options-grid">
-                        <label class="option-label"><input type="checkbox"> 없음</label>
-                        <label class="option-label"><input type="checkbox"> 학자금대출</label>
-                        <label class="option-label"><input type="checkbox"> 신용대출</label>
-                        <label class="option-label"><input type="checkbox"> 전월세대출</label>
-                        <label class="option-label"><input type="checkbox"> 자동차대출</label>
-                        <label class="option-label"><input type="checkbox"> 기타 대출</label>
-                        <label class="option-label" style="grid-column: 1 / -1;"><input type="checkbox"> 정확히 알지 못함</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 (복수 선택) <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="checkbox" value="없음"> 없음</label>
+                            <label class="custom-option"><input type="checkbox" value="학자금대출"> 학자금대출</label>
+                            <label class="custom-option"><input type="checkbox" value="신용대출"> 신용대출</label>
+                            <label class="custom-option"><input type="checkbox" value="전월세대출"> 전월세대출</label>
+                            <label class="custom-option"><input type="checkbox" value="자동차대출"> 자동차대출</label>
+                            <label class="custom-option"><input type="checkbox" value="기타 대출"> 기타 대출</label>
+                            <label class="custom-option"><input type="checkbox" value="정확히 알지 못함"> 정확히 알지 못함</label>
+                        </div>
                     </div>
                 </div>
                 <div class="question">
@@ -680,22 +749,28 @@
                 </div>
                 <div class="question">
                     <label class="q-title">Q17. 독립을 위해 주거자금 대출을 이용할 의향이 있나요?</label>
-                    <div class="options-grid single">
-                        <label class="option-label"><input type="radio" name="q17"> 있음</label>
-                        <label class="option-label"><input type="radio" name="q17"> 조건이 적합하다면 이용할 의향이 있음</label>
-                        <label class="option-label"><input type="radio" name="q17"> 없음</label>
-                        <label class="option-label"><input type="radio" name="q17"> 아직 결정하지 못함</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q17" value="있음"> 있음</label>
+                            <label class="custom-option"><input type="radio" name="q17" value="조건이 적합하다면 이용할 의향이 있음"> 조건이 적합하다면 이용할 의향이 있음</label>
+                            <label class="custom-option"><input type="radio" name="q17" value="없음"> 없음</label>
+                            <label class="custom-option"><input type="radio" name="q17" value="아직 결정하지 못함"> 아직 결정하지 못함</label>
+                        </div>
                     </div>
                 </div>
                 <div class="question">
                     <label class="q-title">Q18. 현재 신용점수 구간을 선택해주세요. (선택)</label>
-                    <div class="options-grid">
-                        <label class="option-label"><input type="radio" name="q18"> 900점 이상</label>
-                        <label class="option-label"><input type="radio" name="q18"> 800~899점</label>
-                        <label class="option-label"><input type="radio" name="q18"> 700~799점</label>
-                        <label class="option-label"><input type="radio" name="q18"> 600~699점</label>
-                        <label class="option-label"><input type="radio" name="q18"> 600점 미만</label>
-                        <label class="option-label"><input type="radio" name="q18"> 정확히 알지 못함</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q18" value="900점 이상"> 900점 이상</label>
+                            <label class="custom-option"><input type="radio" name="q18" value="800~899점"> 800~899점</label>
+                            <label class="custom-option"><input type="radio" name="q18" value="700~799점"> 700~799점</label>
+                            <label class="custom-option"><input type="radio" name="q18" value="600~699점"> 600~699점</label>
+                            <label class="custom-option"><input type="radio" name="q18" value="600점 미만"> 600점 미만</label>
+                            <label class="custom-option"><input type="radio" name="q18" value="정확히 알지 못함"> 정확히 알지 못함</label>
+                        </div>
                     </div>
                 </div>
                 <div class="question">
@@ -715,16 +790,19 @@
                 </div>
                 <div class="question">
                     <label class="q-title">Q20. 로드맵에서 가장 먼저 도움받고 싶은 분야는 무엇인가요?</label>
-                    <div class="options-grid single">
-                        <label class="option-label"><input type="radio" name="q20"> 독립 예산 설정</label>
-                        <label class="option-label"><input type="radio" name="q20"> 희망 지역 및 주거 형태 결정</label>
-                        <label class="option-label"><input type="radio" name="q20"> 전월세 매물 탐색</label>
-                        <label class="option-label"><input type="radio" name="q20"> 공공임대주택 탐색</label>
-                        <label class="option-label"><input type="radio" name="q20"> 청년 주거지원 정책 추천</label>
-                        <label class="option-label"><input type="radio" name="q20"> 전월세대출 비교</label>
-                        <label class="option-label"><input type="radio" name="q20"> 안전한 부동산 계약</label>
-                        <label class="option-label"><input type="radio" name="q20"> 이사 및 전입신고 등 행정 절차</label>
-                        <label class="option-label"><input type="radio" name="q20"> 독립 후 생활비 관리</label>
+                    <div class="custom-select-wrap">
+                        <div class="custom-select-trigger">선택해주세요 <i>▼</i></div>
+                        <div class="custom-select-options">
+                            <label class="custom-option"><input type="radio" name="q20" value="독립 예산 설정"> 독립 예산 설정</label>
+                            <label class="custom-option"><input type="radio" name="q20" value="희망 지역 및 주거 형태 결정"> 희망 지역 및 주거 형태 결정</label>
+                            <label class="custom-option"><input type="radio" name="q20" value="전월세 매물 탐색"> 전월세 매물 탐색</label>
+                            <label class="custom-option"><input type="radio" name="q20" value="공공임대주택 탐색"> 공공임대주택 탐색</label>
+                            <label class="custom-option"><input type="radio" name="q20" value="청년 주거지원 정책 추천"> 청년 주거지원 정책 추천</label>
+                            <label class="custom-option"><input type="radio" name="q20" value="전월세대출 비교"> 전월세대출 비교</label>
+                            <label class="custom-option"><input type="radio" name="q20" value="안전한 부동산 계약"> 안전한 부동산 계약</label>
+                            <label class="custom-option"><input type="radio" name="q20" value="이사 및 전입신고 등 행정 절차"> 이사 및 전입신고 등 행정 절차</label>
+                            <label class="custom-option"><input type="radio" name="q20" value="독립 후 생활비 관리"> 독립 후 생활비 관리</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -736,9 +814,7 @@
         </div>
     </div>
 
-    <!-- =========================================
-         4. 진단 완료 감동 팝업 (새로 추가됨)
-    ========================================= -->
+    <!-- 4. 진단 완료 감동 팝업 -->
     <div class="modal-overlay" id="completion-modal" style="z-index: 9999;">
         <div class="modal-content completion-modal-content">
             <div class="completion-icon">🏠💙</div>
@@ -758,18 +834,178 @@
         const welcomeModal = document.getElementById('welcome-modal');
         const fullscreenSurvey = document.getElementById('fullscreen-survey');
         
-        // 시작하기 버튼 -> 팝업 닫고 자가진단 풀스크린 오픈
         document.getElementById('btn-open-survey').addEventListener('click', () => {
             welcomeModal.style.display = 'none';
             fullscreenSurvey.style.display = 'flex';
         });
 
-        // 건너뛰기 버튼 -> 팝업 닫고 대시보드 바로 진입
         document.getElementById('btn-skip-survey').addEventListener('click', () => {
             welcomeModal.style.display = 'none';
         });
 
-        // --- 2. 주거비 계산기 연동 ---
+        // --- 전국 지역 3단 연동 로직 (Q2) ---
+        const rawRegionData = {
+            "서울특별시": "종로구:청운동,효자동|중구:무교동,명동|용산구:후암동,이태원동|성동구:왕십리동,성수동|광진구:화양동,구의동|동대문구:제기동,청량리동|중랑구:면목동,상봉동|성북구:성북동,안암동|강북구:미아동,수유동|도봉구:쌍문동,방학동|노원구:월계동,공릉동|은평구:불광동,갈현동|서대문구:신촌동,연희동|마포구:망원동,합정동|양천구:목동,신정동|강서구:화곡동,마곡동|구로구:구로동,신도림동|금천구:가산동,독산동|영등포구:여의도동,당산동|동작구:노량진동,사당동|관악구:신림동,봉천동|서초구:서초동,방배동|강남구:역삼동,삼성동|송파구:잠실동,가락동|강동구:천호동,길동",
+            "부산광역시": "중구:남포동,중앙동|서구:동대신동,암남동|동구:초량동,수정동|영도구:남항동,영선동|부산진구:부전동,전포동|동래구:수민동,온천동|남구:대연동,용호동|북구:구포동,화명동|해운대구:우동,좌동|사하구:하단동,다대동|금정구:구서동,장전동|강서구:대저동,명지동|연제구:연산동,거제동|수영구:남천동,광안동|사상구:모라동,주례동|기장군:기장읍,일광읍",
+            "대구광역시": "중구:동인동,삼덕동|동구:신암동,신천동|서구:내당동,비산동|남구:이천동,대명동|북구:침산동,산격동|수성구:범어동,만촌동|달서구:월성동,상인동|달성군:화원읍,다사읍|군위군:군위읍,소보면",
+            "인천광역시": "중구:신포동,영종동|동구:만석동,송림동|미추홀구:숭의동,용현동|연수구:송도동,연수동|남동구:구월동,만수동|부평구:부평동,산곡동|계양구:계산동,작전동|서구:청라동,검단동|강화군:강화읍,교동면|옹진군:북도면,백령면",
+            "광주광역시": "동구:충장동,동명동|서구:광천동,상무동|남구:양림동,백운동|북구:중흥동,용봉동|광산구:송정동,수완동",
+            "대전광역시": "동구:중앙동,용전동|중구:은행선화동,대흥동|서구:둔산동,갈마동|유성구:온천동,노은동|대덕구:신탄진동,송촌동",
+            "울산광역시": "중구:학성동,반구동|남구:신정동,삼산동|동구:방어동,전하동|북구:농소동,강동동|울주군:언양읍,온산읍",
+            "세종특별자치시": "세종시:조치원읍,연기면,한솔동,도담동,아름동,종촌동,고운동",
+            "경기도": "수원시 장안구:파장동,율천동|수원시 권선구:세류동,권선동|수원시 팔달구:매교동,화서동|수원시 영통구:매탄동,영통동|성남시 수정구:신흥동,태평동|성남시 중원구:성남동,금광동|성남시 분당구:서현동,정자동|의정부시:의정부동,호원동|안양시 만안구:안양동,석수동|안양시 동안구:비산동,평촌동|부천시:심곡동,중동|광명시:광명동,철산동|평택시:팽성읍,안중읍|동두천시:생연동,불현동|안산시 상록구:일동,이동|안산시 단원구:와동,고잔동|고양시 덕양구:주교동,원신동|고양시 일산동구:식사동,중산동|고양시 일산서구:일산동,주엽동|과천시:별양동,부림동|구리시:갈매동,인창동|남양주시:와부읍,진접읍|오산시:중앙동,대원동|시흥시:대야동,신천동|군포시:산본동,금정동|의왕시:고천동,부곡동|하남시:천현동,신장동|용인시 처인구:포곡읍,모현읍|용인시 기흥구:신갈동,구갈동|용인시 수지구:풍덕천동,죽전동|파주시:문산읍,조리읍|이천시:장호원읍,부발읍|안성시:공도읍,보개면|김포시:통진읍,고촌읍|화성시:향남읍,남양읍|광주시:오포읍,초월읍|양주시:백석읍,은현면|포천시:소흘읍,군내면|여주시:가남읍,점동면|연천군:연천읍,전곡읍|가평군:가평읍,설악면|양평군:양평읍,강상면",
+            "강원특별자치도": "춘천시:신북읍,동면|원주시:문막읍,호저면|강릉시:주문진읍,성산면|동해시:천곡동,북삼동|태백시:황지동,장성동|속초시:영랑동,동명동|삼척시:도계읍,원덕읍|홍천군:홍천읍,화촌면|횡성군:횡성읍,우천면|영월군:영월읍,상동읍|평창군:평창읍,미탄면|정선군:정선읍,고한읍|철원군:철원읍,김화읍|화천군:화천읍,간동면|양구군:양구읍,남면|인제군:인제읍,남면|고성군:간성읍,거진읍|양양군:양양읍,서면",
+            "충청북도": "청주시 상당구:낭성면,미원면|청주시 서원구:남이면,현도면|청주시 흥덕구:오송읍,강내면|청주시 청원구:내수읍,오창읍|충주시:주덕읍,살미면|제천시:봉양읍,백운면|보은군:보은읍,속리산면|옥천군:옥천읍,동이면|영동군:영동읍,용산면|증평군:증평읍,도안면|진천군:진천읍,초평면|괴산군:괴산읍,감물면|음성군:음성읍,금왕읍|단양군:단양읍,매포읍",
+            "충청남도": "천안시 동남구:목천읍,풍세면|천안시 서북구:성환읍,성거읍|공주시:유구읍,이인면|보령시:웅천읍,주포면|아산시:염치읍,배방읍|서산시:대산읍,인지면|논산시:강경읍,연무읍|계룡시:두마면,엄사면|당진시:합덕읍,송악읍|금산군:금산읍,금성면|부여군:부여읍,규암면|서천군:서천읍,장항읍|청양군:청양읍,운곡면|홍성군:홍성읍,광천읍|예산군:예산읍,삽교읍|태안군:태안읍,안면읍",
+            "전북특별자치도": "전주시 완산구:중앙동,풍남동|전주시 덕진구:진북동,인후동|군산시:옥구읍,옥산면|익산시:함열읍,오산면|정읍시:신태인읍,북면|남원시:운봉읍,주천면|김제시:만경읍,죽산면|완주군:삼례읍,봉동읍|진안군:진안읍,용담면|무주군:무주읍,무풍면|장수군:장수읍,산서면|임실군:임실읍,청웅면|순창군:순창읍,인계면|고창군:고창읍,고수면|부안군:부안읍,주산면",
+            "전라남도": "목포시:용당동,연동|여수시:돌산읍,소라면|순천시:승주읍,해룡면|나주시:남평읍,세지면|광양시:광양읍,봉강면|담양군:담양읍,봉산면|곡성군:곡성읍,오곡면|구례군:구례읍,문척면|고흥군:고흥읍,도양읍|보성군:보성읍,벌교읍|화순군:화순읍,한천면|장흥군:장흥읍,관산읍|강진군:강진읍,군동면|해남군:해남읍,삼산면|영암군:영암읍,삼호읍|무안군:무안읍,일로읍|함평군:함평읍,손불면|영광군:영광읍,백수읍|장성군:장성읍,진원면|완도군:완도읍,금일읍|진도군:진도읍,군내면|신안군:지도읍,압해읍",
+            "경상북도": "포항시 남구:구룡포읍,연일읍|포항시 북구:흥해읍,신광면|경주시:건천읍,외동읍|김천시:아포읍,농소면|안동시:풍산읍,와룡면|구미시:선산읍,고아읍|영주시:풍기읍,이산면|영천시:금호읍,청통면|상주시:함창읍,사벌국면|문경시:문경읍,가은읍|경산시:하양읍,진량읍|의성군:의성읍,단촌면|청송군:청송읍,부동면|영양군:영양읍,입암면|영덕군:영덕읍,강구면|청도군:청도읍,화양읍|고령군:대가야읍,덕곡면|성주군:성주읍,선남면|칠곡군:왜관읍,북삼읍|예천군:예천읍,용문면|봉화군:봉화읍,물야면|울진군:울진읍,평해읍|울릉군:울릉읍,서면",
+            "경상남도": "창원시 의창구:동읍,북면|창원시 성산구:반송동,중앙동|창원시 마산합포구:구산면,진동면|창원시 마산회원구:내서읍,회원동|창원시 진해구:웅천동,웅동|진주시:문산읍,내동면|통영시:산양읍,용남면|사천시:사천읍,정동면|김해시:진영읍,주촌면|밀양시:삼랑진읍,하남읍|거제시:일운면,동부면|양산시:물금읍,동면|의령군:의령읍,가례면|함안군:가야읍,칠원읍|창녕군:창녕읍,남지읍|고성군:고성읍,삼산면|남해군:남해읍,이동면|하동군:하동읍,화개면|산청군:산청읍,차황면|함양군:함양읍,마천면|거창군:거창읍,주상면|합천군:합천읍,봉산면",
+            "제주특별자치도": "제주시:애월읍,조천읍,한림읍,구좌읍,노형동,연동,이도동|서귀포시:대정읍,남원읍,성산읍,안덕면,표선면,중문동,동홍동"
+        };
+
+        const regionMap = {};
+        for (const [sido, dataStr] of Object.entries(rawRegionData)) {
+            regionMap[sido] = {};
+            dataStr.split('|').forEach(item => {
+                const [sigungu, dongStr] = item.split(':');
+                regionMap[sido][sigungu] = dongStr ? dongStr.split(',') : [];
+            });
+        }
+
+        const sidoSelect = document.getElementById('sido-select');
+        const sigunguSelect = document.getElementById('sigungu-select');
+        const dongSelect = document.getElementById('dong-select');
+
+        Object.keys(regionMap).forEach(sido => {
+            const option = document.createElement('option');
+            option.value = sido; option.text = sido;
+            sidoSelect.add(option);
+        });
+
+        sidoSelect.addEventListener('change', (e) => {
+            const selectedSido = e.target.value;
+            sigunguSelect.innerHTML = '<option value="">시/군/구 선택</option>';
+            dongSelect.innerHTML = '<option value="">읍/면/동 선택</option>';
+            dongSelect.disabled = true;
+
+            if (selectedSido && regionMap[selectedSido]) {
+                Object.keys(regionMap[selectedSido]).forEach(sigungu => {
+                    const option = document.createElement('option');
+                    option.value = sigungu; option.text = sigungu;
+                    sigunguSelect.add(option);
+                });
+                sigunguSelect.disabled = false;
+            } else {
+                sigunguSelect.disabled = true;
+            }
+        });
+
+        sigunguSelect.addEventListener('change', (e) => {
+            const selectedSido = sidoSelect.value;
+            const selectedSigungu = e.target.value;
+            dongSelect.innerHTML = '<option value="">읍/면/동 선택</option>';
+
+            if (selectedSido && selectedSigungu && regionMap[selectedSido][selectedSigungu]) {
+                regionMap[selectedSido][selectedSigungu].forEach(dong => {
+                    const option = document.createElement('option');
+                    option.value = dong; option.text = dong;
+                    dongSelect.add(option);
+                });
+                dongSelect.disabled = false;
+            } else {
+                dongSelect.disabled = true;
+            }
+        });
+
+        // --- 부드러운 커스텀 스크롤 엔진 (대기시간 0ms 즉시 시작, 700ms 동안 감속 이동) ---
+        function smoothScrollBy(element, targetAmount, duration = 700) {
+            if (targetAmount <= 0) return;
+            const startTop = element.scrollTop;
+            const startTime = performance.now();
+
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // easeOutCubic: 시작은 즉각적이고 끝은 부드럽게 감속
+                const ease = 1 - Math.pow(1 - progress, 3);
+
+                element.scrollTop = startTop + (targetAmount * ease);
+
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // --- 부드러운 아코디언 드롭다운 & 즉각 자동 스크롤 ---
+        document.querySelectorAll('.custom-select-wrap').forEach(wrap => {
+            const trigger = wrap.querySelector('.custom-select-trigger');
+            const options = wrap.querySelector('.custom-select-options');
+            const inputs = wrap.querySelectorAll('input');
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.custom-select-wrap').forEach(w => {
+                    if(w !== wrap) w.classList.remove('open');
+                });
+                
+                const willOpen = !wrap.classList.contains('open');
+                wrap.classList.toggle('open');
+
+                if (willOpen) {
+                    // 클릭 즉시(0ms 지연) 전체 높이를 계산하여 즉각 스크롤 시작
+                    const triggerRect = trigger.getBoundingClientRect();
+                    const optionsHeight = options.scrollHeight;
+                    const projectedBottom = triggerRect.bottom + optionsHeight;
+                    const container = document.getElementById('fullscreen-survey');
+                    const overflowBottom = projectedBottom - (window.innerHeight - 50); // 하단 50px 여유 공간 확보
+
+                    if (overflowBottom > 0) {
+                        smoothScrollBy(container, overflowBottom, 700);
+                    }
+                }
+            });
+
+            inputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    if (input.type === 'radio') {
+                        trigger.innerHTML = `${input.value} <i>▼</i>`;
+                        wrap.classList.remove('open');
+                    } else if (input.type === 'checkbox') {
+                        const checked = Array.from(inputs).filter(i => i.checked).map(i => i.value);
+                        if (checked.length === 0) trigger.innerHTML = `선택해주세요 (복수 선택) <i>▼</i>`;
+                        else if (checked.length === 1) trigger.innerHTML = `${checked[0]} <i>▼</i>`;
+                        else trigger.innerHTML = `${checked[0]} 외 ${checked.length - 1}개 <i>▼</i>`;
+                    }
+
+                    const questionDiv = input.closest('.question');
+                    const etcInput = questionDiv.querySelector('.etc-input');
+                    const etcTrigger = questionDiv.querySelector('.etc-trigger');
+                    if (etcInput && etcTrigger) {
+                        if (etcTrigger.checked) {
+                            etcInput.classList.add('show');
+                            const rect = etcInput.getBoundingClientRect();
+                            const container = document.getElementById('fullscreen-survey');
+                            const overflowBottom = (rect.bottom + 60) - window.innerHeight;
+                            if (overflowBottom > 0) {
+                                smoothScrollBy(container, overflowBottom, 600);
+                            }
+                        } else {
+                            etcInput.classList.remove('show');
+                            etcInput.value = '';
+                        }
+                    }
+                });
+            });
+        });
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.custom-select-wrap').forEach(w => w.classList.remove('open'));
+        });
+
+        // --- 주거비 계산기 연동 ---
         const calcModal = document.getElementById('calc-modal');
         document.getElementById('btn-open-calc').addEventListener('click', () => calcModal.style.display = 'flex');
         document.getElementById('btn-close-calc').addEventListener('click', () => calcModal.style.display = 'none');
@@ -800,7 +1036,7 @@
             }
         });
 
-        // --- 3. 5단계 설문 전환 로직 ---
+        // --- 5단계 설문 전환 로직 ---
         let currentStep = 1;
         const totalSteps = 5;
         const steps = document.querySelectorAll('.step');
@@ -824,45 +1060,32 @@
             surveyProgress.style.width = `${(currentStep / totalSteps) * 100}%`;
             steps[currentStep - 1].classList.add('active');
             
-            // 다음 스텝으로 넘어갈 때 스크롤 맨 위로
-            fullscreenSurvey.scrollTop = 0;
+            document.querySelector('.fullscreen-survey').scrollTo({top: 0, behavior: 'smooth'});
         }
 
         btnSurveyNext.addEventListener('click', () => {
             if (currentStep < totalSteps) {
                 updateSurveyStep('next');
             } else {
-                // 기존의 투박한 alert() 대신 감동 팝업 띄우기
                 document.getElementById('completion-modal').style.display = 'flex';
             }
         });
 
-        // 진단 완료 팝업 -> 대시보드 이동 로직
         document.getElementById('btn-go-dashboard').addEventListener('click', () => {
             document.getElementById('completion-modal').style.display = 'none';
-            fullscreenSurvey.style.display = 'none'; // 진단 완료 시 대시보드 오픈
+            fullscreenSurvey.style.display = 'none'; 
         });
 
         btnSurveyPrev.addEventListener('click', () => {
             if (currentStep > 1) updateSurveyStep('prev');
         });
 
-        // '기타' 입력창 나타나기 로직
-        function toggleEtc(inputId, labelElement) {
-            const input = document.getElementById(inputId);
-            const radioOrCheck = labelElement.querySelector('.etc-trigger');
-            setTimeout(() => {
-                if(radioOrCheck.checked) input.classList.add('show');
-                else { input.classList.remove('show'); input.value = ''; }
-            }, 10);
-        }
-
-        // --- 4. 프리미엄 기능 잠금 알림 ---
+        // 기타 기능
         document.querySelectorAll('.btn-premium-lock').forEach(btn => {
             btn.addEventListener('click', () => alert('🔒 [첫 독립 3개월 패키지] 이상 구독 시 이용할 수 있는 프리미엄 기능입니다.'));
         });
 
-        // --- 5. 캘린더 자동 생성 로직 (현재 날짜 연동) ---
+        // 캘린더 생성
         const renderCalendar = () => {
             const today = new Date();
             const year = today.getFullYear();
@@ -899,12 +1122,10 @@
         };
         renderCalendar(); 
 
-        // --- 6. 사이드바 & SVG 연동 로직 ---
         document.getElementById('btn-cal-toggle').addEventListener('click', () => document.getElementById('calendar-card').classList.toggle('hidden'));
         const rightSidebar = document.getElementById('right-sidebar');
         const toggleTodoSidebar = () => rightSidebar.classList.toggle('closed');
         document.getElementById('btn-todo-toggle').addEventListener('click', toggleTodoSidebar);
-        document.getElementById('btn-status-todo').addEventListener('click', toggleTodoSidebar);
 
         const checkboxes = document.querySelectorAll('#todo-list input[type="checkbox"]');
         const updateHouseSVG = (percent) => {
@@ -924,7 +1145,6 @@
             const currentPercent = Math.round((checked / total) * 100); 
             const ratioText = `${checked}/${total}`;
             
-            document.getElementById('main-todo-count').innerText = ratioText;
             document.getElementById('tab-todo-count').innerHTML = `이번 주 미션<br>${ratioText}`;
             document.getElementById('panel-todo-ratio').innerText = `${ratioText} 완료`;
             document.getElementById('main-progress').innerText = `${currentPercent}%`;
