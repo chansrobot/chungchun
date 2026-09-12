@@ -30,7 +30,7 @@
         ul { list-style: none; }
 
         /* =========================================
-           HEADER (상단 네비게이션) - 완벽 복원
+           HEADER (상단 네비게이션)
         ========================================= */
         header {
             height: 70px; background-color: var(--white); display: flex; align-items: center; justify-content: space-between;
@@ -96,7 +96,7 @@
         /* 중앙 코칭 섹션 */
         .center-panel { display: flex; flex-direction: column; align-items: center; text-align: center; }
         
-        .mini-profile { background: var(--white); border: 1px solid var(--border-light); border-radius: 30px; padding: 8px 20px; display: flex; gap: 15px; box-shadow: var(--shadow-sm); margin-bottom: 20px; font-size: 13px; font-weight: 600; color: var(--navy); }
+        .mini-profile { background: var(--white); border: 1px solid var(--border-light); border-radius: 30px; padding: 10px 20px; display: flex; gap: 15px; box-shadow: var(--shadow-sm); font-size: 13px; font-weight: 600; color: var(--navy); margin-top: 10px; margin-bottom: 0; }
         .mini-profile span { display: flex; align-items: center; gap: 5px; }
         .mini-profile i { color: var(--blue-primary); }
 
@@ -171,7 +171,7 @@
         .btn-calc:hover { background: var(--blue-primary); }
 
         /* =========================================
-           1. 첫 접속 "팝업(Modal)" (진단 할래 말래)
+           1. 첫 접속 "팝업(Modal)"
         ========================================= */
         .welcome-modal { width: 420px; text-align: center; }
         .welcome-modal h2 { font-size: 24px; color: var(--navy); margin-bottom: 15px; line-height: 1.4; font-weight: 800;}
@@ -182,16 +182,14 @@
         .btn-skip-diag:hover { color: var(--text-dark); }
 
         /* =========================================
-           2. 자가진단 전체화면 (방법 1 적용: 스크롤바 영역 확보로 가로 흔들림 차단)
+           2. 자가진단 전체화면
         ========================================= */
         .fullscreen-survey {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--bg-color); z-index: 9998;
             display: none; flex-direction: column; align-items: center; justify-content: flex-start;
             padding-top: 5vh; padding-bottom: 40px; 
-            overflow-y: auto;
-            overflow-x: hidden;
-            scrollbar-gutter: stable;
+            overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable;
         }
         .survey-card {
             background: var(--white); width: 100%; max-width: 650px; border-radius: 20px;
@@ -231,10 +229,7 @@
             background: var(--white); border: 1px solid var(--border-light); border-top: none;
             border-radius: 0 0 12px 12px; box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.05);
         }
-        .custom-select-wrap.open .custom-select-options {
-            max-height: 480px;
-            opacity: 1; padding: 12px 10px;
-        }
+        .custom-select-wrap.open .custom-select-options { max-height: 280px; overflow-y: auto; opacity: 1; padding: 12px 10px; }
         .custom-select-wrap.open .custom-select-trigger { border-radius: 12px 12px 0 0; border-color: var(--border-light); }
         .custom-select-wrap.open .custom-select-trigger i { transform: rotate(180deg); }
 
@@ -246,16 +241,18 @@
         .custom-option input { accent-color: var(--mint); width: 16px; height: 16px; cursor: pointer; }
         .custom-option:has(input:checked) { background: var(--blue-light); color: var(--blue-primary); }
 
-        input[type="number"], input[type="text"], select {
+        /* Q2 지역 선택 가로 배치 및 커스텀 스타일 */
+        .region-group-custom { display: flex; gap: 10px; margin-bottom: 10px; }
+        .region-group-custom .custom-select-wrap { flex: 1; margin-bottom: 0; }
+
+        input[type="number"], input[type="text"] {
             width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: 0.2s;
         }
-        input:focus, select:focus { border-color: var(--blue-primary); background: var(--white); box-shadow: 0 0 0 3px var(--blue-light); }
+        input:focus { border-color: var(--blue-primary); background: var(--white); box-shadow: 0 0 0 3px var(--blue-light); }
 
-        .region-group { display: flex; gap: 8px; margin-bottom: 10px;}
         .money-group { display: flex; align-items: center; gap: 8px; margin-bottom: 10px;}
         .money-group span { font-size: 14px; color: var(--text-dark); font-weight: 600; white-space: nowrap;}
         
-        /* Q6 예산 디자인 동기화 */
         .money-input-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 5px 0; }
         .money-input-row label { font-size: 14px; font-weight: 700; color: var(--navy); width: 100px; }
         .money-input-row input { flex: 1; padding: 12px 16px; border: 1px solid var(--border-light); border-radius: 8px; background: #f8fafc; outline: none; text-align: left; margin: 0 15px; transition: 0.2s; }
@@ -279,7 +276,7 @@
         .btn-next:hover { background: var(--blue-primary); }
 
         /* =========================================
-           4. 진단 완료 감동 팝업 (새로 추가됨)
+           4. 진단 완료 감동 팝업
         ========================================= */
         .completion-modal-content { text-align: center; padding: 50px 40px; width: 450px; }
         .completion-icon { font-size: 48px; margin-bottom: 20px; animation: float 2s infinite ease-in-out; }
@@ -290,9 +287,7 @@
 </head>
 <body>
 
-    <!-- =========================================
-         복구된 헤더 (버튼 전부 다 있음!)
-    ========================================= -->
+    <!-- 헤더 -->
     <header>
         <a href="#" class="header-logo">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -433,7 +428,7 @@
             </div>
 
             <!-- 하단으로 이동한 미니 프로필 -->
-            <div class="mini-profile" style="margin-top: 10px; margin-bottom: 0;">
+            <div class="mini-profile">
                 <span><i>📍</i> 희망 지역: 서초구</span>
                 <span style="color:var(--border-light);">|</span>
                 <span><i>💰</i> 예산: 1천 / 월 50</span>
@@ -461,7 +456,7 @@
         </aside>
     </main>
 
-    <!-- 1. 첫 접속 모달 (온보딩 질문) -->
+    <!-- 1. 첫 접속 모달 (로딩 빼고 바로 뜸) -->
     <div class="modal-overlay" id="welcome-modal" style="display:flex;">
         <div class="modal-content welcome-modal">
             <h2>세상에 첫발을 내딛는 당신,<br>어떤 독립을 꿈꾸시나요?</h2>
@@ -516,15 +511,27 @@
                     <label class="q-title">Q1. 현재 나이를 입력해주세요.</label>
                     <div class="money-group"><span>만</span><input type="number" placeholder="예: 21"><span>세</span></div>
                 </div>
-                <!-- 전국 단위 지역 정보 셀렉트 -->
+                <!-- Q2. 지역 선택 (다른 선택지와 똑같은 커스텀 드롭다운 아코디언 적용) -->
                 <div class="question">
-                    <label class="q-title">Q2. 독립을 희망하는 지역을 입력해주세요.</label>
-                    <div class="region-group">
-                        <select id="sido-select"><option value="">시/도 선택</option></select>
-                        <select id="sigungu-select" disabled><option value="">시/군/구 선택</option></select>
-                        <select id="dong-select" disabled><option value="">읍/면/동 선택</option></select>
+                    <label class="q-title">Q2. 독립을 희망하는 지역을 선택해주세요.</label>
+                    <div class="region-group-custom">
+                        <!-- 시/도 선택 -->
+                        <div class="custom-select-wrap" id="wrap-sido">
+                            <div class="custom-select-trigger" id="trigger-sido">시/도 선택 <i>▼</i></div>
+                            <div class="custom-select-options" id="options-sido"></div>
+                        </div>
+                        <!-- 시/군/구 선택 -->
+                        <div class="custom-select-wrap" id="wrap-sigungu">
+                            <div class="custom-select-trigger" id="trigger-sigungu" style="color: var(--text-light); cursor: not-allowed;">시/군/구 선택 <i>▼</i></div>
+                            <div class="custom-select-options" id="options-sigungu"></div>
+                        </div>
+                        <!-- 읍/면/동 선택 -->
+                        <div class="custom-select-wrap" id="wrap-dong">
+                            <div class="custom-select-trigger" id="trigger-dong" style="color: var(--text-light); cursor: not-allowed;">읍/면/동 선택 <i>▼</i></div>
+                            <div class="custom-select-options" id="options-dong"></div>
+                        </div>
                     </div>
-                    <label style="font-size: 13px; color: var(--text-light);"><input type="checkbox"> 아직 정하지 못함</label>
+                    <label style="font-size: 13px; color: var(--text-light); margin-top: 8px; display: block;"><input type="checkbox"> 아직 정하지 못함</label>
                 </div>
                 <div class="question">
                     <label class="q-title">Q3. 언제까지 독립하고 싶나요?</label>
@@ -577,7 +584,6 @@
                     </div>
                     <input type="text" id="etc-q5" class="etc-input" placeholder="원하시는 형태를 직접 적어주세요.">
                 </div>
-                <!-- 예산 입력 칸 -->
                 <div class="question" style="margin-top: 40px;">
                     <label class="q-title">Q6. 주거에 사용할 수 있는 예산을 입력해주세요.</label>
                     <div class="money-input-row">
@@ -826,7 +832,7 @@
 
     <!-- 인터랙션 자바스크립트 -->
     <script>
-        // --- 0. 헤더 기능 연동 (복구 완료) ---
+        // --- 0. 헤더 기능 연동 ---
         document.getElementById('btn-bell').addEventListener('click', () => alert('새로운 알림이 없습니다.'));
         document.getElementById('btn-profile').addEventListener('click', () => alert('가입 후 마이페이지를 이용할 수 있습니다.'));
 
@@ -843,7 +849,7 @@
             welcomeModal.style.display = 'none';
         });
 
-        // --- 전국 지역 3단 연동 로직 (Q2) ---
+        // --- 전국 지역 3단 아코디언 드롭다운 연동 로직 (Q2) ---
         const rawRegionData = {
             "서울특별시": "종로구:청운동,효자동|중구:무교동,명동|용산구:후암동,이태원동|성동구:왕십리동,성수동|광진구:화양동,구의동|동대문구:제기동,청량리동|중랑구:면목동,상봉동|성북구:성북동,안암동|강북구:미아동,수유동|도봉구:쌍문동,방학동|노원구:월계동,공릉동|은평구:불광동,갈현동|서대문구:신촌동,연희동|마포구:망원동,합정동|양천구:목동,신정동|강서구:화곡동,마곡동|구로구:구로동,신도림동|금천구:가산동,독산동|영등포구:여의도동,당산동|동작구:노량진동,사당동|관악구:신림동,봉천동|서초구:서초동,방배동|강남구:역삼동,삼성동|송파구:잠실동,가락동|강동구:천호동,길동",
             "부산광역시": "중구:남포동,중앙동|서구:동대신동,암남동|동구:초량동,수정동|영도구:남항동,영선동|부산진구:부전동,전포동|동래구:수민동,온천동|남구:대연동,용호동|북구:구포동,화명동|해운대구:우동,좌동|사하구:하단동,다대동|금정구:구서동,장전동|강서구:대저동,명지동|연제구:연산동,거제동|수영구:남천동,광안동|사상구:모라동,주례동|기장군:기장읍,일광읍",
@@ -873,52 +879,93 @@
             });
         }
 
-        const sidoSelect = document.getElementById('sido-select');
-        const sigunguSelect = document.getElementById('sigungu-select');
-        const dongSelect = document.getElementById('dong-select');
+        const triggerSido = document.getElementById('trigger-sido');
+        const optionsSido = document.getElementById('options-sido');
+        const wrapSido = document.getElementById('wrap-sido');
 
+        const triggerSigungu = document.getElementById('trigger-sigungu');
+        const optionsSigungu = document.getElementById('options-sigungu');
+        const wrapSigungu = document.getElementById('wrap-sigungu');
+
+        const triggerDong = document.getElementById('trigger-dong');
+        const optionsDong = document.getElementById('options-dong');
+        const wrapDong = document.getElementById('wrap-dong');
+
+        let selectedSido = "";
+        let selectedSigungu = "";
+
+        // 1. 시/도 목록 생성
         Object.keys(regionMap).forEach(sido => {
-            const option = document.createElement('option');
-            option.value = sido; option.text = sido;
-            sidoSelect.add(option);
-        });
+            const lbl = document.createElement('label');
+            lbl.className = 'custom-option';
+            lbl.innerHTML = `<input type="radio" name="custom_sido" value="${sido}"> ${sido}`;
+            lbl.querySelector('input').addEventListener('change', () => {
+                selectedSido = sido;
+                triggerSido.innerHTML = `${sido} <i>▼</i>`;
+                wrapSido.classList.remove('open');
 
-        sidoSelect.addEventListener('change', (e) => {
-            const selectedSido = e.target.value;
-            sigunguSelect.innerHTML = '<option value="">시/군/구 선택</option>';
-            dongSelect.innerHTML = '<option value="">읍/면/동 선택</option>';
-            dongSelect.disabled = true;
+                // 시/군/구 초기화 및 활성화
+                triggerSigungu.innerHTML = `시/군/구 선택 <i>▼</i>`;
+                triggerSigungu.style.color = 'var(--text-dark)';
+                triggerSigungu.style.cursor = 'pointer';
+                optionsSigungu.innerHTML = '';
+                selectedSigungu = "";
 
-            if (selectedSido && regionMap[selectedSido]) {
+                // 읍/면/동 초기화 및 비활성화
+                triggerDong.innerHTML = `읍/면/동 선택 <i>▼</i>`;
+                triggerDong.style.color = 'var(--text-light)';
+                triggerDong.style.cursor = 'not-allowed';
+                optionsDong.innerHTML = '';
+
                 Object.keys(regionMap[selectedSido]).forEach(sigungu => {
-                    const option = document.createElement('option');
-                    option.value = sigungu; option.text = sigungu;
-                    sigunguSelect.add(option);
+                    const sLbl = document.createElement('label');
+                    sLbl.className = 'custom-option';
+                    sLbl.innerHTML = `<input type="radio" name="custom_sigungu" value="${sigungu}"> ${sigungu}`;
+                    sLbl.querySelector('input').addEventListener('change', () => {
+                        selectedSigungu = sigungu;
+                        triggerSigungu.innerHTML = `${sigungu} <i>▼</i>`;
+                        wrapSigungu.classList.remove('open');
+
+                        // 읍/면/동 초기화 및 활성화
+                        triggerDong.innerHTML = `읍/면/동 선택 <i>▼</i>`;
+                        triggerDong.style.color = 'var(--text-dark)';
+                        triggerDong.style.cursor = 'pointer';
+                        optionsDong.innerHTML = '';
+
+                        regionMap[selectedSido][selectedSigungu].forEach(dong => {
+                            const dLbl = document.createElement('label');
+                            dLbl.className = 'custom-option';
+                            dLbl.innerHTML = `<input type="radio" name="custom_dong" value="${dong}"> ${dong}`;
+                            dLbl.querySelector('input').addEventListener('change', () => {
+                                triggerDong.innerHTML = `${dong} <i>▼</i>`;
+                                wrapDong.classList.remove('open');
+                            });
+                            optionsDong.appendChild(dLbl);
+                        });
+                    });
+                    optionsSigungu.appendChild(sLbl);
                 });
-                sigunguSelect.disabled = false;
-            } else {
-                sigunguSelect.disabled = true;
-            }
+            });
+            optionsSido.appendChild(lbl);
         });
 
-        sigunguSelect.addEventListener('change', (e) => {
-            const selectedSido = sidoSelect.value;
-            const selectedSigungu = e.target.value;
-            dongSelect.innerHTML = '<option value="">읍/면/동 선택</option>';
-
-            if (selectedSido && selectedSigungu && regionMap[selectedSido][selectedSigungu]) {
-                regionMap[selectedSido][selectedSigungu].forEach(dong => {
-                    const option = document.createElement('option');
-                    option.value = dong; option.text = dong;
-                    dongSelect.add(option);
+        // 드롭다운 열기/닫기 공통 처리
+        [
+            { wrap: wrapSido, trigger: triggerSido },
+            { wrap: wrapSigungu, trigger: triggerSigungu, check: () => selectedSido !== "" },
+            { wrap: wrapDong, trigger: triggerDong, check: () => selectedSigungu !== "" }
+        ].forEach(item => {
+            item.trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (item.check && !item.check()) return; 
+                document.querySelectorAll('.region-group-custom .custom-select-wrap').forEach(w => {
+                    if(w !== item.wrap) w.classList.remove('open');
                 });
-                dongSelect.disabled = false;
-            } else {
-                dongSelect.disabled = true;
-            }
+                item.wrap.classList.toggle('open');
+            });
         });
 
-        // --- 부드러운 커스텀 스크롤 엔진 (대기시간 0ms 즉시 시작, 700ms 동안 감속 이동) ---
+        // --- 부드러운 스크롤 엔진 ---
         function smoothScrollBy(element, targetAmount, duration = 700) {
             if (targetAmount <= 0) return;
             const startTop = element.scrollTop;
@@ -927,44 +974,34 @@
             function step(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                // easeOutCubic: 시작은 즉각적이고 끝은 부드럽게 감속
                 const ease = 1 - Math.pow(1 - progress, 3);
-
                 element.scrollTop = startTop + (targetAmount * ease);
-
-                if (progress < 1) {
-                    requestAnimationFrame(step);
-                }
+                if (progress < 1) requestAnimationFrame(step);
             }
             requestAnimationFrame(step);
         }
 
-        // --- 부드러운 아코디언 드롭다운 & 즉각 자동 스크롤 ---
-        document.querySelectorAll('.custom-select-wrap').forEach(wrap => {
+        // 일반 옵션 드롭다운
+        document.querySelectorAll('.fullscreen-survey .custom-select-wrap:not(.region-group-custom .custom-select-wrap)').forEach(wrap => {
             const trigger = wrap.querySelector('.custom-select-trigger');
             const options = wrap.querySelector('.custom-select-options');
             const inputs = wrap.querySelectorAll('input');
 
             trigger.addEventListener('click', (e) => {
                 e.stopPropagation();
-                document.querySelectorAll('.custom-select-wrap').forEach(w => {
+                document.querySelectorAll('.fullscreen-survey .custom-select-wrap').forEach(w => {
                     if(w !== wrap) w.classList.remove('open');
                 });
-                
                 const willOpen = !wrap.classList.contains('open');
                 wrap.classList.toggle('open');
 
                 if (willOpen) {
-                    // 클릭 즉시(0ms 지연) 전체 높이를 계산하여 즉각 스크롤 시작
                     const triggerRect = trigger.getBoundingClientRect();
                     const optionsHeight = options.scrollHeight;
                     const projectedBottom = triggerRect.bottom + optionsHeight;
                     const container = document.getElementById('fullscreen-survey');
-                    const overflowBottom = projectedBottom - (window.innerHeight - 50); // 하단 50px 여유 공간 확보
-
-                    if (overflowBottom > 0) {
-                        smoothScrollBy(container, overflowBottom, 700);
-                    }
+                    const overflowBottom = projectedBottom - (window.innerHeight - 50); 
+                    if (overflowBottom > 0) smoothScrollBy(container, overflowBottom, 700);
                 }
             });
 
@@ -989,9 +1026,7 @@
                             const rect = etcInput.getBoundingClientRect();
                             const container = document.getElementById('fullscreen-survey');
                             const overflowBottom = (rect.bottom + 60) - window.innerHeight;
-                            if (overflowBottom > 0) {
-                                smoothScrollBy(container, overflowBottom, 600);
-                            }
+                            if (overflowBottom > 0) smoothScrollBy(container, overflowBottom, 600);
                         } else {
                             etcInput.classList.remove('show');
                             etcInput.value = '';
