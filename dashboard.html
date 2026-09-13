@@ -30,6 +30,106 @@
         ul { list-style: none; }
 
         /* =========================================
+           [PREMIUM] 시네마틱 로딩 스크린 (네모 박스 완벽 해결 & 딥다이브 강화)
+        ========================================= */
+        .global-loader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #ffffff; z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 1; transform: scale(1);
+            /* 딥 다이브 전환 시간을 2.0초로 길고 깊게 설정 */
+            transition: opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1), transform 2.0s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: auto;
+            overflow: hidden;
+        }
+
+        /* 로딩 종료 시 빨려들어가는 연출 */
+        .global-loader.fade-out {
+            opacity: 0;
+            /* 8배로 거대하게 확대해서 확실하게 화면 속으로 빨려 들어가는 느낌 부여 */
+            transform: scale(8); 
+            pointer-events: none;
+        }
+
+        /* 로고 뒤 은은한 백라이트 글로우 */
+        .loader-glow {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            animation: pulseGlow 3s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+        }
+
+        .loader-content-box {
+            position: relative; width: 450px; height: 450px; max-width: 85vw; max-height: 85vw;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 1;
+        }
+
+        /* [네모티 해결] 영역 침범 렌더링 버그를 막기 위해 순수 이미지 분리 적용 */
+        .loader-road-img, .loader-text-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;
+        }
+
+        /* 1. 길 (Road) - 제자리에서 스르륵 차오름 */
+        .loader-road-img {
+            clip-path: inset(100% 0 0 0);
+            transform: translateZ(0); 
+            will-change: clip-path;
+            animation: drawRoadCinematic 1.8s 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes drawRoadCinematic {
+            0% { clip-path: inset(100% 0 0 0); }
+            100% { clip-path: inset(59% 0 0 0); } 
+        }
+
+        /* 2. 글자 (Text) - 제자리에서 가장 깔끔하게 페이드인 (움직임 빼서 사각형 아예 안 보임) */
+        .loader-text-img {
+            clip-path: inset(0 0 41% 0);
+            opacity: 0;
+            transform: translateZ(0);
+            will-change: opacity;
+            animation: riseTextCinematic 1.6s 1.4s ease-in-out forwards;
+        }
+        @keyframes riseTextCinematic {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* 빛이 슥 쓸고 지나가는 프리미엄 스윕 이펙트 */
+        .light-sweep {
+            position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            z-index: 10;
+            mix-blend-mode: overlay;
+            animation: sweepShimmer 1.5s 2.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        @keyframes sweepShimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        /* 3. 슬로건 - 시네마틱 텐션 */
+        .loader-slogan {
+            position: absolute; bottom: 8%; font-size: 15px; font-weight: 700; color: #1e629b;
+            letter-spacing: 4px;
+            opacity: 0; transform: translateY(10px);
+            animation: riseSloganCinematic 1.2s 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            text-align: center;
+            width: 100%;
+        }
+        @keyframes riseSloganCinematic { 
+            0% { opacity: 0; transform: translateY(10px); letter-spacing: 4px; filter: blur(4px); }
+            100% { opacity: 0.85; transform: translateY(0); letter-spacing: -0.5px; filter: blur(0); } 
+        }
+
+        /* =========================================
            HEADER (상단 네비게이션)
         ========================================= */
         header {
@@ -115,13 +215,6 @@
         .quiz-btn.dont-know:hover { background: #fee2e2; border-color: #ef4444; color: #ef4444;}
 
         .illustration-placeholder { width: 300px; height: 180px; margin-bottom: 40px; display: flex; justify-content: center; align-items: center; }
-        
-        .status-bar { display: flex; align-items: center; gap: 40px; }
-        .status-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; }
-        .status-item svg { width: 20px; height: 20px; stroke: var(--text-light); fill: none; stroke-width: 2; transition: 0.2s; }
-        .status-item:hover svg { stroke: var(--blue-primary); transform: translateY(-2px); }
-        .status-item span.count { color: var(--blue-primary); }
-        .status-item span.count-mint { color: var(--mint); }
 
         /* 우측 플로팅 서랍 탭 */
         .right-sidebar { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; align-items: center; transition: 0.4s; z-index: 10; }
@@ -287,6 +380,23 @@
 </head>
 <body>
 
+    <!-- =========================================
+         [PREMIUM] 시네마틱 로딩 스크린 (네모 티 완벽 제거)
+    ========================================= -->
+    <div class="global-loader" id="global-loader">
+        <div class="loader-glow"></div>
+        <div class="loader-content-box">
+            <!-- 1. 길 영역: 초점이 맺히며 등장 -->
+            <img src="./logo.png" class="loader-road-img" decoding="sync" loading="eager" alt="청춘비서 길">
+            <!-- 2. 텍스트 영역: 강한 블러에서 선명해지며 등장 -->
+            <img src="./logo.png" class="loader-text-img" decoding="sync" loading="eager" alt="청춘비서 로고 텍스트">
+            <!-- 시네마틱 광택 효과 (Light Sweep) -->
+            <div class="light-sweep"></div>
+            <!-- 3. 슬로건: 타이포 텐션(글자 간격) 애니메이션 -->
+            <p class="loader-slogan">세상에 첫발을 내딛는 청춘을 위한 자립 비서</p>
+        </div>
+    </div>
+
     <!-- 헤더 -->
     <header>
         <a href="#" class="header-logo">
@@ -427,7 +537,7 @@
                 </svg>
             </div>
 
-            <!-- 하단으로 이동한 미니 프로필 -->
+            <!-- 하단 미니 프로필 -->
             <div class="mini-profile">
                 <span><i>📍</i> 희망 지역: 서초구</span>
                 <span style="color:var(--border-light);">|</span>
@@ -456,8 +566,8 @@
         </aside>
     </main>
 
-    <!-- 1. 첫 접속 모달 (로딩 빼고 바로 뜸) -->
-    <div class="modal-overlay" id="welcome-modal" style="display:flex;">
+    <!-- 1. 첫 접속 모달 -->
+    <div class="modal-overlay" id="welcome-modal" style="display:none;">
         <div class="modal-content welcome-modal">
             <h2>세상에 첫발을 내딛는 당신,<br>어떤 독립을 꿈꾸시나요?</h2>
             <p>1분 자가진단을 통해 현재 경제 상황과<br>목표에 딱 맞는 자립 패키지를 추천해 드릴게요!</p>
@@ -511,7 +621,7 @@
                     <label class="q-title">Q1. 현재 나이를 입력해주세요.</label>
                     <div class="money-group"><span>만</span><input type="number" placeholder="예: 21"><span>세</span></div>
                 </div>
-                <!-- Q2. 지역 선택 (다른 선택지와 똑같은 커스텀 드롭다운 아코디언 적용) -->
+                <!-- Q2. 지역 선택 -->
                 <div class="question">
                     <label class="q-title">Q2. 독립을 희망하는 지역을 선택해주세요.</label>
                     <div class="region-group-custom">
@@ -836,6 +946,21 @@
         document.getElementById('btn-bell').addEventListener('click', () => alert('새로운 알림이 없습니다.'));
         document.getElementById('btn-profile').addEventListener('click', () => alert('가입 후 마이페이지를 이용할 수 있습니다.'));
 
+        // --- 시네마틱 인트로 로딩 처리 타이밍 로직 ---
+        window.addEventListener('DOMContentLoaded', () => {
+            // 연출 완료 대기 5초 후 거대한 시네마틱 다이브 줌인
+            setTimeout(() => {
+                const loader = document.getElementById('global-loader');
+                loader.classList.add('fade-out');
+
+                // 2.0초의 길고 웅장한 줌인 효과 후 DOM에서 완전 정리
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    document.getElementById('welcome-modal').style.display = 'flex';
+                }, 2000);
+            }, 5000); 
+        });
+
         // --- 1. 팝업(모달) -> 자가진단 로직 ---
         const welcomeModal = document.getElementById('welcome-modal');
         const fullscreenSurvey = document.getElementById('fullscreen-survey');
@@ -849,121 +974,111 @@
             welcomeModal.style.display = 'none';
         });
 
-        // --- 전국 지역 3단 아코디언 드롭다운 연동 로직 (Q2) ---
-        const rawRegionData = {
-            "서울특별시": "종로구:청운동,효자동|중구:무교동,명동|용산구:후암동,이태원동|성동구:왕십리동,성수동|광진구:화양동,구의동|동대문구:제기동,청량리동|중랑구:면목동,상봉동|성북구:성북동,안암동|강북구:미아동,수유동|도봉구:쌍문동,방학동|노원구:월계동,공릉동|은평구:불광동,갈현동|서대문구:신촌동,연희동|마포구:망원동,합정동|양천구:목동,신정동|강서구:화곡동,마곡동|구로구:구로동,신도림동|금천구:가산동,독산동|영등포구:여의도동,당산동|동작구:노량진동,사당동|관악구:신림동,봉천동|서초구:서초동,방배동|강남구:역삼동,삼성동|송파구:잠실동,가락동|강동구:천호동,길동",
-            "부산광역시": "중구:남포동,중앙동|서구:동대신동,암남동|동구:초량동,수정동|영도구:남항동,영선동|부산진구:부전동,전포동|동래구:수민동,온천동|남구:대연동,용호동|북구:구포동,화명동|해운대구:우동,좌동|사하구:하단동,다대동|금정구:구서동,장전동|강서구:대저동,명지동|연제구:연산동,거제동|수영구:남천동,광안동|사상구:모라동,주례동|기장군:기장읍,일광읍",
-            "대구광역시": "중구:동인동,삼덕동|동구:신암동,신천동|서구:내당동,비산동|남구:이천동,대명동|북구:침산동,산격동|수성구:범어동,만촌동|달서구:월성동,상인동|달성군:화원읍,다사읍|군위군:군위읍,소보면",
-            "인천광역시": "중구:신포동,영종동|동구:만석동,송림동|미추홀구:숭의동,용현동|연수구:송도동,연수동|남동구:구월동,만수동|부평구:부평동,산곡동|계양구:계산동,작전동|서구:청라동,검단동|강화군:강화읍,교동면|옹진군:북도면,백령면",
-            "광주광역시": "동구:충장동,동명동|서구:광천동,상무동|남구:양림동,백운동|북구:중흥동,용봉동|광산구:송정동,수완동",
-            "대전광역시": "동구:중앙동,용전동|중구:은행선화동,대흥동|서구:둔산동,갈마동|유성구:온천동,노은동|대덕구:신탄진동,송촌동",
-            "울산광역시": "중구:학성동,반구동|남구:신정동,삼산동|동구:방어동,전하동|북구:농소동,강동동|울주군:언양읍,온산읍",
-            "세종특별자치시": "세종시:조치원읍,연기면,한솔동,도담동,아름동,종촌동,고운동",
-            "경기도": "수원시 장안구:파장동,율천동|수원시 권선구:세류동,권선동|수원시 팔달구:매교동,화서동|수원시 영통구:매탄동,영통동|성남시 수정구:신흥동,태평동|성남시 중원구:성남동,금광동|성남시 분당구:서현동,정자동|의정부시:의정부동,호원동|안양시 만안구:안양동,석수동|안양시 동안구:비산동,평촌동|부천시:심곡동,중동|광명시:광명동,철산동|평택시:팽성읍,안중읍|동두천시:생연동,불현동|안산시 상록구:일동,이동|안산시 단원구:와동,고잔동|고양시 덕양구:주교동,원신동|고양시 일산동구:식사동,중산동|고양시 일산서구:일산동,주엽동|과천시:별양동,부림동|구리시:갈매동,인창동|남양주시:와부읍,진접읍|오산시:중앙동,대원동|시흥시:대야동,신천동|군포시:산본동,금정동|의왕시:고천동,부곡동|하남시:천현동,신장동|용인시 처인구:포곡읍,모현읍|용인시 기흥구:신갈동,구갈동|용인시 수지구:풍덕천동,죽전동|파주시:문산읍,조리읍|이천시:장호원읍,부발읍|안성시:공도읍,보개면|김포시:통진읍,고촌읍|화성시:향남읍,남양읍|광주시:오포읍,초월읍|양주시:백석읍,은현면|포천시:소흘읍,군내면|여주시:가남읍,점동면|연천군:연천읍,전곡읍|가평군:가평읍,설악면|양평군:양평읍,강상면",
-            "강원특별자치도": "춘천시:신북읍,동면|원주시:문막읍,호저면|강릉시:주문진읍,성산면|동해시:천곡동,북삼동|태백시:황지동,장성동|속초시:영랑동,동명동|삼척시:도계읍,원덕읍|홍천군:홍천읍,화촌면|횡성군:횡성읍,우천면|영월군:영월읍,상동읍|평창군:평창읍,미탄면|정선군:정선읍,고한읍|철원군:철원읍,김화읍|화천군:화천읍,간동면|양구군:양구읍,남면|인제군:인제읍,남면|고성군:간성읍,거진읍|양양군:양양읍,서면",
-            "충청북도": "청주시 상당구:낭성면,미원면|청주시 서원구:남이면,현도면|청주시 흥덕구:오송읍,강내면|청주시 청원구:내수읍,오창읍|충주시:주덕읍,살미면|제천시:봉양읍,백운면|보은군:보은읍,속리산면|옥천군:옥천읍,동이면|영동군:영동읍,용산면|증평군:증평읍,도안면|진천군:진천읍,초평면|괴산군:괴산읍,감물면|음성군:음성읍,금왕읍|단양군:단양읍,매포읍",
-            "충청남도": "천안시 동남구:목천읍,풍세면|천안시 서북구:성환읍,성거읍|공주시:유구읍,이인면|보령시:웅천읍,주포면|아산시:염치읍,배방읍|서산시:대산읍,인지면|논산시:강경읍,연무읍|계룡시:두마면,엄사면|당진시:합덕읍,송악읍|금산군:금산읍,금성면|부여군:부여읍,규암면|서천군:서천읍,장항읍|청양군:청양읍,운곡면|홍성군:홍성읍,광천읍|예산군:예산읍,삽교읍|태안군:태안읍,안면읍",
-            "전북특별자치도": "전주시 완산구:중앙동,풍남동|전주시 덕진구:진북동,인후동|군산시:옥구읍,옥산면|익산시:함열읍,오산면|정읍시:신태인읍,북면|남원시:운봉읍,주천면|김제시:만경읍,죽산면|완주군:삼례읍,봉동읍|진안군:진안읍,용담면|무주군:무주읍,무풍면|장수군:장수읍,산서면|임실군:임실읍,청웅면|순창군:순창읍,인계면|고창군:고창읍,고수면|부안군:부안읍,주산면",
-            "전라남도": "목포시:용당동,연동|여수시:돌산읍,소라면|순천시:승주읍,해룡면|나주시:남평읍,세지면|광양시:광양읍,봉강면|담양군:담양읍,봉산면|곡성군:곡성읍,오곡면|구례군:구례읍,문척면|고흥군:고흥읍,도양읍|보성군:보성읍,벌교읍|화순군:화순읍,한천면|장흥군:장흥읍,관산읍|강진군:강진읍,군동면|해남군:해남읍,삼산면|영암군:영암읍,삼호읍|무안군:무안읍,일로읍|함평군:함평읍,손불면|영광군:영광읍,백수읍|장성군:장성읍,진원면|완도군:완도읍,금일읍|진도군:진도읍,군내면|신안군:지도읍,압해읍",
-            "경상북도": "포항시 남구:구룡포읍,연일읍|포항시 북구:흥해읍,신광면|경주시:건천읍,외동읍|김천시:아포읍,농소면|안동시:풍산읍,와룡면|구미시:선산읍,고아읍|영주시:풍기읍,이산면|영천시:금호읍,청통면|상주시:함창읍,사벌국면|문경시:문경읍,가은읍|경산시:하양읍,진량읍|의성군:의성읍,단촌면|청송군:청송읍,부동면|영양군:영양읍,입암면|영덕군:영덕읍,강구면|청도군:청도읍,화양읍|고령군:대가야읍,덕곡면|성주군:성주읍,선남면|칠곡군:왜관읍,북삼읍|예천군:예천읍,용문면|봉화군:봉화읍,물야면|울진군:울진읍,평해읍|울릉군:울릉읍,서면",
-            "경상남도": "창원시 의창구:동읍,북면|창원시 성산구:반송동,중앙동|창원시 마산합포구:구산면,진동면|창원시 마산회원구:내서읍,회원동|창원시 진해구:웅천동,웅동|진주시:문산읍,내동면|통영시:산양읍,용남면|사천시:사천읍,정동면|김해시:진영읍,주촌면|밀양시:삼랑진읍,하남읍|거제시:일운면,동부면|양산시:물금읍,동면|의령군:의령읍,가례면|함안군:가야읍,칠원읍|창녕군:창녕읍,남지읍|고성군:고성읍,삼산면|남해군:남해읍,이동면|하동군:하동읍,화개면|산청군:산청읍,차황면|함양군:함양읍,마천면|거창군:거창읍,주상면|합천군:합천읍,봉산면",
-            "제주특별자치도": "제주시:애월읍,조천읍,한림읍,구좌읍,노형동,연동,이도동|서귀포시:대정읍,남원읍,성산읍,안덕면,표선면,중문동,동홍동"
-        };
+        // 애니메이션 프레임 확보를 위해 무거운 DOM 파싱을 비동기로 지연 실행
+        setTimeout(() => {
+            initRegionData();
+            initCalendar();
+            initHouseState();
+        }, 100);
 
-        const regionMap = {};
-        for (const [sido, dataStr] of Object.entries(rawRegionData)) {
-            regionMap[sido] = {};
-            dataStr.split('|').forEach(item => {
-                const [sigungu, dongStr] = item.split(':');
-                regionMap[sido][sigungu] = dongStr ? dongStr.split(',') : [];
+        // --- 전국 지역 3단 아코디언 데이터 및 초기화 ---
+        function initRegionData() {
+            const rawRegionData = {
+                "서울특별시": "종로구:청운동,효자동,사직동,삼청동,부암동,평창동,무악동,교남동,가회동,종로1.2.3.4가동,종로5.6가동,이화동,혜화동,창신1동,창신2동,창신3동,숭인1동,숭인2동|중구:소공동,회현동,명동,필동,장충동,광희동,을지로동,신당동,다산동,약수동,청구동,동화동,황학동,중림동|용산구:후암동,용산2가동,남영동,청파동,원효로1동,원효로2동,효창동,용문동,한강로동,이촌1동,이촌2동,이태원1동,이태원2동,서빙고동,보광동,한남동|성동구:왕십리2동,왕십리도선동,마장동,사근동,행당1동,행당2동,응봉동,금호1가동,금호2.3가동,금호4가동,성수1가1동,성수1가2동,성수2가1동,성수2가3동,송정동,용답동|광진구:중곡1동,중곡2동,중곡3동,중곡4동,능동,구의1동,구의2동,구의3동,광장동,자양1동,자양2동,자양3동,자양4동,화양동,군자동|동대문구:신설동,용두동,제기동,전농1동,전농2동,답십리1동,답십리2동,장안1동,장안2동,청량리동,회기동,휘경1동,휘경2동,이문1동,이문2동|중랑구:면목본동,면목2동,면목3.8동,면목4동,면목5동,면목7동,상봉1동,상봉2동,중화1동,중화2동,묵1동,묵2동,망우본동,망우3동,신내1동,신내2동|성북구:성북동,삼선동,동선동,돈암1동,돈암2동,안암동,보문동,정릉1동,정릉2동,정릉3동,정릉4동,길음1동,길음2동,종암동,월곡1동,월곡2동,장위1동,장위2동,장위3동,석관동|강북구:삼양동,미아동,송중동,송천동,삼각산동,우이동,복사동,수유1동,수유2동,수유3동,인수동|도봉구:창1동,창2동,창3동,창4동,창5동,도봉1동,도봉2동,방학1동,방학2동,방학3동,쌍문1동,쌍문2동,쌍문3동,쌍문4동|노원구:월계1동,월계2동,월계3동,공릉1동,공릉2동,하계1동,하계2동,중계본동,중계1동,중계4동,중계동,상계1동,상계2동,상계3.4동,상계5동,상계6.7동,상계8동,상계9동,상계10동|은평구:불광1동,불광2동,갈현1동,갈현2동,구산동,대조동,응암1동,응암2동,응암3동,역촌동,신사1동,신사2동,증산동,수색동,진관동|서대문구:천연동,북아현동,신촌동,연희동,홍제1동,홍제2동,홍제3동,홍은1동,홍은2동,남가좌1동,남가좌2동,북가좌1동,북가좌2동|마포구:공덕동,아현동,도화동,용강동,대흥동,염리동,신수동,서강동,서교동,합정동,망원1동,망원2동,연남동,성산1동,성산2동,상암동|양천구:목1동,목2동,목3동,목4동,목5동,신월1동,신월2동,신월3동,신월4동,신월5동,신월6동,신월7동,신정1동,신정2동,신정3동,신정4동,신정6동,신정7동|강서구:염창동,목동,등촌1동,등촌2동,등촌3동,화곡본동,화곡1동,화곡2동,화곡3동,화곡4동,화곡6동,화곡8동,우장산동,발산1동,가양1동,가양2동,가양3동,공항동,방화1동,방화2동,방화3동,마곡동|구로구:신도림동,구로1동,구로2동,구로3동,구로4동,구로5동,가리봉동,고척1동,고척2동,개봉1동,개봉2동,개봉3동,오류1동,오류2동,수궁동,항동|금천구:가산동,독산1동,독산2동,독산3동,독산4동,시흥1동,시흥2동,시흥3동,시흥4동,시흥5동|영등포구:영등포본동,영등포동,여의동,당산1동,당산2동,도림동,문래동,양평1동,양평2동,신길1동,신길3동,신길4동,신길5동,신길6동,신길7동,대림1동,대림2동,대림3동|동작구:노량진1동,노량진2동,상도1동,상도2동,상도3동,상도4동,흑석동,사당1동,사당2동,사당3동,사당4동,사당5동,대방동,신대방1동,신대방2동|관악구:보라매동,청림동,성현동,행운동,낙성대동,청룡동,사당동,은천동,제기동,난향동,신사동,조원동,대학동,삼성동,난곡동,원신동,서원동,신림동|서초구:서초1동,서초2동,서초3동,서초4동,반포본동,반포1동,반포2동,반포3동,반포4동,방배본동,방배1동,방배2동,방배3동,방배4동,잠원동,서초동,양재1동,양재2동,내곡동|강남구:신사동,논현1동,논현2동,압구정동,청담동,삼성1동,삼성2동,대치1동,대치2동,대치4동,역삼1동,역삼2동,도곡1동,도곡2동,개포1동,개포4동,일원본동,일원1동,일원2동,수서동,세곡동|송파구:풍납1동,풍납2동,거여1동,거여2동,마천1동,마천2동,방이1동,방이2동,오륜동,오금동,송파1동,송파2동,석촌동,삼전동,가락본동,가락1동,가락2동,문정1동,문정2동,장지동,위례동,잠실본동,잠실2동,잠실3동,잠실4동,잠실6동,잠실7동|강동구:강일동,상일1동,상일2동,명일1동,명일2동,고덕1동,고덕2동,암사1동,암사2동,암사3동,천호1동,천호2동,천호3동,성내1동,성내2동,성내3동,둔촌1동,둔촌2동",
+                "부산광역시": "중구:동광동,대청동,보수동,부평동,광복동,남포동,중앙동|서구:동대신1동,동대신2동,동대신3동,서대신1동,서대신3동,암남동,초장동,충무동,남부민1동,남부민2동|동구:초량1동,초량2동,초량3동,초량6동,수정1동,수정2동,수정4동,수정5동,좌천동,범일1동,범일2동,범일5동|영도구:남항동,영선1동,영선2동,신선동,봉래1동,봉래2동,청학1동,청학2동,동삼1동,동삼2동,동삼3동|부산진구:부전1동,부전2동,연지동,초읍동,양정1동,양정2동,전포1동,전포2동,부암1동,부암3동,개금1동,개금2동,개금3동,가야1동,가야2동,범천1동,범천2동|동래구:수민동,복산동,명륜동,온천1동,온천2동,온천3동,사직1동,사직2동,사직3동,안락1동,안락2동,칠산동|남구:대연1동,대연3동,대연4동,대연5동,대연6동,용호1동,용호2동,용호3동,용호4동,용암동,문현1동,문현2동,문현3동,문현4동,감만1동,감만2동,우암동,용당동|북구:구포1동,구포2동,구포3동,금곡동,화명1동,화명2동,화명3동,덕천1동,덕천2동,덕천3동,만덕1동,만덕2동,만덕3동|해운대구:우1동,우2동,우3동,중1동,중2동,좌1동,좌2동,좌3동,좌4동,재송1동,재송2동,반여1동,반여2동,반여3동,반송1동,반송2동,석대동|사하구:하단1동,하단2동,신평1동,신평2동,장림1동,장림2동,다대1동,다대2동,구평동,감천1동,감천2동,괴정1동,괴정2동,괴정3동,괴정4동,당리동|금정구:구서1동,구서2동,장전1동,장전2동,남산동,부곡1동,부곡2동,부곡3동,부곡4동,청룡노포동,서동,금사회동동|강서구:대저1동,대저2동,강동동,명지1동,명지2동,가락동,녹산동,가덕도동|연제구:거제1동,거제2동,거제3동,거제4동,연산1동,연산2동,연산3동,연산4동,연산5동,연산6동,연산8동,연산9동|수영구:남천1동,남천2동,수영동,망미1동,망미2동,광안1동,광안2동,광안3동,광안4동,민락동|사상구:모라1동,모라3동,덕포1동,덕포2동,쾌법동,삼락동,모라동,주례1동,주례2동,주례3동,학장동,엄궁동|기장군:기장읍,장안읍,정관읍,일광읍,철마면",
+                "경기도": "수원시 장안구:파장동,정자1동,정자2동,정자3동,영화동,송죽동,조원1동,조원2동,연무동|수원시 권선구:세류1동,세류2동,세류3동,권선1동,권선2동,곡선동,평동,호매실동,서둔동,구운동|수원시 팔달구:매교동,매산동,고등동,화서1동,화서2동,지동,우만1동,우만2동,인계동|수원시 영통구:매탄1동,매탄2동,매탄3동,매탄4동,원천동,영통1동,영통2동,영통3동,광교1동,광교2동|성남시 수정구:신흥1동,신흥2동,신흥3동,태평1동,태평2동,태평3동,태평4동,수진1동,수진2동,단대동,산성동,복정동,신촌동,고등동,양지동|성남시 중원구:성남동,중앙동,금광1동,금광2동,은행1동,은행2동,상대원1동,상대원2동,상대원3동,하대원동,도촌동|성남시 분당구:분당동,수내1동,수내2동,수내3동,정자동,정자1동,정자2동,정자3동,서현1동,서현2동,이매1동,이매2동,야탑1동,야탑2동,야탑3동,금곡동,구미동,판교동,삼평동,백현동,운중동|고양시 덕양구:원신동,고양동,관산동,성사1동,성사2동,효자동,신도동,창릉동,능곡동,행주동,행신1동,행신2동,행신3동,화정1동,화정2동,대덕동|고양시 일산동구:식사동,중산1동,중산2동,정발산동,풍산동,백석1동,백석2동,마두1동,마두2동,장항1동,장항2동,고봉동|고양시 일산서구:일산1동,일산2동,일산3동,탄현1동,탄현2동,주엽1동,주엽2동,대화동,송포동,송산동|용인시 처인구:포곡읍,모현읍,남사읍,이동읍,원삼면,백암면,양지면,동부동,역삼동,유림동,중앙동|용인시 기흥구:신갈동,구갈동,상갈동,보정동,마북동,동백동,상하동,서농동,구성동,기흥동,세교동|용인시 수지구:풍덕천1동,풍덕천2동,죽전1동,죽전2동,동천동,상현1동,상현2동,성복동"
+            };
+
+            const regionMap = {};
+            for (const [sido, dataStr] of Object.entries(rawRegionData)) {
+                regionMap[sido] = {};
+                dataStr.split('|').forEach(item => {
+                    const [sigungu, dongStr] = item.split(':');
+                    regionMap[sido][sigungu] = dongStr ? dongStr.split(',') : [];
+                });
+            }
+
+            const triggerSido = document.getElementById('trigger-sido');
+            const optionsSido = document.getElementById('options-sido');
+            const wrapSido = document.getElementById('wrap-sido');
+
+            const triggerSigungu = document.getElementById('trigger-sigungu');
+            const optionsSigungu = document.getElementById('options-sigungu');
+            const wrapSigungu = document.getElementById('wrap-sigungu');
+
+            const triggerDong = document.getElementById('trigger-dong');
+            const optionsDong = document.getElementById('options-dong');
+            const wrapDong = document.getElementById('wrap-dong');
+
+            let selectedSido = "";
+            let selectedSigungu = "";
+
+            Object.keys(regionMap).forEach(sido => {
+                const lbl = document.createElement('label');
+                lbl.className = 'custom-option';
+                lbl.innerHTML = `<input type="radio" name="custom_sido" value="${sido}"> ${sido}`;
+                lbl.querySelector('input').addEventListener('change', () => {
+                    selectedSido = sido;
+                    triggerSido.innerHTML = `${sido} <i>▼</i>`;
+                    wrapSido.classList.remove('open');
+
+                    triggerSigungu.innerHTML = `시/군/구 선택 <i>▼</i>`;
+                    triggerSigungu.style.color = 'var(--text-dark)';
+                    triggerSigungu.style.cursor = 'pointer';
+                    optionsSigungu.innerHTML = '';
+                    selectedSigungu = "";
+
+                    triggerDong.innerHTML = `읍/면/동 선택 <i>▼</i>`;
+                    triggerDong.style.color = 'var(--text-light)';
+                    triggerDong.style.cursor = 'not-allowed';
+                    optionsDong.innerHTML = '';
+
+                    Object.keys(regionMap[selectedSido]).forEach(sigungu => {
+                        const sLbl = document.createElement('label');
+                        sLbl.className = 'custom-option';
+                        sLbl.innerHTML = `<input type="radio" name="custom_sigungu" value="${sigungu}"> ${sigungu}`;
+                        sLbl.querySelector('input').addEventListener('change', () => {
+                            selectedSigungu = sigungu;
+                            triggerSigungu.innerHTML = `${sigungu} <i>▼</i>`;
+                            wrapSigungu.classList.remove('open');
+
+                            triggerDong.innerHTML = `읍/면/동 선택 <i>▼</i>`;
+                            triggerDong.style.color = 'var(--text-dark)';
+                            triggerDong.style.cursor = 'pointer';
+                            optionsDong.innerHTML = '';
+
+                            regionMap[selectedSido][selectedSigungu].forEach(dong => {
+                                const dLbl = document.createElement('label');
+                                dLbl.className = 'custom-option';
+                                dLbl.innerHTML = `<input type="radio" name="custom_dong" value="${dong}"> ${dong}`;
+                                dLbl.querySelector('input').addEventListener('change', () => {
+                                    triggerDong.innerHTML = `${dong} <i>▼</i>`;
+                                    wrapDong.classList.remove('open');
+                                });
+                                optionsDong.appendChild(dLbl);
+                            });
+                        });
+                        optionsSigungu.appendChild(sLbl);
+                    });
+                });
+                optionsSido.appendChild(lbl);
+            });
+
+            [
+                { wrap: wrapSido, trigger: triggerSido },
+                { wrap: wrapSigungu, trigger: triggerSigungu, check: () => selectedSido !== "" },
+                { wrap: wrapDong, trigger: triggerDong, check: () => selectedSigungu !== "" }
+            ].forEach(item => {
+                item.trigger.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (item.check && !item.check()) return; 
+                    document.querySelectorAll('.region-group-custom .custom-select-wrap').forEach(w => {
+                        if(w !== item.wrap) w.classList.remove('open');
+                    });
+                    item.wrap.classList.toggle('open');
+                });
             });
         }
-
-        const triggerSido = document.getElementById('trigger-sido');
-        const optionsSido = document.getElementById('options-sido');
-        const wrapSido = document.getElementById('wrap-sido');
-
-        const triggerSigungu = document.getElementById('trigger-sigungu');
-        const optionsSigungu = document.getElementById('options-sigungu');
-        const wrapSigungu = document.getElementById('wrap-sigungu');
-
-        const triggerDong = document.getElementById('trigger-dong');
-        const optionsDong = document.getElementById('options-dong');
-        const wrapDong = document.getElementById('wrap-dong');
-
-        let selectedSido = "";
-        let selectedSigungu = "";
-
-        // 1. 시/도 목록 생성
-        Object.keys(regionMap).forEach(sido => {
-            const lbl = document.createElement('label');
-            lbl.className = 'custom-option';
-            lbl.innerHTML = `<input type="radio" name="custom_sido" value="${sido}"> ${sido}`;
-            lbl.querySelector('input').addEventListener('change', () => {
-                selectedSido = sido;
-                triggerSido.innerHTML = `${sido} <i>▼</i>`;
-                wrapSido.classList.remove('open');
-
-                // 시/군/구 초기화 및 활성화
-                triggerSigungu.innerHTML = `시/군/구 선택 <i>▼</i>`;
-                triggerSigungu.style.color = 'var(--text-dark)';
-                triggerSigungu.style.cursor = 'pointer';
-                optionsSigungu.innerHTML = '';
-                selectedSigungu = "";
-
-                // 읍/면/동 초기화 및 비활성화
-                triggerDong.innerHTML = `읍/면/동 선택 <i>▼</i>`;
-                triggerDong.style.color = 'var(--text-light)';
-                triggerDong.style.cursor = 'not-allowed';
-                optionsDong.innerHTML = '';
-
-                Object.keys(regionMap[selectedSido]).forEach(sigungu => {
-                    const sLbl = document.createElement('label');
-                    sLbl.className = 'custom-option';
-                    sLbl.innerHTML = `<input type="radio" name="custom_sigungu" value="${sigungu}"> ${sigungu}`;
-                    sLbl.querySelector('input').addEventListener('change', () => {
-                        selectedSigungu = sigungu;
-                        triggerSigungu.innerHTML = `${sigungu} <i>▼</i>`;
-                        wrapSigungu.classList.remove('open');
-
-                        // 읍/면/동 초기화 및 활성화
-                        triggerDong.innerHTML = `읍/면/동 선택 <i>▼</i>`;
-                        triggerDong.style.color = 'var(--text-dark)';
-                        triggerDong.style.cursor = 'pointer';
-                        optionsDong.innerHTML = '';
-
-                        regionMap[selectedSido][selectedSigungu].forEach(dong => {
-                            const dLbl = document.createElement('label');
-                            dLbl.className = 'custom-option';
-                            dLbl.innerHTML = `<input type="radio" name="custom_dong" value="${dong}"> ${dong}`;
-                            dLbl.querySelector('input').addEventListener('change', () => {
-                                triggerDong.innerHTML = `${dong} <i>▼</i>`;
-                                wrapDong.classList.remove('open');
-                            });
-                            optionsDong.appendChild(dLbl);
-                        });
-                    });
-                    optionsSigungu.appendChild(sLbl);
-                });
-            });
-            optionsSido.appendChild(lbl);
-        });
-
-        // 드롭다운 열기/닫기 공통 처리
-        [
-            { wrap: wrapSido, trigger: triggerSido },
-            { wrap: wrapSigungu, trigger: triggerSigungu, check: () => selectedSido !== "" },
-            { wrap: wrapDong, trigger: triggerDong, check: () => selectedSigungu !== "" }
-        ].forEach(item => {
-            item.trigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (item.check && !item.check()) return; 
-                document.querySelectorAll('.region-group-custom .custom-select-wrap').forEach(w => {
-                    if(w !== item.wrap) w.classList.remove('open');
-                });
-                item.wrap.classList.toggle('open');
-            });
-        });
 
         // --- 부드러운 스크롤 엔진 ---
         function smoothScrollBy(element, targetAmount, duration = 700) {
@@ -1115,13 +1230,8 @@
             if (currentStep > 1) updateSurveyStep('prev');
         });
 
-        // 기타 기능
-        document.querySelectorAll('.btn-premium-lock').forEach(btn => {
-            btn.addEventListener('click', () => alert('🔒 [첫 독립 3개월 패키지] 이상 구독 시 이용할 수 있는 프리미엄 기능입니다.'));
-        });
-
-        // 캘린더 생성
-        const renderCalendar = () => {
+        // --- 캘린더 초기화 ---
+        function initCalendar() {
             const today = new Date();
             const year = today.getFullYear();
             const month = today.getMonth(); 
@@ -1154,47 +1264,49 @@
             }
             calGrid.innerHTML = dayNamesHTML + daysHTML;
             document.getElementById('event-date-1').innerText = `${month+1}.${Math.min(currentDate+3, lastDayDate)}`;
-        };
-        renderCalendar(); 
+        }
 
         document.getElementById('btn-cal-toggle').addEventListener('click', () => document.getElementById('calendar-card').classList.toggle('hidden'));
         const rightSidebar = document.getElementById('right-sidebar');
         const toggleTodoSidebar = () => rightSidebar.classList.toggle('closed');
         document.getElementById('btn-todo-toggle').addEventListener('click', toggleTodoSidebar);
 
-        const checkboxes = document.querySelectorAll('#todo-list input[type="checkbox"]');
-        const updateHouseSVG = (percent) => {
-            document.getElementById('house-foundation').style.opacity = percent >= 20 ? 1 : 0;
-            document.getElementById('house-walls').style.opacity = percent >= 40 ? 1 : 0;
-            document.getElementById('house-roof').style.opacity = percent >= 60 ? 1 : 0;
-            document.getElementById('house-details').style.opacity = percent >= 80 ? 1 : 0;
-            document.getElementById('house-deco').style.opacity = percent >= 100 ? 1 : 0;
-            const svgHouse = document.getElementById('house-svg');
-            if(percent === 100) svgHouse.style.transform = 'scale(1.08)';
-            else svgHouse.style.transform = 'scale(1)';
-        };
+        // --- 투두 & 일러스트레이션 상태 관리 ---
+        function initHouseState() {
+            const checkboxes = document.querySelectorAll('#todo-list input[type="checkbox"]');
+            const updateHouseSVG = (percent) => {
+                document.getElementById('house-foundation').style.opacity = percent >= 20 ? 1 : 0;
+                document.getElementById('house-walls').style.opacity = percent >= 40 ? 1 : 0;
+                document.getElementById('house-roof').style.opacity = percent >= 60 ? 1 : 0;
+                document.getElementById('house-details').style.opacity = percent >= 80 ? 1 : 0;
+                document.getElementById('house-deco').style.opacity = percent >= 100 ? 1 : 0;
+                const svgHouse = document.getElementById('house-svg');
+                if(percent === 100) svgHouse.style.transform = 'scale(1.08)';
+                else svgHouse.style.transform = 'scale(1)';
+            };
 
-        const updateTodoProgress = () => {
-            const total = checkboxes.length;
-            const checked = document.querySelectorAll('#todo-list input[type="checkbox"]:checked').length;
-            const currentPercent = Math.round((checked / total) * 100); 
-            const ratioText = `${checked}/${total}`;
-            
-            document.getElementById('tab-todo-count').innerHTML = `이번 주 미션<br>${ratioText}`;
-            document.getElementById('panel-todo-ratio').innerText = `${ratioText} 완료`;
-            document.getElementById('main-progress').innerText = `${currentPercent}%`;
+            const updateTodoProgress = () => {
+                const total = checkboxes.length;
+                const checked = document.querySelectorAll('#todo-list input[type="checkbox"]:checked').length;
+                const currentPercent = Math.round((checked / total) * 100); 
+                const ratioText = `${checked}/${total}`;
+                
+                document.getElementById('tab-todo-count').innerHTML = `이번 주 미션<br>${ratioText}`;
+                document.getElementById('panel-todo-ratio').innerText = `${ratioText} 완료`;
+                document.getElementById('main-progress').innerText = `${currentPercent}%`;
 
-            updateHouseSVG(currentPercent);
-        };
+                updateHouseSVG(currentPercent);
+            };
 
-        checkboxes.forEach(box => {
-            box.addEventListener('change', function() {
-                if(this.checked) this.parentElement.classList.add('done');
-                else this.parentElement.classList.remove('done');
-                updateTodoProgress();
+            checkboxes.forEach(box => {
+                box.addEventListener('change', function() {
+                    if(this.checked) this.parentElement.classList.add('done');
+                    else this.parentElement.classList.remove('done');
+                    updateTodoProgress();
+                });
             });
-        });
-        updateTodoProgress();
+            updateTodoProgress();
+        }
     </script>
 </body>
 </html>
