@@ -22,9 +22,6 @@
             --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
             --premium-gold: #f59e0b;
-
-            /* JS로 화면 높이에 맞춰 자동 조절되는 가변 배율 */
-            --ui-scale: 1;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Pretendard, "Noto Sans KR", sans-serif; }
@@ -109,7 +106,7 @@
            HEADER (상단 전체 100% 꽉 차게)
         ========================================= */
         header {
-            width: 100%; height: 70px; background-color: var(--white); 
+            width: 100%; height: 70px; background-color: var(--white); flex-shrink: 0;
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 clamp(20px, 3vw, 40px); border-bottom: 1px solid var(--border-light); z-index: 100;
         }
@@ -133,7 +130,7 @@
         .user-profile:hover { background-color: var(--blue-primary); color: white; }
 
         /* =========================================
-           MAIN CONTENT AREA (화면 전체 확장)
+           MAIN CONTENT AREA (화면 전체 확장 & 높이 가변 대응)
         ========================================= */
         main { 
             flex: 1; width: 100%; position: relative; 
@@ -141,32 +138,39 @@
             overflow: hidden; 
         }
 
-        /* 좌측 플로팅 캘린더 (화면 왼쪽 끝에 밀착) */
+        /* 좌측 플로팅 캘린더 (스마트 높이 적용) */
         .left-sidebar { 
             position: absolute; left: 0; top: 50%; 
-            transform: translateY(-50%) scale(var(--ui-scale));
-            transform-origin: left center;
+            transform: translateY(-50%);
             display: flex; align-items: flex-start; z-index: 10; 
-            transition: transform 0.2s ease;
         }
         .tab-left { width: 50px; background-color: #5b8def; color: var(--white); border-radius: 0 16px 16px 0; padding: 20px 0; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: var(--shadow-sm); cursor: pointer; transition: 0.3s; }
         .tab-left:hover { background-color: var(--blue-primary); padding-left: 5px; }
         .tab-left span { writing-mode: vertical-rl; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
-        .calendar-card { background: var(--white); width: 320px; margin-left: 20px; border-radius: 20px; box-shadow: var(--shadow-lg); padding: 30px 25px; overflow: hidden; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: left center; }
+        
+        .calendar-card { 
+            background: var(--white); width: 320px; margin-left: 20px; border-radius: 20px; 
+            box-shadow: var(--shadow-lg); padding: clamp(20px, 3vh, 30px) 25px; 
+            overflow-y: auto; overflow-x: hidden; scrollbar-width: none; -ms-overflow-style: none;
+            max-height: calc(100vh - 120px); /* 화면 높이에 맞춰 내부 스크롤 허용 */
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: left center; 
+        }
+        .calendar-card::-webkit-scrollbar { display: none; }
         .calendar-card.hidden { opacity: 0; transform: scaleX(0); margin-left: 0; width: 0; padding: 0; }
-        .cal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 16px; margin-bottom: 25px; color: var(--navy);}
+        
+        .cal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 16px; margin-bottom: clamp(15px, 2.5vh, 25px); color: var(--navy);}
         .premium-badge { background-color: #fef3c7; color: #b45309; font-size: 11px; padding: 4px 8px; border-radius: 12px; display: flex; align-items: center; gap: 4px; cursor: pointer; transition: 0.2s; border: 1px solid #fde68a; }
         .premium-badge:hover { background-color: #fde68a; }
-        .cal-month { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 700; margin-bottom: 20px; }
+        .cal-month { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 700; margin-bottom: clamp(10px, 2vh, 20px); }
         .cal-arrow { color: var(--text-light); cursor: pointer; padding: 5px; transition: 0.2s; }
         .cal-arrow:hover { color: var(--blue-primary); }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px 0; text-align: center; font-size: 13px; color: var(--text-dark); }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: clamp(6px, 1vh, 10px) 0; text-align: center; font-size: 13px; color: var(--text-dark); }
         .cal-grid .day-name { color: var(--text-light); font-weight: 700; margin-bottom: 10px; }
         .cal-grid .date { position: relative; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 500; cursor: pointer; border-radius: 50%; }
         .cal-grid .date.today { background-color: var(--blue-light); color: var(--blue-primary); font-weight: 800; box-shadow: inset 0 0 0 1px var(--blue-primary); }
         .cal-grid .date.has-event-blue::after { content: ""; position: absolute; bottom: 2px; width: 4px; height: 4px; border-radius: 50%; background: var(--blue-primary); }
         .cal-grid .date.has-event-mint::after { content: ""; position: absolute; bottom: 2px; width: 4px; height: 4px; border-radius: 50%; background: var(--mint); }
-        .cal-schedule { margin-top: 25px; border-top: 1px solid var(--border-light); padding-top: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .cal-schedule { margin-top: clamp(15px, 2.5vh, 25px); border-top: 1px solid var(--border-light); padding-top: clamp(15px, 2vh, 20px); display: flex; flex-direction: column; gap: clamp(10px, 1.5vh, 15px); }
         .schedule-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px; border-radius: 6px; }
         .schedule-item:hover { background-color: #f8fafc; }
         .schedule-item span:first-child { display: flex; align-items: center; gap: 8px; }
@@ -175,51 +179,79 @@
         .item-mint span:first-child::before { background: var(--mint); }
         .schedule-item .s-date { color: var(--text-light); font-weight: 500; font-size: 12px; }
 
-        /* 중앙 코칭 섹션 (스마트 스케일링으로 절대 안 잘림) */
+        /* 중앙 코칭 섹션 (반응형 텐션 및 이너 스크롤 적용) */
         .center-panel { 
             display: flex; flex-direction: column; align-items: center; text-align: center; 
-            transform: scale(var(--ui-scale));
-            transform-origin: center center;
-            transition: transform 0.2s ease;
+            height: calc(100vh - 70px); /* 헤더 제외 전체 높이 활용 */
+            padding-top: clamp(20px, 5vh, 60px);
+            padding-bottom: clamp(20px, 4vh, 40px);
+            overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; /* 공간 부족 시 자연스러운 자체 스크롤 활성화 */
         }
-        .mini-profile { background: var(--white); border: 1px solid var(--border-light); border-radius: 30px; padding: 10px 20px; display: flex; gap: 15px; box-shadow: var(--shadow-sm); font-size: 13px; font-weight: 600; color: var(--navy); margin-top: 10px; margin-bottom: 0; }
-        .mini-profile span { display: flex; align-items: center; gap: 5px; }
-        .mini-profile i { color: var(--blue-primary); }
-        .greeting h1 { font-size: 32px; font-weight: 800; color: var(--navy); line-height: 1.4; margin-bottom: 10px; }
-        .greeting p { font-size: 15px; color: var(--text-light); margin-bottom: 20px; }
-        .progress-badge { background: var(--navy); color: var(--white); padding: 10px 24px; border-radius: 30px; font-size: 14px; font-weight: 700; box-shadow: var(--shadow-lg); margin-bottom: 30px; }
+        .center-panel::-webkit-scrollbar { display: none; }
+        
+        .greeting { flex-shrink: 0; }
+        .greeting h1 { font-size: clamp(24px, 3.5vh, 32px); font-weight: 800; color: var(--navy); line-height: 1.4; margin-bottom: clamp(5px, 1vh, 10px); }
+        .greeting p { font-size: 15px; color: var(--text-light); margin-bottom: clamp(10px, 2vh, 20px); }
+        .progress-badge { background: var(--navy); color: var(--white); padding: 10px 24px; border-radius: 30px; font-size: 14px; font-weight: 700; box-shadow: var(--shadow-lg); margin-bottom: clamp(15px, 3vh, 30px); flex-shrink: 0; }
         .progress-badge .highlight { color: #fcd34d; }
         
-        .quiz-card { background: var(--white); border: 1px solid var(--border-light); border-radius: 16px; padding: 20px; width: 450px; box-shadow: var(--shadow-sm); margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .quiz-card { background: var(--white); border: 1px solid var(--border-light); border-radius: 16px; padding: clamp(15px, 2vh, 20px); width: 450px; box-shadow: var(--shadow-sm); margin-bottom: clamp(15px, 3vh, 30px); display: flex; flex-direction: column; align-items: center; gap: clamp(10px, 1.5vh, 15px); flex-shrink: 0; }
         .quiz-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--mint); }
         .quiz-question { font-size: 16px; font-weight: 800; color: var(--navy); }
         .quiz-buttons { display: flex; gap: 10px; width: 100%; }
         .quiz-btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; border: 1px solid var(--border-light); background: var(--white); color: var(--text-dark);}
         .quiz-btn.know:hover { background: var(--mint-light); border-color: var(--mint); color: var(--mint);}
         .quiz-btn.dont-know:hover { background: #fee2e2; border-color: #ef4444; color: #ef4444;}
-        .illustration-placeholder { width: 300px; height: 180px; margin-bottom: 40px; display: flex; justify-content: center; align-items: center; }
-
-        /* 우측 플로팅 서랍 탭 (화면 오른쪽 끝에 밀착) */
-        .right-sidebar { 
-            position: absolute; right: 0; top: 50%; 
-            transform: translateY(-50%) scale(var(--ui-scale));
-            transform-origin: right center;
-            display: flex; align-items: center; z-index: 10; 
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        
+        /* 세로 높이 부족 시 가장 먼저 납작해지며 공간을 양보하는 반응형 일러스트 */
+        .illustration-placeholder { 
+            width: 300px; 
+            height: clamp(80px, 15vh, 180px); /* 180px에서 최소 80px까지 고무줄처럼 축소 */
+            margin-bottom: clamp(15px, 4vh, 40px); 
+            display: flex; justify-content: center; align-items: center; 
+            flex-shrink: 1; /* 압축 허용 */
+            min-height: 0;
         }
-        .right-sidebar.closed { transform: translate(320px, -50%) scale(var(--ui-scale)); }
+
+        .mini-profile { background: var(--white); border: 1px solid var(--border-light); border-radius: 30px; padding: 10px 20px; display: flex; gap: 15px; box-shadow: var(--shadow-sm); font-size: 13px; font-weight: 600; color: var(--navy); margin-top: auto; flex-shrink: 0; }
+        .mini-profile span { display: flex; align-items: center; gap: 5px; }
+        .mini-profile i { color: var(--blue-primary); }
+
+        /* 우측 플로팅 서랍 탭 (스마트 높이 적용) */
+        .right-sidebar { 
+            position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+            display: flex; align-items: center; z-index: 10; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .right-sidebar.closed { transform: translate(320px, -50%); }
         .tab-right { background-color: #e6fcf5; border: 1px solid #a7f3d0; border-right: none; border-radius: 20px 0 0 20px; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; box-shadow: -4px 4px 15px rgba(16, 185, 129, 0.1); transition: 0.3s; }
         .tab-right:hover { background-color: var(--mint-light); padding-right: 20px; }
         .tab-right svg { width: 24px; height: 24px; stroke: var(--mint); fill: none; stroke-width: 2; }
         .tab-right .tab-text { color: var(--mint); font-size: 12px; font-weight: 800; text-align: center; }
-        .todo-panel { width: 320px; height: 500px; background: var(--white); border-left: 1px solid var(--border-light); box-shadow: var(--shadow-lg); padding: 30px; display: flex; flex-direction: column; }
-        .todo-header { font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .todo-panel { 
+            width: 320px; background: var(--white); border-left: 1px solid var(--border-light); 
+            box-shadow: var(--shadow-lg); padding: clamp(20px, 3vh, 30px); display: flex; flex-direction: column; 
+            max-height: calc(100vh - 120px); overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .todo-panel::-webkit-scrollbar { display: none; }
+        
+        .todo-header { font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: clamp(15px, 2.5vh, 20px); display: flex; justify-content: space-between; align-items: center; }
         .todo-header span { color: var(--mint); font-size: 13px; background: var(--mint-light); padding: 4px 10px; border-radius: 12px; }
-        .todo-list { display: flex; flex-direction: column; gap: 12px; }
+        .todo-list { display: flex; flex-direction: column; gap: clamp(8px, 1.5vh, 12px); }
         .todo-item { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; cursor: pointer; padding: 10px; border-radius: 8px; border: 1px solid transparent; transition: 0.2s;}
         .todo-item:hover { background-color: #f8fafc; border-color: var(--border-light);}
         .todo-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--mint); cursor: pointer; }
         .todo-item.done { color: var(--text-light); text-decoration: line-through; background: #f8fafc;}
+
+        /* =========================================
+           윈도우 배율 125% 대응 미디어 쿼리 (가용높이 800px 이하)
+        ========================================= */
+        @media (max-height: 800px) {
+            .quiz-card { width: 400px; }
+            .calendar-card { width: 300px; padding: 20px; }
+            .todo-panel { width: 300px; padding: 20px; }
+            .cal-schedule { margin-top: 15px; padding-top: 15px; }
+        }
 
         /* =========================================
            모달 오버레이 (계산기 전용)
@@ -428,7 +460,7 @@
             </div>
         </aside>
 
-        <!-- 중앙 메인 코칭 영역 (가운데 완벽 정렬 및 가변 배율 적용) -->
+        <!-- 중앙 메인 코칭 영역 (CSS 반응형 스케일링) -->
         <section class="center-panel">
             <div class="greeting">
                 <h1>세상에 첫발을 내딛는 청춘님, 오늘도<br>독립에 한 걸음 가까워졌어요!</h1>
@@ -448,6 +480,7 @@
                 </div>
             </div>
 
+            <!-- 공간 부족 시 높이가 압축되는 반응형 일러스트 -->
             <div class="illustration-placeholder" id="house-illustration">
                 <svg id="house-svg" viewBox="0 0 380 250" style="width:100%; height:100%; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
                     <g stroke="#cbd5e0" stroke-width="2" fill="none" stroke-dasharray="6,4">
@@ -870,27 +903,6 @@
 
     <!-- 인터랙션 자바스크립트 -->
     <script>
-        // --- [NEW] 화면 높이에 맞춘 동적 배율 계산 (가운데 콘텐츠 전용) ---
-        function updateResponsiveScale() {
-            const winH = window.innerHeight;
-            const headerH = 70;
-            const availableH = winH - headerH;
-            
-            // 중앙 콘텐츠가 차지하는 이상적인 기준 높이 (약 720px)
-            const idealH = 720;
-            
-            // 높이가 부족하면 비율에 맞춰 자동 축소 (최소 0.65배)
-            let scale = 1;
-            if (availableH < idealH) {
-                scale = Math.max(0.65, (availableH - 20) / idealH);
-            }
-            
-            // CSS 변수로 배율 주입 -> 좌우 끝은 채우고 알맹이만 축소
-            document.documentElement.style.setProperty('--ui-scale', scale);
-        }
-        window.addEventListener('resize', updateResponsiveScale);
-        updateResponsiveScale();
-
         // --- 0. 헤더 기능 연동 ---
         document.getElementById('btn-bell').addEventListener('click', () => alert('새로운 알림이 없습니다.'));
         document.getElementById('btn-profile').addEventListener('click', () => alert('가입 후 마이페이지를 이용할 수 있습니다.'));
