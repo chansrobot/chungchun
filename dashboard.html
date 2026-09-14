@@ -22,36 +22,37 @@
             --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
             --premium-gold: #f59e0b;
+
+            /* JS로 화면 높이에 맞춰 자동 조절되는 가변 배율 */
+            --ui-scale: 1;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Pretendard, "Noto Sans KR", sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-dark); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* 전체 화면을 꽉 채우는 풀스크린 레이아웃 */
+        body { 
+            background-color: var(--bg-color); color: var(--text-dark); 
+            width: 100vw; height: 100vh; display: flex; flex-direction: column; 
+            overflow: hidden; position: relative; 
+        }
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
 
         /* =========================================
-           [PREMIUM] 시네마틱 로딩 스크린 (네모 박스 완벽 해결 & 딥다이브 강화)
+           [PREMIUM] 시네마틱 로딩 스크린 (네모 티 완벽 제거)
         ========================================= */
         .global-loader {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #ffffff; z-index: 99999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             opacity: 1; transform: scale(1);
-            /* 딥 다이브 전환 시간을 2.0초로 길고 깊게 설정 */
             transition: opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1), transform 2.0s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: auto;
             overflow: hidden;
         }
-
-        /* 로딩 종료 시 빨려들어가는 연출 */
         .global-loader.fade-out {
-            opacity: 0;
-            /* 8배로 거대하게 확대해서 확실하게 화면 속으로 빨려 들어가는 느낌 부여 */
-            transform: scale(8); 
-            pointer-events: none;
+            opacity: 0; transform: scale(8); pointer-events: none;
         }
-
-        /* 로고 뒤 은은한 백라이트 글로우 */
         .loader-glow {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 350px; height: 350px;
@@ -64,65 +65,40 @@
             0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
             100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
         }
-
         .loader-content-box {
             position: relative; width: 450px; height: 450px; max-width: 85vw; max-height: 85vw;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             z-index: 1;
         }
-
-        /* [네모티 해결] 영역 침범 렌더링 버그를 막기 위해 순수 이미지 분리 적용 */
         .loader-road-img, .loader-text-img {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;
+            mix-blend-mode: multiply; 
         }
-
-        /* 1. 길 (Road) - 제자리에서 스르륵 차오름 */
         .loader-road-img {
-            clip-path: inset(100% 0 0 0);
-            transform: translateZ(0); 
-            will-change: clip-path;
+            clip-path: inset(100% 0 0 0); transform: translateZ(0); will-change: clip-path;
             animation: drawRoadCinematic 1.8s 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         @keyframes drawRoadCinematic {
             0% { clip-path: inset(100% 0 0 0); }
             100% { clip-path: inset(59% 0 0 0); } 
         }
-
-        /* 2. 글자 (Text) - 제자리에서 가장 깔끔하게 페이드인 (움직임 빼서 사각형 아예 안 보임) */
         .loader-text-img {
-            clip-path: inset(0 0 41% 0);
-            opacity: 0;
-            transform: translateZ(0);
-            will-change: opacity;
+            clip-path: inset(0 0 41% 0); opacity: 0; transform: translateZ(0); will-change: opacity;
             animation: riseTextCinematic 1.6s 1.4s ease-in-out forwards;
         }
-        @keyframes riseTextCinematic {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        /* 빛이 슥 쓸고 지나가는 프리미엄 스윕 이펙트 */
+        @keyframes riseTextCinematic { 0% { opacity: 0; } 100% { opacity: 1; } }
         .light-sweep {
             position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
             background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            z-index: 10;
-            mix-blend-mode: overlay;
+            transform: skewX(-25deg); z-index: 10; mix-blend-mode: overlay;
             animation: sweepShimmer 1.5s 2.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
-        @keyframes sweepShimmer {
-            0% { left: -100%; }
-            100% { left: 200%; }
-        }
-
-        /* 3. 슬로건 - 시네마틱 텐션 */
+        @keyframes sweepShimmer { 0% { left: -100%; } 100% { left: 200%; } }
         .loader-slogan {
             position: absolute; bottom: 8%; font-size: 15px; font-weight: 700; color: #1e629b;
-            letter-spacing: 4px;
-            opacity: 0; transform: translateY(10px);
+            letter-spacing: 4px; opacity: 0; transform: translateY(10px);
             animation: riseSloganCinematic 1.2s 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            text-align: center;
-            width: 100%;
+            text-align: center; width: 100%;
         }
         @keyframes riseSloganCinematic { 
             0% { opacity: 0; transform: translateY(10px); letter-spacing: 4px; filter: blur(4px); }
@@ -130,29 +106,26 @@
         }
 
         /* =========================================
-           HEADER (상단 네비게이션)
+           HEADER (상단 전체 100% 꽉 차게)
         ========================================= */
         header {
-            height: 70px; background-color: var(--white); display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; border-bottom: 1px solid var(--border-light); z-index: 100;
+            width: 100%; height: 70px; background-color: var(--white); 
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 clamp(20px, 3vw, 40px); border-bottom: 1px solid var(--border-light); z-index: 100;
         }
-
         .header-logo { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 800; color: var(--blue-primary); }
         .nav-menu { display: flex; gap: 40px; height: 100%; }
         .nav-item { position: relative; display: flex; align-items: center; height: 100%; font-size: 15px; font-weight: 600; cursor: pointer; }
         .nav-item i { margin-left: 5px; font-size: 10px; color: var(--text-light); }
-
         .dropdown { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); background: var(--white); border: 1px solid var(--border-light); border-radius: 8px; box-shadow: var(--shadow-lg); width: 200px; padding: 10px 0; display: none; flex-direction: column; }
         .nav-item:hover .dropdown { display: flex; }
         .dropdown li { padding: 12px 20px; font-size: 14px; color: var(--text-dark); transition: 0.2s; }
         .dropdown li:hover { color: var(--blue-primary); background-color: var(--blue-light); font-weight: 700; }
-
         .mega-dropdown { position: absolute; top: 70px; left: -100px; width: 450px; background: var(--white); border: 1px solid var(--border-light); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 20px; display: none; grid-template-columns: 1fr 1fr; gap: 20px; cursor: default; }
         .nav-item:hover .mega-dropdown { display: grid; }
         .mega-col h4 { font-size: 13px; color: var(--mint); margin-bottom: 10px; border-bottom: 1px solid var(--border-light); padding-bottom: 5px;}
         .mega-col ul li { padding: 6px 0; font-size: 13px; color: var(--text-dark); cursor: pointer; transition: 0.2s;}
         .mega-col ul li:hover { color: var(--blue-primary); font-weight: 700; transform: translateX(5px);}
-
         .header-actions { display: flex; align-items: center; gap: 20px; }
         .icon-bell { width: 20px; height: 20px; fill: none; stroke: var(--text-dark); stroke-width: 2; cursor: pointer; transition: 0.2s; }
         .icon-bell:hover { stroke: var(--blue-primary); transform: scale(1.1); }
@@ -160,16 +133,25 @@
         .user-profile:hover { background-color: var(--blue-primary); color: white; }
 
         /* =========================================
-           MAIN CONTENT AREA
+           MAIN CONTENT AREA (화면 전체 확장)
         ========================================= */
-        main { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; }
+        main { 
+            flex: 1; width: 100%; position: relative; 
+            display: flex; align-items: center; justify-content: center; 
+            overflow: hidden; 
+        }
 
-        /* 좌측 플로팅 캘린더 */
-        .left-sidebar { position: absolute; left: 0; top: 40px; display: flex; align-items: flex-start; z-index: 10; }
+        /* 좌측 플로팅 캘린더 (화면 왼쪽 끝에 밀착) */
+        .left-sidebar { 
+            position: absolute; left: 0; top: 50%; 
+            transform: translateY(-50%) scale(var(--ui-scale));
+            transform-origin: left center;
+            display: flex; align-items: flex-start; z-index: 10; 
+            transition: transform 0.2s ease;
+        }
         .tab-left { width: 50px; background-color: #5b8def; color: var(--white); border-radius: 0 16px 16px 0; padding: 20px 0; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: var(--shadow-sm); cursor: pointer; transition: 0.3s; }
         .tab-left:hover { background-color: var(--blue-primary); padding-left: 5px; }
         .tab-left span { writing-mode: vertical-rl; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
-
         .calendar-card { background: var(--white); width: 320px; margin-left: 20px; border-radius: 20px; box-shadow: var(--shadow-lg); padding: 30px 25px; overflow: hidden; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: left center; }
         .calendar-card.hidden { opacity: 0; transform: scaleX(0); margin-left: 0; width: 0; padding: 0; }
         .cal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 16px; margin-bottom: 25px; color: var(--navy);}
@@ -193,19 +175,21 @@
         .item-mint span:first-child::before { background: var(--mint); }
         .schedule-item .s-date { color: var(--text-light); font-weight: 500; font-size: 12px; }
 
-        /* 중앙 코칭 섹션 */
-        .center-panel { display: flex; flex-direction: column; align-items: center; text-align: center; }
-        
+        /* 중앙 코칭 섹션 (스마트 스케일링으로 절대 안 잘림) */
+        .center-panel { 
+            display: flex; flex-direction: column; align-items: center; text-align: center; 
+            transform: scale(var(--ui-scale));
+            transform-origin: center center;
+            transition: transform 0.2s ease;
+        }
         .mini-profile { background: var(--white); border: 1px solid var(--border-light); border-radius: 30px; padding: 10px 20px; display: flex; gap: 15px; box-shadow: var(--shadow-sm); font-size: 13px; font-weight: 600; color: var(--navy); margin-top: 10px; margin-bottom: 0; }
         .mini-profile span { display: flex; align-items: center; gap: 5px; }
         .mini-profile i { color: var(--blue-primary); }
-
         .greeting h1 { font-size: 32px; font-weight: 800; color: var(--navy); line-height: 1.4; margin-bottom: 10px; }
         .greeting p { font-size: 15px; color: var(--text-light); margin-bottom: 20px; }
         .progress-badge { background: var(--navy); color: var(--white); padding: 10px 24px; border-radius: 30px; font-size: 14px; font-weight: 700; box-shadow: var(--shadow-lg); margin-bottom: 30px; }
         .progress-badge .highlight { color: #fcd34d; }
-
-        /* 퀴즈 위젯 */
+        
         .quiz-card { background: var(--white); border: 1px solid var(--border-light); border-radius: 16px; padding: 20px; width: 450px; box-shadow: var(--shadow-sm); margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
         .quiz-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--mint); }
         .quiz-question { font-size: 16px; font-weight: 800; color: var(--navy); }
@@ -213,17 +197,21 @@
         .quiz-btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; border: 1px solid var(--border-light); background: var(--white); color: var(--text-dark);}
         .quiz-btn.know:hover { background: var(--mint-light); border-color: var(--mint); color: var(--mint);}
         .quiz-btn.dont-know:hover { background: #fee2e2; border-color: #ef4444; color: #ef4444;}
-
         .illustration-placeholder { width: 300px; height: 180px; margin-bottom: 40px; display: flex; justify-content: center; align-items: center; }
 
-        /* 우측 플로팅 서랍 탭 */
-        .right-sidebar { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; align-items: center; transition: 0.4s; z-index: 10; }
-        .right-sidebar.closed { transform: translate(320px, -50%); }
+        /* 우측 플로팅 서랍 탭 (화면 오른쪽 끝에 밀착) */
+        .right-sidebar { 
+            position: absolute; right: 0; top: 50%; 
+            transform: translateY(-50%) scale(var(--ui-scale));
+            transform-origin: right center;
+            display: flex; align-items: center; z-index: 10; 
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .right-sidebar.closed { transform: translate(320px, -50%) scale(var(--ui-scale)); }
         .tab-right { background-color: #e6fcf5; border: 1px solid #a7f3d0; border-right: none; border-radius: 20px 0 0 20px; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; box-shadow: -4px 4px 15px rgba(16, 185, 129, 0.1); transition: 0.3s; }
         .tab-right:hover { background-color: var(--mint-light); padding-right: 20px; }
         .tab-right svg { width: 24px; height: 24px; stroke: var(--mint); fill: none; stroke-width: 2; }
         .tab-right .tab-text { color: var(--mint); font-size: 12px; font-weight: 800; text-align: center; }
-        
         .todo-panel { width: 320px; height: 500px; background: var(--white); border-left: 1px solid var(--border-light); box-shadow: var(--shadow-lg); padding: 30px; display: flex; flex-direction: column; }
         .todo-header { font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
         .todo-header span { color: var(--mint); font-size: 13px; background: var(--mint-light); padding: 4px 10px; border-radius: 12px; }
@@ -237,7 +225,7 @@
            모달 오버레이 (계산기 전용)
         ========================================= */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px);
             display: none; justify-content: center; align-items: center; z-index: 999;
         }
@@ -246,10 +234,8 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; animation: popIn 0.3s ease;
         }
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        
         .modal-close { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px; color: var(--text-light); transition: 0.2s;}
         .modal-close:hover { color: var(--navy); transform: rotate(90deg);}
-        
         .calc-header h2 { font-size: 20px; color: var(--navy); margin-bottom: 5px; }
         .calc-header p { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
         .input-group { margin-bottom: 15px; }
@@ -278,89 +264,54 @@
            2. 자가진단 전체화면
         ========================================= */
         .fullscreen-survey {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: var(--bg-color); z-index: 9998;
             display: none; flex-direction: column; align-items: center; justify-content: flex-start;
             padding-top: 5vh; padding-bottom: 40px; 
             overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable;
         }
-        .survey-card {
-            background: var(--white); width: 100%; max-width: 650px; border-radius: 20px;
-            box-shadow: var(--shadow-lg); padding: 40px; position: relative; margin-bottom: 50px;
-            animation: slideUp 0.4s ease;
-        }
+        .survey-card { background: var(--white); width: 100%; max-width: 650px; border-radius: 20px; box-shadow: var(--shadow-lg); padding: 40px; position: relative; margin-bottom: 50px; animation: slideUp 0.4s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
         .survey-header { text-align: center; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid var(--border-light);}
         .survey-header h1 { font-size: 22px; color: var(--navy); font-weight: 800; margin-bottom: 8px; }
         .survey-header p { font-size: 14px; color: var(--text-light); }
-        
         .progress-container { width: 100%; height: 8px; background: var(--border-light); border-radius: 4px; margin-bottom: 30px; overflow: hidden;}
         .progress-bar { height: 100%; background: var(--mint); width: 20%; transition: width 0.4s ease; }
-
         .step { display: none; animation: fadeIn 0.4s ease; }
         .step.active { display: block; }
         .step-title { font-size: 18px; color: var(--blue-primary); font-weight: 800; margin-bottom: 25px; }
-        
         .question { margin-bottom: 30px; }
         .question label.q-title { display: block; font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 12px; line-height: 1.4; }
-
-        /* 부드러운 아코디언 드롭다운 */
         .custom-select-wrap { position: relative; width: 100%; margin-bottom: 10px; }
-        .custom-select-trigger {
-            width: 100%; padding: 14px 16px; border: 1px solid var(--border-light); border-radius: 12px;
-            font-size: 14px; color: var(--text-dark); background: var(--white); cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center; transition: 0.3s; font-weight: 600;
-        }
+        .custom-select-trigger { width: 100%; padding: 14px 16px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 14px; color: var(--text-dark); background: var(--white); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; font-weight: 600; }
         .custom-select-trigger:hover { border-color: var(--blue-primary); }
         .custom-select-trigger i { font-style: normal; font-size: 12px; color: var(--text-light); transition: transform 0.45s ease; }
-        
-        .custom-select-options {
-            max-height: 0; opacity: 0; overflow: hidden;
-            transition: max-height 0.65s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, padding 0.5s ease;
-            display: flex; flex-direction: column; padding: 0 10px; margin-top: -6px;
-            background: var(--white); border: 1px solid var(--border-light); border-top: none;
-            border-radius: 0 0 12px 12px; box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.05);
-        }
+        .custom-select-options { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.65s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, padding 0.5s ease; display: flex; flex-direction: column; padding: 0 10px; margin-top: -6px; background: var(--white); border: 1px solid var(--border-light); border-top: none; border-radius: 0 0 12px 12px; box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.05); }
         .custom-select-wrap.open .custom-select-options { max-height: 280px; overflow-y: auto; opacity: 1; padding: 12px 10px; }
         .custom-select-wrap.open .custom-select-trigger { border-radius: 12px 12px 0 0; border-color: var(--border-light); }
         .custom-select-wrap.open .custom-select-trigger i { transform: rotate(180deg); }
-
-        .custom-option {
-            padding: 12px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; gap: 10px; transition: 0.2s; color: var(--text-dark);
-        }
+        .custom-option { padding: 12px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; color: var(--text-dark); }
         .custom-option:hover { background: var(--bg-color); }
         .custom-option input { accent-color: var(--mint); width: 16px; height: 16px; cursor: pointer; }
         .custom-option:has(input:checked) { background: var(--blue-light); color: var(--blue-primary); }
-
-        /* Q2 지역 선택 가로 배치 및 커스텀 스타일 */
         .region-group-custom { display: flex; gap: 10px; margin-bottom: 10px; }
         .region-group-custom .custom-select-wrap { flex: 1; margin-bottom: 0; }
-
-        input[type="number"], input[type="text"] {
-            width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: 0.2s;
-        }
+        input[type="number"], input[type="text"] { width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: 0.2s; }
         input:focus { border-color: var(--blue-primary); background: var(--white); box-shadow: 0 0 0 3px var(--blue-light); }
-
         .money-group { display: flex; align-items: center; gap: 8px; margin-bottom: 10px;}
         .money-group span { font-size: 14px; color: var(--text-dark); font-weight: 600; white-space: nowrap;}
-        
         .money-input-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 5px 0; }
         .money-input-row label { font-size: 14px; font-weight: 700; color: var(--navy); width: 100px; }
         .money-input-row input { flex: 1; padding: 12px 16px; border: 1px solid var(--border-light); border-radius: 8px; background: #f8fafc; outline: none; text-align: left; margin: 0 15px; transition: 0.2s; }
         .money-input-row input:focus { border-color: var(--blue-primary); box-shadow: 0 0 0 3px var(--blue-light); background: #fff;}
         .money-input-row span { font-size: 14px; font-weight: 600; color: var(--text-dark); }
-
         .expense-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px;}
         .expense-item { display: flex; flex-direction: column; gap: 5px; }
         .expense-item span { font-size: 13px; font-weight: 600; color: var(--text-light); }
         .expense-item input { padding: 10px; }
-
         .etc-input { margin-top: 8px; display: none; width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: 0.2s;}
         .etc-input:focus { border-color: var(--blue-primary); background: var(--white); box-shadow: 0 0 0 3px var(--blue-light); }
         .etc-input.show { display: block; animation: fadeIn 0.3s ease; }
-
         .survey-footer { display: flex; justify-content: space-between; gap: 10px; margin-top: 40px; }
         .btn-step { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; transition: 0.2s;}
         .btn-prev { background: var(--border-light); color: var(--text-dark); display: none; }
@@ -381,23 +332,19 @@
 <body>
 
     <!-- =========================================
-         [PREMIUM] 시네마틱 로딩 스크린 (네모 티 완벽 제거)
+         [PREMIUM] 시네마틱 로딩 스크린
     ========================================= -->
     <div class="global-loader" id="global-loader">
         <div class="loader-glow"></div>
         <div class="loader-content-box">
-            <!-- 1. 길 영역: 초점이 맺히며 등장 -->
             <img src="./logo.png" class="loader-road-img" decoding="sync" loading="eager" alt="청춘비서 길">
-            <!-- 2. 텍스트 영역: 강한 블러에서 선명해지며 등장 -->
             <img src="./logo.png" class="loader-text-img" decoding="sync" loading="eager" alt="청춘비서 로고 텍스트">
-            <!-- 시네마틱 광택 효과 (Light Sweep) -->
             <div class="light-sweep"></div>
-            <!-- 3. 슬로건: 타이포 텐션(글자 간격) 애니메이션 -->
             <p class="loader-slogan">세상에 첫발을 내딛는 청춘을 위한 자립 비서</p>
         </div>
     </div>
 
-    <!-- 헤더 -->
+    <!-- 헤더 (화면 전체 100% 너비) -->
     <header>
         <a href="#" class="header-logo">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -464,7 +411,7 @@
     </header>
 
     <main>
-        <!-- 좌측 캘린더 영역 -->
+        <!-- 좌측 캘린더 영역 (화면 왼쪽 끝 밀착) -->
         <aside class="left-sidebar" id="left-sidebar">
             <div class="tab-left" id="btn-cal-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -481,7 +428,7 @@
             </div>
         </aside>
 
-        <!-- 중앙 메인 코칭 영역 -->
+        <!-- 중앙 메인 코칭 영역 (가운데 완벽 정렬 및 가변 배율 적용) -->
         <section class="center-panel">
             <div class="greeting">
                 <h1>세상에 첫발을 내딛는 청춘님, 오늘도<br>독립에 한 걸음 가까워졌어요!</h1>
@@ -547,7 +494,7 @@
             </div>
         </section>
 
-        <!-- 우측 플로팅 서랍 탭 -->
+        <!-- 우측 플로팅 서랍 탭 (화면 오른쪽 끝 밀착) -->
         <aside class="right-sidebar closed" id="right-sidebar">
             <div class="tab-right" id="btn-todo-toggle">
                 <svg viewBox="0 0 24 24" style="stroke-width: 2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -621,25 +568,12 @@
                     <label class="q-title">Q1. 현재 나이를 입력해주세요.</label>
                     <div class="money-group"><span>만</span><input type="number" placeholder="예: 21"><span>세</span></div>
                 </div>
-                <!-- Q2. 지역 선택 -->
                 <div class="question">
                     <label class="q-title">Q2. 독립을 희망하는 지역을 선택해주세요.</label>
                     <div class="region-group-custom">
-                        <!-- 시/도 선택 -->
-                        <div class="custom-select-wrap" id="wrap-sido">
-                            <div class="custom-select-trigger" id="trigger-sido">시/도 선택 <i>▼</i></div>
-                            <div class="custom-select-options" id="options-sido"></div>
-                        </div>
-                        <!-- 시/군/구 선택 -->
-                        <div class="custom-select-wrap" id="wrap-sigungu">
-                            <div class="custom-select-trigger" id="trigger-sigungu" style="color: var(--text-light); cursor: not-allowed;">시/군/구 선택 <i>▼</i></div>
-                            <div class="custom-select-options" id="options-sigungu"></div>
-                        </div>
-                        <!-- 읍/면/동 선택 -->
-                        <div class="custom-select-wrap" id="wrap-dong">
-                            <div class="custom-select-trigger" id="trigger-dong" style="color: var(--text-light); cursor: not-allowed;">읍/면/동 선택 <i>▼</i></div>
-                            <div class="custom-select-options" id="options-dong"></div>
-                        </div>
+                        <div class="custom-select-wrap" id="wrap-sido"><div class="custom-select-trigger" id="trigger-sido">시/도 선택 <i>▼</i></div><div class="custom-select-options" id="options-sido"></div></div>
+                        <div class="custom-select-wrap" id="wrap-sigungu"><div class="custom-select-trigger" id="trigger-sigungu" style="color: var(--text-light); cursor: not-allowed;">시/군/구 선택 <i>▼</i></div><div class="custom-select-options" id="options-sigungu"></div></div>
+                        <div class="custom-select-wrap" id="wrap-dong"><div class="custom-select-trigger" id="trigger-dong" style="color: var(--text-light); cursor: not-allowed;">읍/면/동 선택 <i>▼</i></div><div class="custom-select-options" id="options-dong"></div></div>
                     </div>
                     <label style="font-size: 13px; color: var(--text-light); margin-top: 8px; display: block;"><input type="checkbox"> 아직 정하지 못함</label>
                 </div>
@@ -696,15 +630,9 @@
                 </div>
                 <div class="question" style="margin-top: 40px;">
                     <label class="q-title">Q6. 주거에 사용할 수 있는 예산을 입력해주세요.</label>
-                    <div class="money-input-row">
-                        <label>보증금: 약</label><input type="number" placeholder="0"><span>만원</span>
-                    </div>
-                    <div class="money-input-row">
-                        <label>월세: 최대</label><input type="number" placeholder="0"><span>만원</span>
-                    </div>
-                    <div class="money-input-row">
-                        <label>월 관리비: 최대</label><input type="number" placeholder="0"><span>만원</span>
-                    </div>
+                    <div class="money-input-row"><label>보증금: 약</label><input type="number" placeholder="0"><span>만원</span></div>
+                    <div class="money-input-row"><label>월세: 최대</label><input type="number" placeholder="0"><span>만원</span></div>
+                    <div class="money-input-row"><label>월 관리비: 최대</label><input type="number" placeholder="0"><span>만원</span></div>
                     <label style="font-size: 13px; color: var(--text-light); display: block; margin-top: 10px;"><input type="checkbox"> 아직 예산을 정하지 못함</label>
                 </div>
             </div>
@@ -942,18 +870,36 @@
 
     <!-- 인터랙션 자바스크립트 -->
     <script>
+        // --- [NEW] 화면 높이에 맞춘 동적 배율 계산 (가운데 콘텐츠 전용) ---
+        function updateResponsiveScale() {
+            const winH = window.innerHeight;
+            const headerH = 70;
+            const availableH = winH - headerH;
+            
+            // 중앙 콘텐츠가 차지하는 이상적인 기준 높이 (약 720px)
+            const idealH = 720;
+            
+            // 높이가 부족하면 비율에 맞춰 자동 축소 (최소 0.65배)
+            let scale = 1;
+            if (availableH < idealH) {
+                scale = Math.max(0.65, (availableH - 20) / idealH);
+            }
+            
+            // CSS 변수로 배율 주입 -> 좌우 끝은 채우고 알맹이만 축소
+            document.documentElement.style.setProperty('--ui-scale', scale);
+        }
+        window.addEventListener('resize', updateResponsiveScale);
+        updateResponsiveScale();
+
         // --- 0. 헤더 기능 연동 ---
         document.getElementById('btn-bell').addEventListener('click', () => alert('새로운 알림이 없습니다.'));
         document.getElementById('btn-profile').addEventListener('click', () => alert('가입 후 마이페이지를 이용할 수 있습니다.'));
 
         // --- 시네마틱 인트로 로딩 처리 타이밍 로직 ---
         window.addEventListener('DOMContentLoaded', () => {
-            // 연출 완료 대기 5초 후 거대한 시네마틱 다이브 줌인
             setTimeout(() => {
                 const loader = document.getElementById('global-loader');
                 loader.classList.add('fade-out');
-
-                // 2.0초의 길고 웅장한 줌인 효과 후 DOM에서 완전 정리
                 setTimeout(() => {
                     loader.style.display = 'none';
                     document.getElementById('welcome-modal').style.display = 'flex';
@@ -974,7 +920,6 @@
             welcomeModal.style.display = 'none';
         });
 
-        // 애니메이션 프레임 확보를 위해 무거운 DOM 파싱을 비동기로 지연 실행
         setTimeout(() => {
             initRegionData();
             initCalendar();
@@ -1001,11 +946,9 @@
             const triggerSido = document.getElementById('trigger-sido');
             const optionsSido = document.getElementById('options-sido');
             const wrapSido = document.getElementById('wrap-sido');
-
             const triggerSigungu = document.getElementById('trigger-sigungu');
             const optionsSigungu = document.getElementById('options-sigungu');
             const wrapSigungu = document.getElementById('wrap-sigungu');
-
             const triggerDong = document.getElementById('trigger-dong');
             const optionsDong = document.getElementById('options-dong');
             const wrapDong = document.getElementById('wrap-dong');
@@ -1021,13 +964,11 @@
                     selectedSido = sido;
                     triggerSido.innerHTML = `${sido} <i>▼</i>`;
                     wrapSido.classList.remove('open');
-
                     triggerSigungu.innerHTML = `시/군/구 선택 <i>▼</i>`;
                     triggerSigungu.style.color = 'var(--text-dark)';
                     triggerSigungu.style.cursor = 'pointer';
                     optionsSigungu.innerHTML = '';
                     selectedSigungu = "";
-
                     triggerDong.innerHTML = `읍/면/동 선택 <i>▼</i>`;
                     triggerDong.style.color = 'var(--text-light)';
                     triggerDong.style.cursor = 'not-allowed';
@@ -1041,7 +982,6 @@
                             selectedSigungu = sigungu;
                             triggerSigungu.innerHTML = `${sigungu} <i>▼</i>`;
                             wrapSigungu.classList.remove('open');
-
                             triggerDong.innerHTML = `읍/면/동 선택 <i>▼</i>`;
                             triggerDong.style.color = 'var(--text-dark)';
                             triggerDong.style.cursor = 'pointer';
@@ -1064,11 +1004,7 @@
                 optionsSido.appendChild(lbl);
             });
 
-            [
-                { wrap: wrapSido, trigger: triggerSido },
-                { wrap: wrapSigungu, trigger: triggerSigungu, check: () => selectedSido !== "" },
-                { wrap: wrapDong, trigger: triggerDong, check: () => selectedSigungu !== "" }
-            ].forEach(item => {
+            [ { wrap: wrapSido, trigger: triggerSido }, { wrap: wrapSigungu, trigger: triggerSigungu, check: () => selectedSido !== "" }, { wrap: wrapDong, trigger: triggerDong, check: () => selectedSigungu !== "" } ].forEach(item => {
                 item.trigger.addEventListener('click', (e) => {
                     e.stopPropagation();
                     if (item.check && !item.check()) return; 
@@ -1080,12 +1016,10 @@
             });
         }
 
-        // --- 부드러운 스크롤 엔진 ---
         function smoothScrollBy(element, targetAmount, duration = 700) {
             if (targetAmount <= 0) return;
             const startTop = element.scrollTop;
             const startTime = performance.now();
-
             function step(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
@@ -1096,7 +1030,6 @@
             requestAnimationFrame(step);
         }
 
-        // 일반 옵션 드롭다운
         document.querySelectorAll('.fullscreen-survey .custom-select-wrap:not(.region-group-custom .custom-select-wrap)').forEach(wrap => {
             const trigger = wrap.querySelector('.custom-select-trigger');
             const options = wrap.querySelector('.custom-select-options');
@@ -1151,42 +1084,31 @@
             });
         });
 
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.custom-select-wrap').forEach(w => w.classList.remove('open'));
-        });
+        document.addEventListener('click', () => { document.querySelectorAll('.custom-select-wrap').forEach(w => w.classList.remove('open')); });
 
-        // --- 주거비 계산기 연동 ---
         const calcModal = document.getElementById('calc-modal');
         document.getElementById('btn-open-calc').addEventListener('click', () => calcModal.style.display = 'flex');
         document.getElementById('btn-close-calc').addEventListener('click', () => calcModal.style.display = 'none');
-        
         document.getElementById('btn-do-calc').addEventListener('click', () => {
             const income = Number(document.getElementById('input-income').value) || 0;
             const rent = Number(document.getElementById('input-rent').value) || 0;
             const util = Number(document.getElementById('input-util').value) || 0;
             const trans = Number(document.getElementById('input-trans').value) || 0;
             const food = Number(document.getElementById('input-food').value) || 0;
-
             const totalExpense = rent + util + trans + food;
             const remain = income - totalExpense;
             const ratio = income > 0 ? (rent + util) / income : 0;
-
             document.getElementById('result-amount').innerText = remain.toLocaleString() + ' 만원';
-            
             const statusBadge = document.getElementById('result-status');
             if(income === 0) {
-                statusBadge.innerText = '소득을 입력해주세요';
-                statusBadge.style.color = 'var(--text-light)';
+                statusBadge.innerText = '소득을 입력해주세요'; statusBadge.style.color = 'var(--text-light)';
             } else if(ratio > 0.35) {
-                statusBadge.innerText = '⚠️ 주거비 부담 과다 (위험)';
-                statusBadge.style.color = '#ef4444';
+                statusBadge.innerText = '⚠️ 주거비 부담 과다 (위험)'; statusBadge.style.color = '#ef4444';
             } else {
-                statusBadge.innerText = '✅ 주거비 비율 적정 (안정)';
-                statusBadge.style.color = 'var(--mint)';
+                statusBadge.innerText = '✅ 주거비 비율 적정 (안정)'; statusBadge.style.color = 'var(--mint)';
             }
         });
 
-        // --- 5단계 설문 전환 로직 ---
         let currentStep = 1;
         const totalSteps = 5;
         const steps = document.querySelectorAll('.step');
@@ -1196,59 +1118,35 @@
 
         function updateSurveyStep(direction) {
             steps[currentStep - 1].classList.remove('active');
-            if (direction === 'next') currentStep++;
-            else if (direction === 'prev') currentStep--;
-
+            if (direction === 'next') currentStep++; else if (direction === 'prev') currentStep--;
             btnSurveyPrev.style.display = currentStep === 1 ? 'none' : 'block';
             if (currentStep === totalSteps) {
-                btnSurveyNext.innerText = '맞춤형 결과 확인하기';
-                btnSurveyNext.style.backgroundColor = 'var(--mint)';
+                btnSurveyNext.innerText = '맞춤형 결과 확인하기'; btnSurveyNext.style.backgroundColor = 'var(--mint)';
             } else {
-                btnSurveyNext.innerText = '다음 단계';
-                btnSurveyNext.style.backgroundColor = 'var(--navy)';
+                btnSurveyNext.innerText = '다음 단계'; btnSurveyNext.style.backgroundColor = 'var(--navy)';
             }
             surveyProgress.style.width = `${(currentStep / totalSteps) * 100}%`;
             steps[currentStep - 1].classList.add('active');
-            
             document.querySelector('.fullscreen-survey').scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        btnSurveyNext.addEventListener('click', () => {
-            if (currentStep < totalSteps) {
-                updateSurveyStep('next');
-            } else {
-                document.getElementById('completion-modal').style.display = 'flex';
-            }
-        });
+        btnSurveyNext.addEventListener('click', () => { if (currentStep < totalSteps) updateSurveyStep('next'); else document.getElementById('completion-modal').style.display = 'flex'; });
+        document.getElementById('btn-go-dashboard').addEventListener('click', () => { document.getElementById('completion-modal').style.display = 'none'; fullscreenSurvey.style.display = 'none'; });
+        btnSurveyPrev.addEventListener('click', () => { if (currentStep > 1) updateSurveyStep('prev'); });
 
-        document.getElementById('btn-go-dashboard').addEventListener('click', () => {
-            document.getElementById('completion-modal').style.display = 'none';
-            fullscreenSurvey.style.display = 'none'; 
-        });
-
-        btnSurveyPrev.addEventListener('click', () => {
-            if (currentStep > 1) updateSurveyStep('prev');
-        });
-
-        // --- 캘린더 초기화 ---
         function initCalendar() {
             const today = new Date();
             const year = today.getFullYear();
             const month = today.getMonth(); 
             const currentDate = today.getDate();
-
             document.getElementById('month-title').innerText = `${year}년 ${month + 1}월`;
             const firstDayIndex = new Date(year, month, 1).getDay(); 
             const lastDayDate = new Date(year, month + 1, 0).getDate(); 
             const prevLastDayDate = new Date(year, month, 0).getDate(); 
-
             const calGrid = document.getElementById('cal-grid');
             const dayNamesHTML = '<div class="day-name">일</div><div class="day-name">월</div><div class="day-name">화</div><div class="day-name">수</div><div class="day-name">목</div><div class="day-name">금</div><div class="day-name">토</div>';
             let daysHTML = '';
-
-            for(let x = firstDayIndex; x > 0; x--) {
-                daysHTML += `<div class="date" style="color:#cbd5e0;">${prevLastDayDate - x + 1}</div>`;
-            }
+            for(let x = firstDayIndex; x > 0; x--) daysHTML += `<div class="date" style="color:#cbd5e0;">${prevLastDayDate - x + 1}</div>`;
             for(let i = 1; i <= lastDayDate; i++) {
                 let classes = 'date';
                 if(i === currentDate) classes += ' today';
@@ -1258,20 +1156,15 @@
             }
             const totalCells = firstDayIndex + lastDayDate;
             let nextDays = 1;
-            while((totalCells + nextDays - 1) % 7 !== 0) {
-                daysHTML += `<div class="date" style="color:#cbd5e0;">${nextDays}</div>`;
-                nextDays++;
-            }
+            while((totalCells + nextDays - 1) % 7 !== 0) { daysHTML += `<div class="date" style="color:#cbd5e0;">${nextDays}</div>`; nextDays++; }
             calGrid.innerHTML = dayNamesHTML + daysHTML;
             document.getElementById('event-date-1').innerText = `${month+1}.${Math.min(currentDate+3, lastDayDate)}`;
         }
 
         document.getElementById('btn-cal-toggle').addEventListener('click', () => document.getElementById('calendar-card').classList.toggle('hidden'));
         const rightSidebar = document.getElementById('right-sidebar');
-        const toggleTodoSidebar = () => rightSidebar.classList.toggle('closed');
-        document.getElementById('btn-todo-toggle').addEventListener('click', toggleTodoSidebar);
+        document.getElementById('btn-todo-toggle').addEventListener('click', () => rightSidebar.classList.toggle('closed'));
 
-        // --- 투두 & 일러스트레이션 상태 관리 ---
         function initHouseState() {
             const checkboxes = document.querySelectorAll('#todo-list input[type="checkbox"]');
             const updateHouseSVG = (percent) => {
@@ -1280,9 +1173,7 @@
                 document.getElementById('house-roof').style.opacity = percent >= 60 ? 1 : 0;
                 document.getElementById('house-details').style.opacity = percent >= 80 ? 1 : 0;
                 document.getElementById('house-deco').style.opacity = percent >= 100 ? 1 : 0;
-                const svgHouse = document.getElementById('house-svg');
-                if(percent === 100) svgHouse.style.transform = 'scale(1.08)';
-                else svgHouse.style.transform = 'scale(1)';
+                document.getElementById('house-svg').style.transform = percent === 100 ? 'scale(1.08)' : 'scale(1)';
             };
 
             const updateTodoProgress = () => {
@@ -1290,18 +1181,15 @@
                 const checked = document.querySelectorAll('#todo-list input[type="checkbox"]:checked').length;
                 const currentPercent = Math.round((checked / total) * 100); 
                 const ratioText = `${checked}/${total}`;
-                
                 document.getElementById('tab-todo-count').innerHTML = `이번 주 미션<br>${ratioText}`;
                 document.getElementById('panel-todo-ratio').innerText = `${ratioText} 완료`;
                 document.getElementById('main-progress').innerText = `${currentPercent}%`;
-
                 updateHouseSVG(currentPercent);
             };
 
             checkboxes.forEach(box => {
                 box.addEventListener('change', function() {
-                    if(this.checked) this.parentElement.classList.add('done');
-                    else this.parentElement.classList.remove('done');
+                    if(this.checked) this.parentElement.classList.add('done'); else this.parentElement.classList.remove('done');
                     updateTodoProgress();
                 });
             });
