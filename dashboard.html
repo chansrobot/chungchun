@@ -245,6 +245,58 @@
         .todo-item.done { color: var(--text-light); text-decoration: line-through; background: #f8fafc;}
 
         /* =========================================
+           [정적] 우측 하단 고정 '미씨' 위젯 (움직임 없음 & 배경 완벽 동화)
+        ========================================= */
+        .missy-widget {
+            position: fixed;
+            bottom: 25px;
+            right: 45px;
+            z-index: 120;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* 캐릭터 래퍼 (정적인 원형 마스크, 움직임 애니메이션 완전 제거) */
+        .missy-body-wrap {
+            pointer-events: auto;
+            position: relative;
+            width: 190px;
+            height: 190px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            /* 대시보드 배경색과 똑같이 맞춰 네모 박스 티를 지움 */
+            background-color: var(--bg-color); 
+            box-shadow: 0 12px 30px rgba(25, 43, 77, 0.15);
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.8);
+        }
+        
+        /* 캐릭터 본체 (애니메이션 제거, 완벽한 정지 상태) */
+        .missy-character {
+            width: 112%;
+            height: 112%;
+            object-fit: contain;
+        }
+
+        /* 바닥 잔상 그림자 (고정형) */
+        .missy-shadow {
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 14px;
+            background: radial-gradient(ellipse, rgba(30, 58, 138, 0.25) 0%, rgba(30, 58, 138, 0) 75%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* =========================================
            모달 오버레이 공통
         ========================================= */
         .modal-overlay {
@@ -253,12 +305,11 @@
             display: none; justify-content: center; align-items: center; z-index: 9999;
         }
         
-        /* 뷰어 사이즈 950px 대폭 확대 */
         .article-modal-content { 
             width: 950px; max-width: 95vw; background: #fff; border-radius: 20px; 
             padding: 60px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); position: relative; 
             max-height: 85vh; overflow-y: auto; animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            scrollbar-width: none; /* 파이어폭스 */
+            scrollbar-width: none;
         }
         .article-modal-content::-webkit-scrollbar { display: none; }
         
@@ -267,39 +318,23 @@
         .modal-close { position: absolute; top: 25px; right: 30px; background: none; border: none; font-size: 32px; color: var(--text-light); cursor: pointer; transition: 0.2s; }
         .modal-close:hover { color: var(--navy); transform: rotate(90deg); }
 
-        /* [NEW] 하단 닫기 버튼 추가 */
         .btn-close-bottom {
-            width: 100%;
-            padding: 18px;
-            margin-top: 40px;
-            background: var(--navy);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%; padding: 18px; margin-top: 40px; background: var(--navy); color: white;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer;
+            transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .btn-close-bottom:hover {
-            background: var(--blue-primary);
-            transform: translateY(-2px);
+            background: var(--blue-primary); transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
         }
 
-        /* 계산기 등 작은 모달 사이즈 유지 */
         .small-modal { width: 400px; padding: 30px; background: #fff; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; animation: popIn 0.3s ease; max-height: 90vh; overflow-y: auto; scrollbar-width: none;}
         .small-modal::-webkit-scrollbar { display: none; }
 
-        /* 북마크 버튼 */
         .btn-bookmark { position: absolute; top: 32px; right: 80px; background: none; border: none; font-size: 24px; color: #cbd5e0; cursor: pointer; transition: 0.2s; }
         .btn-bookmark:hover { transform: scale(1.1); }
         .btn-bookmark.active { color: var(--premium-gold); }
 
-        /* =========================================
-           [NEW] 도서관 리포트 스타일링 (여의도 폼)
-        ========================================= */
         .report-header { border-bottom: 3px solid var(--navy); padding-bottom: 20px; margin-bottom: 30px; }
         .report-category { display: inline-block; font-size: 13px; font-weight: 800; color: var(--blue-primary); background: var(--blue-light); padding: 6px 12px; border-radius: 6px; margin-bottom: 15px; letter-spacing: 0.05em;}
         .report-title { font-size: 34px; font-weight: 900; color: var(--navy); line-height: 1.3; letter-spacing: -0.03em; }
@@ -324,13 +359,10 @@
         .highlight-box { background: #fffbeb; border: 1px solid #fde68a; padding: 20px 25px; border-radius: 12px; color: #92400e; font-size: 15px; font-weight: 600; margin-top: 20px; display: flex; gap: 12px;}
         .highlight-box i { font-style: normal; font-size: 18px; }
 
-        /* 토스트 알림 */
         .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(15, 23, 42, 0.9); color: white; padding: 16px 30px; border-radius: 30px; font-size: 15px; font-weight: 700; opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10000; box-shadow: 0 10px 25px rgba(0,0,0,0.2);}
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* =========================================
-           4. 프리미엄 패키지 업셀링 모달
-        ========================================= */
+        /* 프리미엄 모달 */
         .premium-modal-content { text-align: center; padding: 45px 35px; width: 420px; }
         .premium-icon { font-size: 55px; margin-bottom: 15px; animation: float 2s infinite ease-in-out; }
         .premium-modal-content h2 { font-size: 22px; color: var(--navy); margin-bottom: 15px; line-height: 1.4; font-weight: 800; }
@@ -341,7 +373,7 @@
         .btn-upgrade { width: 100%; padding: 16px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3); }
         .btn-upgrade:hover { transform: translateY(-2px); background: linear-gradient(135deg, #fbbf24, #b45309); box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4); }
 
-        /* 계산기 모달 전용 */
+        /* 계산기 모달 */
         .calc-header h2 { font-size: 20px; color: var(--navy); margin-bottom: 5px; }
         .calc-header p { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
         .input-group { margin-bottom: 15px; }
@@ -355,9 +387,7 @@
         .btn-calc { width: 100%; padding: 15px; margin-top: 15px; background: var(--navy); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-calc:hover { background: var(--blue-primary); }
 
-        /* =========================================
-           1. 첫 접속 "팝업(Modal)"
-        ========================================= */
+        /* 웰컴 모달 */
         .welcome-modal { width: 420px; text-align: center; }
         .welcome-modal h2 { font-size: 24px; color: var(--navy); margin-bottom: 15px; line-height: 1.4; font-weight: 800;}
         .welcome-modal p { font-size: 15px; color: var(--text-light); margin-bottom: 35px; line-height: 1.6; }
@@ -366,9 +396,7 @@
         .btn-skip-diag { width: 100%; padding: 12px; background: transparent; color: var(--text-light); border: none; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: underline; transition: 0.2s;}
         .btn-skip-diag:hover { color: var(--text-dark); }
 
-        /* =========================================
-           2. 자가진단 전체화면
-        ========================================= */
+        /* 자가진단 전체화면 */
         .fullscreen-survey {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: var(--bg-color); z-index: 9998;
@@ -403,7 +431,7 @@
         .region-group-custom { display: flex; gap: 10px; margin-bottom: 10px; }
         .region-group-custom .custom-select-wrap { flex: 1; margin-bottom: 0; }
         input[type="number"], input[type="text"] { width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: 0.2s; }
-        input:focus { border-color: var(--blue-primary); box-shadow: 0 0 0 3px var(--blue-light); background: #fff;}
+        input:focus { border-color: var(--blue-primary); background: var(--white); box-shadow: 0 0 0 3px var(--blue-light); }
         .money-group { display: flex; align-items: center; gap: 8px; margin-bottom: 10px;}
         .money-group span { font-size: 14px; color: var(--text-dark); font-weight: 600; white-space: nowrap;}
         .money-input-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 5px 0; }
@@ -624,6 +652,14 @@
             </div>
         </aside>
     </main>
+
+    <!-- [NEW] 우측 하단 정적 '미씨' 위젯 (움직임 없음 & 대시보드 배경색과 완벽 동화) -->
+    <div class="missy-widget" id="missy-widget">
+        <div class="missy-body-wrap" id="missy-body">
+            <!-- [핵심] missy.png 파일 사용 (원형 프레임과 배경색 동화로 네모 박스 완벽 차단) -->
+            <img src="./missy.png" alt="비서 미씨" class="missy-character" id="missy-img">
+        </div>
+    </div>
 
     <!-- =========================================
          [NEW] 도서관 아티클 읽기 뷰어 모달
@@ -1020,7 +1056,7 @@
     </div>
     
     <!-- 토스트 알림창 -->
-    <div class="toast" id="toast-msg">마이페이지 도서관에 저장되었습니다!</div>
+    <div class="toast" id="toast-msg">마이페이지 도서관에 저장되었습니다! ✨</div>
 
     <!-- 1. 외부 데이터 스크립트 불러오기 (여의도 리포트 파일 연동) -->
     <script src="./library-data.js"></script>
@@ -1044,7 +1080,7 @@
 
         // --- 0. 헤더 기능 연동 ---
         document.querySelectorAll('.icon-bell, .nav-item:not(.mega-hover)').forEach(item => {
-            if(item.innerText === '주거비 계산기') return; // 계산기는 별도 처리
+            if(item.innerText === '주거비 계산기') return; 
             item.addEventListener('click', () => alert('개발 중인 기능입니다.'));
         });
         document.getElementById('btn-profile').addEventListener('click', () => alert('가입 후 마이페이지를 이용할 수 있습니다.'));
@@ -1053,7 +1089,6 @@
         const navItems = document.querySelectorAll(".nav-item.mega-hover");
         navItems.forEach(item => {
             item.addEventListener('click', function(e) {
-                // 도서관 글자 자체를 눌렀을 때 열고 닫기 토글
                 if(e.target === this || e.target.tagName === 'I') {
                     const dropdown = this.querySelector('.mega-dropdown');
                     if(dropdown) {
@@ -1065,7 +1100,6 @@
             });
         });
 
-        // [핵심 수정] 모달창 내부나 어두운 배경을 클릭했을 때는 드롭다운 메뉴가 꺼지지 않고 그대로 유지되도록 처리
         document.addEventListener('click', (e) => {
             if(!e.target.closest('.nav-item.mega-hover') && !e.target.closest('.modal-overlay')) {
                 document.querySelectorAll('.mega-dropdown').forEach(d => d.style.display = 'none');
@@ -1097,12 +1131,12 @@
             welcomeModal.style.display = 'none';
         });
 
-        // --- [NEW] 도서관 아티클(여의도 리포트) 읽기 뷰어 연동 ---
+        // --- [NEW] 도서관 아티클 읽기 뷰어 연동 ---
         const libraryModal = document.getElementById('library-modal');
         
         document.querySelectorAll('.lib-menu li').forEach(item => {
             item.addEventListener('click', (e) => {
-                e.stopPropagation(); // 상위 네비게이션 드롭다운 닫히지 않도록 막음
+                e.stopPropagation(); 
                 
                 const title = e.target.innerText.trim();
                 const data = (typeof libraryData !== 'undefined') ? libraryData[title] : null;
@@ -1111,7 +1145,6 @@
                     document.getElementById('article-category').innerText = data.category;
                     document.getElementById('article-title').innerText = title;
                     
-                    // 상단 요약 + 본문 + 하단 닫기 버튼 결합
                     const summaryHTML = `
                         <div class="report-summary">
                             <strong>[EXECUTIVE SUMMARY] 핵심 요약</strong>
@@ -1136,13 +1169,9 @@
                     `;
                 }
                 
-                // 북마크 초기화
                 document.getElementById('btn-bookmark').classList.remove('active');
-                
-                // 모달 띄우기
                 libraryModal.style.display = 'flex';
 
-                // [핵심 수정] 모달 열릴 때 무조건 스크롤을 맨 위로 리셋
                 const articleContent = libraryModal.querySelector('.article-modal-content');
                 if (articleContent) {
                     articleContent.scrollTop = 0;
