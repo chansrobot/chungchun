@@ -22,6 +22,9 @@
             --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
             --premium-gold: #f59e0b;
+
+            /* JS로 화면 높이에 맞춰 자동 조절되는 가변 배율 */
+            --ui-scale: 1;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Pretendard, "Noto Sans KR", sans-serif; }
@@ -359,6 +362,42 @@
         .completion-modal-content h2 { font-size: 26px; color: var(--navy); margin-bottom: 20px; font-weight: 800; line-height: 1.4; }
         .completion-modal-content p { font-size: 15px; color: var(--text-dark); margin-bottom: 35px; line-height: 1.6; word-break: keep-all; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* =========================================
+           [NEW] 모바일(스마트폰) 대응 미디어 쿼리 (가로 768px 이하)
+        ========================================= */
+        @media (max-width: 768px) {
+            header { padding: 0 15px; }
+            .nav-menu { display: none; } /* 모바일에서는 상단 네비게이션 메뉴 숨김 */
+            
+            /* 중앙 메인 코칭 영역 모바일 꽉 차게 변경 */
+            .quiz-card { width: 90%; }
+            .quiz-buttons { flex-direction: column; }
+            .illustration-placeholder { width: 100%; }
+            
+            /* 미니 프로필 세로 정렬 및 | 기호 숨김 처리 */
+            .mini-profile { flex-direction: column; gap: 8px; border-radius: 16px; width: 90%; }
+            .mini-profile span[style*="color:var(--border-light)"] { display: none; } 
+
+            /* 좌우 사이드바를 모바일 화면 너비(85vw)에 맞춰 최적화 */
+            .calendar-card { width: 85vw; }
+            .todo-panel { width: 85vw; }
+            .right-sidebar.closed { transform: translate(85vw, -50%); }
+
+            /* 모달 및 자가진단 카드 모바일 맞춤 (여백 및 비율 조정) */
+            .modal-content, .welcome-modal, .completion-modal-content { width: 90%; padding: 25px 20px; }
+            .survey-card { width: 95%; padding: 25px 15px; margin-bottom: 20px; }
+            
+            /* 모달 내부 flex 구조(입력창 나란히 보기)를 모바일에서는 위아래로 분리 */
+            .modal-content div[style*="display:flex"] { flex-direction: column; gap: 0 !important; }
+            .modal-content div[style*="display:flex"] .input-group { width: 100%; margin-bottom: 15px; }
+
+            /* 자가진단표 내부 그리드 1열로 축소 */
+            .expense-grid { grid-template-columns: 1fr; }
+            .money-input-row { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .money-input-row input { margin: 0; width: 100%; }
+            .region-group-custom { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
@@ -903,6 +942,27 @@
 
     <!-- 인터랙션 자바스크립트 -->
     <script>
+        // --- [NEW] 화면 높이에 맞춘 동적 배율 계산 (가운데 콘텐츠 전용) ---
+        function updateResponsiveScale() {
+            const winH = window.innerHeight;
+            const headerH = 70;
+            const availableH = winH - headerH;
+            
+            // 중앙 콘텐츠가 차지하는 이상적인 기준 높이 (약 720px)
+            const idealH = 720;
+            
+            // 높이가 부족하면 비율에 맞춰 자동 축소 (최소 0.65배)
+            let scale = 1;
+            if (availableH < idealH) {
+                scale = Math.max(0.65, (availableH - 20) / idealH);
+            }
+            
+            // CSS 변수로 배율 주입 -> 좌우 끝은 채우고 알맹이만 축소
+            document.documentElement.style.setProperty('--ui-scale', scale);
+        }
+        window.addEventListener('resize', updateResponsiveScale);
+        updateResponsiveScale();
+
         // --- 0. 헤더 기능 연동 ---
         document.getElementById('btn-bell').addEventListener('click', () => alert('새로운 알림이 없습니다.'));
         document.getElementById('btn-profile').addEventListener('click', () => alert('가입 후 마이페이지를 이용할 수 있습니다.'));
