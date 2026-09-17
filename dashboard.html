@@ -39,7 +39,7 @@
         ul { list-style: none; }
 
         /* =========================================
-           [PREMIUM] 시네마틱 로딩 스크린 (네모 티 완벽 제거)
+           [PREMIUM] 시네마틱 로딩 스크린
         ========================================= */
         .global-loader {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -106,7 +106,7 @@
         }
 
         /* =========================================
-           HEADER (상단 전체 100% 꽉 차게)
+           HEADER
         ========================================= */
         header {
             width: 100%; height: 70px; background-color: var(--white); flex-shrink: 0;
@@ -117,15 +117,15 @@
         .nav-menu { display: flex; gap: 40px; height: 100%; }
         .nav-item { position: relative; display: flex; align-items: center; height: 100%; font-size: 15px; font-weight: 600; cursor: pointer; }
         .nav-item i { margin-left: 5px; font-size: 10px; color: var(--text-light); }
-        .dropdown { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); background: var(--white); border: 1px solid var(--border-light); border-radius: 8px; box-shadow: var(--shadow-lg); width: 200px; padding: 10px 0; display: none; flex-direction: column; }
+        .dropdown { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); background: var(--white); border: 1px solid var(--border-light); border-radius: 8px; box-shadow: var(--shadow-lg); width: 200px; padding: 10px 0; display: none; flex-direction: column; z-index: 200; }
         .nav-item:hover .dropdown { display: flex; }
-        .dropdown li { padding: 12px 20px; font-size: 14px; color: var(--text-dark); transition: 0.2s; }
+        .dropdown li { padding: 12px 20px; font-size: 14px; color: var(--text-dark); transition: 0.2s; cursor: pointer; }
         .dropdown li:hover { color: var(--blue-primary); background-color: var(--blue-light); font-weight: 700; }
-        .mega-dropdown { position: absolute; top: 70px; left: -100px; width: 450px; background: var(--white); border: 1px solid var(--border-light); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 20px; display: none; grid-template-columns: 1fr 1fr; gap: 20px; cursor: default; }
+        .mega-dropdown { position: absolute; top: 70px; left: -100px; width: 450px; background: var(--white); border: 1px solid var(--border-light); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 20px; display: none; grid-template-columns: 1fr 1fr; gap: 20px; cursor: default; z-index: 200; }
         .nav-item:hover .mega-dropdown { display: grid; }
         .mega-col h4 { font-size: 13px; color: var(--mint); margin-bottom: 10px; border-bottom: 1px solid var(--border-light); padding-bottom: 5px;}
-        .mega-col ul li { padding: 6px 0; font-size: 13px; color: var(--text-dark); cursor: pointer; transition: 0.2s;}
-        .mega-col ul li:hover { color: var(--blue-primary); font-weight: 700; transform: translateX(5px);}
+        .mega-col ul li { padding: 6px 0; font-size: 13px; color: var(--text-dark); cursor: pointer; transition: 0.2s; font-weight: 500;}
+        .mega-col ul li:hover { color: var(--blue-primary); font-weight: 800; transform: translateX(5px);}
         .header-actions { display: flex; align-items: center; gap: 20px; }
         .icon-bell { width: 20px; height: 20px; fill: none; stroke: var(--text-dark); stroke-width: 2; cursor: pointer; transition: 0.2s; }
         .icon-bell:hover { stroke: var(--blue-primary); transform: scale(1.1); }
@@ -133,7 +133,7 @@
         .user-profile:hover { background-color: var(--blue-primary); color: white; }
 
         /* =========================================
-           MAIN CONTENT AREA (화면 전체 확장 & 높이 가변 대응)
+           MAIN CONTENT AREA
         ========================================= */
         main { 
             flex: 1; width: 100%; position: relative; 
@@ -141,7 +141,7 @@
             overflow: hidden; 
         }
 
-        /* 좌측 플로팅 캘린더 (스마트 높이 적용) */
+        /* 좌측 플로팅 캘린더 */
         .left-sidebar { 
             position: absolute; left: 0; top: 50%; 
             transform: translateY(-50%);
@@ -155,15 +155,15 @@
             background: var(--white); width: 320px; margin-left: 20px; border-radius: 20px; 
             box-shadow: var(--shadow-lg); padding: clamp(20px, 3vh, 30px) 25px; 
             overflow-y: auto; overflow-x: hidden; scrollbar-width: none; -ms-overflow-style: none;
-            max-height: calc(100vh - 120px); /* 화면 높이에 맞춰 내부 스크롤 허용 */
+            max-height: calc(100vh - 120px);
             transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: left center; 
         }
         .calendar-card::-webkit-scrollbar { display: none; }
         .calendar-card.hidden { opacity: 0; transform: scaleX(0); margin-left: 0; width: 0; padding: 0; }
         
         .cal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 16px; margin-bottom: clamp(15px, 2.5vh, 25px); color: var(--navy);}
-        .premium-badge { background-color: #fef3c7; color: #b45309; font-size: 11px; padding: 4px 8px; border-radius: 12px; display: flex; align-items: center; gap: 4px; cursor: pointer; transition: 0.2s; border: 1px solid #fde68a; }
-        .premium-badge:hover { background-color: #fde68a; }
+        .premium-badge { background-color: #fef3c7; color: #b45309; font-size: 11px; padding: 4px 8px; border-radius: 12px; display: flex; align-items: center; gap: 4px; cursor: pointer; transition: 0.2s; border: 1px solid #fde68a; font-weight: 800;}
+        .premium-badge:hover { background-color: #fde68a; transform: scale(1.05); }
         .cal-month { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 700; margin-bottom: clamp(10px, 2vh, 20px); }
         .cal-arrow { color: var(--text-light); cursor: pointer; padding: 5px; transition: 0.2s; }
         .cal-arrow:hover { color: var(--blue-primary); }
@@ -182,13 +182,16 @@
         .item-mint span:first-child::before { background: var(--mint); }
         .schedule-item .s-date { color: var(--text-light); font-weight: 500; font-size: 12px; }
 
-        /* 중앙 코칭 섹션 (반응형 텐션 및 이너 스크롤 적용) */
+        /* 중앙 코칭 섹션 */
         .center-panel { 
             display: flex; flex-direction: column; align-items: center; text-align: center; 
-            height: calc(100vh - 70px); /* 헤더 제외 전체 높이 활용 */
+            height: calc(100vh - 70px); 
             padding-top: clamp(20px, 5vh, 60px);
             padding-bottom: clamp(20px, 4vh, 40px);
-            overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; /* 공간 부족 시 자연스러운 자체 스크롤 활성화 */
+            overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;
+            transform: scale(var(--ui-scale));
+            transform-origin: center top;
+            transition: transform 0.2s ease;
         }
         .center-panel::-webkit-scrollbar { display: none; }
         
@@ -206,21 +209,16 @@
         .quiz-btn.know:hover { background: var(--mint-light); border-color: var(--mint); color: var(--mint);}
         .quiz-btn.dont-know:hover { background: #fee2e2; border-color: #ef4444; color: #ef4444;}
         
-        /* 세로 높이 부족 시 가장 먼저 납작해지며 공간을 양보하는 반응형 일러스트 */
         .illustration-placeholder { 
-            width: 300px; 
-            height: clamp(80px, 15vh, 180px); /* 180px에서 최소 80px까지 고무줄처럼 축소 */
-            margin-bottom: clamp(15px, 4vh, 40px); 
-            display: flex; justify-content: center; align-items: center; 
-            flex-shrink: 1; /* 압축 허용 */
-            min-height: 0;
+            width: 300px; height: clamp(80px, 15vh, 180px); margin-bottom: clamp(15px, 4vh, 40px); 
+            display: flex; justify-content: center; align-items: center; flex-shrink: 1; min-height: 0;
         }
 
         .mini-profile { background: var(--white); border: 1px solid var(--border-light); border-radius: 30px; padding: 10px 20px; display: flex; gap: 15px; box-shadow: var(--shadow-sm); font-size: 13px; font-weight: 600; color: var(--navy); margin-top: auto; flex-shrink: 0; }
         .mini-profile span { display: flex; align-items: center; gap: 5px; }
         .mini-profile i { color: var(--blue-primary); }
 
-        /* 우측 플로팅 서랍 탭 (스마트 높이 적용) */
+        /* 우측 플로팅 서랍 탭 */
         .right-sidebar { 
             position: absolute; right: 0; top: 50%; transform: translateY(-50%);
             display: flex; align-items: center; z-index: 10; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -247,30 +245,103 @@
         .todo-item.done { color: var(--text-light); text-decoration: line-through; background: #f8fafc;}
 
         /* =========================================
-           윈도우 배율 125% 대응 미디어 쿼리 (가용높이 800px 이하)
-        ========================================= */
-        @media (max-height: 800px) {
-            .quiz-card { width: 400px; }
-            .calendar-card { width: 300px; padding: 20px; }
-            .todo-panel { width: 300px; padding: 20px; }
-            .cal-schedule { margin-top: 15px; padding-top: 15px; }
-        }
-
-        /* =========================================
-           모달 오버레이 (계산기 전용)
+           모달 오버레이 공통
         ========================================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px);
-            display: none; justify-content: center; align-items: center; z-index: 999;
+            background: rgba(4, 15, 30, 0.75); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center; z-index: 9999;
         }
-        .modal-content {
-            background: var(--white); width: 400px; border-radius: 24px; padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; animation: popIn 0.3s ease;
+        
+        /* 뷰어 사이즈 950px 대폭 확대 */
+        .article-modal-content { 
+            width: 950px; max-width: 95vw; background: #fff; border-radius: 20px; 
+            padding: 60px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); position: relative; 
+            max-height: 85vh; overflow-y: auto; animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            scrollbar-width: none; /* 파이어폭스 */
         }
-        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-close { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px; color: var(--text-light); transition: 0.2s;}
-        .modal-close:hover { color: var(--navy); transform: rotate(90deg);}
+        .article-modal-content::-webkit-scrollbar { display: none; }
+        
+        @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .modal-close { position: absolute; top: 25px; right: 30px; background: none; border: none; font-size: 32px; color: var(--text-light); cursor: pointer; transition: 0.2s; }
+        .modal-close:hover { color: var(--navy); transform: rotate(90deg); }
+
+        /* [NEW] 하단 닫기 버튼 추가 */
+        .btn-close-bottom {
+            width: 100%;
+            padding: 18px;
+            margin-top: 40px;
+            background: var(--navy);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn-close-bottom:hover {
+            background: var(--blue-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* 계산기 등 작은 모달 사이즈 유지 */
+        .small-modal { width: 400px; padding: 30px; background: #fff; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; animation: popIn 0.3s ease; max-height: 90vh; overflow-y: auto; scrollbar-width: none;}
+        .small-modal::-webkit-scrollbar { display: none; }
+
+        /* 북마크 버튼 */
+        .btn-bookmark { position: absolute; top: 32px; right: 80px; background: none; border: none; font-size: 24px; color: #cbd5e0; cursor: pointer; transition: 0.2s; }
+        .btn-bookmark:hover { transform: scale(1.1); }
+        .btn-bookmark.active { color: var(--premium-gold); }
+
+        /* =========================================
+           [NEW] 도서관 리포트 스타일링 (여의도 폼)
+        ========================================= */
+        .report-header { border-bottom: 3px solid var(--navy); padding-bottom: 20px; margin-bottom: 30px; }
+        .report-category { display: inline-block; font-size: 13px; font-weight: 800; color: var(--blue-primary); background: var(--blue-light); padding: 6px 12px; border-radius: 6px; margin-bottom: 15px; letter-spacing: 0.05em;}
+        .report-title { font-size: 34px; font-weight: 900; color: var(--navy); line-height: 1.3; letter-spacing: -0.03em; }
+        
+        .report-body { font-size: 16px; line-height: 1.8; color: #334155; }
+        .report-summary { background: #f8fafc; border-left: 4px solid var(--blue-primary); padding: 25px 30px; border-radius: 0 12px 12px 0; margin-bottom: 40px; font-weight: 500; font-size: 17px;}
+        .report-summary strong { color: var(--blue-dark); font-size: 18px; display: block; margin-bottom: 10px; }
+        
+        .report-section { margin-bottom: 45px; }
+        .report-section h4 { font-size: 22px; color: var(--navy); font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        .report-section h4::before { content: "■"; color: var(--blue-primary); font-size: 16px; }
+        
+        .report-section p { margin-bottom: 15px; word-break: keep-all; }
+        .report-section ul { padding-left: 25px; margin-bottom: 20px; }
+        .report-section li { margin-bottom: 10px; padding-left: 5px; }
+        .report-section li strong { color: var(--navy); }
+
+        .report-table { width: 100%; border-collapse: collapse; margin: 25px 0; font-size: 14px; text-align: left; }
+        .report-table th, .report-table td { padding: 15px; border: 1px solid var(--border-light); }
+        .report-table th { background: #f1f5f9; color: var(--navy); font-weight: 800; }
+        
+        .highlight-box { background: #fffbeb; border: 1px solid #fde68a; padding: 20px 25px; border-radius: 12px; color: #92400e; font-size: 15px; font-weight: 600; margin-top: 20px; display: flex; gap: 12px;}
+        .highlight-box i { font-style: normal; font-size: 18px; }
+
+        /* 토스트 알림 */
+        .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(15, 23, 42, 0.9); color: white; padding: 16px 30px; border-radius: 30px; font-size: 15px; font-weight: 700; opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10000; box-shadow: 0 10px 25px rgba(0,0,0,0.2);}
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* =========================================
+           4. 프리미엄 패키지 업셀링 모달
+        ========================================= */
+        .premium-modal-content { text-align: center; padding: 45px 35px; width: 420px; }
+        .premium-icon { font-size: 55px; margin-bottom: 15px; animation: float 2s infinite ease-in-out; }
+        .premium-modal-content h2 { font-size: 22px; color: var(--navy); margin-bottom: 15px; line-height: 1.4; font-weight: 800; }
+        .premium-modal-content p { font-size: 14px; color: var(--text-light); line-height: 1.6; word-break: keep-all; }
+        .premium-benefits { text-align: left; background: #fffbeb; border: 1px solid #fde68a; padding: 25px; border-radius: 16px; margin: 25px 0; }
+        .premium-benefits li { margin-bottom: 12px; font-size: 14px; font-weight: 700; color: #b45309; display: flex; align-items: center; gap: 8px; }
+        .premium-benefits li:last-child { margin-bottom: 0; }
+        .btn-upgrade { width: 100%; padding: 16px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3); }
+        .btn-upgrade:hover { transform: translateY(-2px); background: linear-gradient(135deg, #fbbf24, #b45309); box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4); }
+
+        /* 계산기 모달 전용 */
         .calc-header h2 { font-size: 20px; color: var(--navy); margin-bottom: 5px; }
         .calc-header p { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
         .input-group { margin-bottom: 15px; }
@@ -332,7 +403,7 @@
         .region-group-custom { display: flex; gap: 10px; margin-bottom: 10px; }
         .region-group-custom .custom-select-wrap { flex: 1; margin-bottom: 0; }
         input[type="number"], input[type="text"] { width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: 0.2s; }
-        input:focus { border-color: var(--blue-primary); background: var(--white); box-shadow: 0 0 0 3px var(--blue-light); }
+        input:focus { border-color: var(--blue-primary); box-shadow: 0 0 0 3px var(--blue-light); background: #fff;}
         .money-group { display: flex; align-items: center; gap: 8px; margin-bottom: 10px;}
         .money-group span { font-size: 14px; color: var(--text-dark); font-weight: 600; white-space: nowrap;}
         .money-input-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 5px 0; }
@@ -354,49 +425,19 @@
         .btn-next { background: var(--navy); color: var(--white); }
         .btn-next:hover { background: var(--blue-primary); }
 
-        /* =========================================
-           4. 진단 완료 감동 팝업
-        ========================================= */
+        /* 진단 완료 감동 팝업 */
         .completion-modal-content { text-align: center; padding: 50px 40px; width: 450px; }
         .completion-icon { font-size: 48px; margin-bottom: 20px; animation: float 2s infinite ease-in-out; }
         .completion-modal-content h2 { font-size: 26px; color: var(--navy); margin-bottom: 20px; font-weight: 800; line-height: 1.4; }
         .completion-modal-content p { font-size: 15px; color: var(--text-dark); margin-bottom: 35px; line-height: 1.6; word-break: keep-all; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* =========================================
-           [NEW] 모바일(스마트폰) 대응 미디어 쿼리 (가로 768px 이하)
-        ========================================= */
-        @media (max-width: 768px) {
-            header { padding: 0 15px; }
-            .nav-menu { display: none; } /* 모바일에서는 상단 네비게이션 메뉴 숨김 */
-            
-            /* 중앙 메인 코칭 영역 모바일 꽉 차게 변경 */
-            .quiz-card { width: 90%; }
-            .quiz-buttons { flex-direction: column; }
-            .illustration-placeholder { width: 100%; }
-            
-            /* 미니 프로필 세로 정렬 및 | 기호 숨김 처리 */
-            .mini-profile { flex-direction: column; gap: 8px; border-radius: 16px; width: 90%; }
-            .mini-profile span[style*="color:var(--border-light)"] { display: none; } 
-
-            /* 좌우 사이드바를 모바일 화면 너비(85vw)에 맞춰 최적화 */
-            .calendar-card { width: 85vw; }
-            .todo-panel { width: 85vw; }
-            .right-sidebar.closed { transform: translate(85vw, -50%); }
-
-            /* 모달 및 자가진단 카드 모바일 맞춤 (여백 및 비율 조정) */
-            .modal-content, .welcome-modal, .completion-modal-content { width: 90%; padding: 25px 20px; }
-            .survey-card { width: 95%; padding: 25px 15px; margin-bottom: 20px; }
-            
-            /* 모달 내부 flex 구조(입력창 나란히 보기)를 모바일에서는 위아래로 분리 */
-            .modal-content div[style*="display:flex"] { flex-direction: column; gap: 0 !important; }
-            .modal-content div[style*="display:flex"] .input-group { width: 100%; margin-bottom: 15px; }
-
-            /* 자가진단표 내부 그리드 1열로 축소 */
-            .expense-grid { grid-template-columns: 1fr; }
-            .money-input-row { flex-direction: column; align-items: flex-start; gap: 5px; }
-            .money-input-row input { margin: 0; width: 100%; }
-            .region-group-custom { flex-direction: column; }
+        /* 윈도우 125% 배율 및 태블릿 최적화 */
+        @media (max-height: 800px) {
+            .quiz-card { width: 400px; }
+            .calendar-card { width: 300px; padding: 20px; }
+            .todo-panel { width: 300px; padding: 20px; }
+            .cal-schedule { margin-top: 15px; padding-top: 15px; }
         }
     </style>
 </head>
@@ -415,7 +456,7 @@
         </div>
     </div>
 
-    <!-- 헤더 (화면 전체 100% 너비) -->
+    <!-- 헤더 -->
     <header>
         <a href="#" class="header-logo">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -433,11 +474,11 @@
                 </ul>
             </li>
             <li class="nav-item mega-hover">
-                청춘비서 도서관 <i>▼</i>
+                청춘 도서관 <i>▼</i>
                 <div class="mega-dropdown">
                     <div class="mega-col">
                         <h4>📖 개념 이해</h4>
-                        <ul>
+                        <ul class="lib-menu">
                             <li>월세 vs 전세 vs 반전세</li>
                             <li>보증금과 관리비 구조</li>
                             <li>등기부등본 보는 법</li>
@@ -445,7 +486,7 @@
                     </div>
                     <div class="mega-col">
                         <h4>🔍 실전 탐색</h4>
-                        <ul>
+                        <ul class="lib-menu">
                             <li>허위매물 거르는 방법</li>
                             <li>부동산 방문 시 체크리스트</li>
                             <li>안전한 매물 고르기</li>
@@ -453,7 +494,7 @@
                     </div>
                     <div class="mega-col">
                         <h4>✍️ 계약 및 행정</h4>
-                        <ul>
+                        <ul class="lib-menu">
                             <li>계약서 특약사항 작성법</li>
                             <li>전세보증보험 가입 안내</li>
                             <li>확정일자 및 전입신고</li>
@@ -461,7 +502,7 @@
                     </div>
                     <div class="mega-col">
                         <h4>🏠 입주 및 유지관리</h4>
-                        <ul>
+                        <ul class="lib-menu">
                             <li>공과금 종류별 납부 방법</li>
                             <li>임대차 갱신 및 분쟁 대처</li>
                             <li>이사 시 원상복구 가이드</li>
@@ -482,7 +523,7 @@
     </header>
 
     <main>
-        <!-- 좌측 캘린더 영역 (화면 왼쪽 끝 밀착) -->
+        <!-- 좌측 캘린더 영역 -->
         <aside class="left-sidebar" id="left-sidebar">
             <div class="tab-left" id="btn-cal-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -499,7 +540,7 @@
             </div>
         </aside>
 
-        <!-- 중앙 메인 코칭 영역 (CSS 반응형 스케일링) -->
+        <!-- 중앙 메인 코칭 영역 -->
         <section class="center-panel">
             <div class="greeting">
                 <h1>세상에 첫발을 내딛는 청춘님, 오늘도<br>독립에 한 걸음 가까워졌어요!</h1>
@@ -515,11 +556,10 @@
                 <div class="quiz-question" id="quiz-q">Q. '전입신고'와 '확정일자'의 차이를 아시나요?</div>
                 <div class="quiz-buttons">
                     <button class="quiz-btn know" onclick="alert('훌륭해요! 보증금을 지키는 아주 중요한 지식입니다.')">잘 알고 있어요!</button>
-                    <button class="quiz-btn dont-know" onclick="alert('청춘비서 도서관의 [확정일자 및 전입신고] 페이지로 이동합니다!')">잘 모르겠어요 🤔</button>
+                    <button class="quiz-btn dont-know" id="btn-quiz-hint">도서관에서 찾아볼래요 🤔</button>
                 </div>
             </div>
 
-            <!-- 공간 부족 시 높이가 압축되는 반응형 일러스트 -->
             <div class="illustration-placeholder" id="house-illustration">
                 <svg id="house-svg" viewBox="0 0 380 250" style="width:100%; height:100%; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
                     <g stroke="#cbd5e0" stroke-width="2" fill="none" stroke-dasharray="6,4">
@@ -566,7 +606,7 @@
             </div>
         </section>
 
-        <!-- 우측 플로팅 서랍 탭 (화면 오른쪽 끝 밀착) -->
+        <!-- 우측 플로팅 서랍 탭 -->
         <aside class="right-sidebar closed" id="right-sidebar">
             <div class="tab-right" id="btn-todo-toggle">
                 <svg viewBox="0 0 24 24" style="stroke-width: 2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -585,9 +625,48 @@
         </aside>
     </main>
 
+    <!-- =========================================
+         [NEW] 도서관 아티클 읽기 뷰어 모달
+    ========================================= -->
+    <div class="modal-overlay" id="library-modal">
+        <div class="modal-content article-modal-content small-modal" style="width: 950px; max-width: 95vw;">
+            <button type="button" class="btn-bookmark" id="btn-bookmark">★</button>
+            <button type="button" class="modal-close" id="btn-close-library" onclick="document.getElementById('library-modal').style.display='none'">&times;</button>
+            
+            <div class="report-header">
+                <span class="report-category" id="article-category">📖 카테고리</span>
+                <h2 id="article-title" class="report-title">제목 로딩중...</h2>
+            </div>
+            
+            <div class="report-body" id="article-body">
+                <!-- library-data.js의 내용과 [닫기 버튼]이 여기에 렌더링됨 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================
+         프리미엄 잠금 해제 (업셀링) 모달
+    ========================================= -->
+    <div class="modal-overlay" id="premium-modal">
+        <div class="modal-content small-modal premium-modal-content">
+            <button type="button" class="modal-close" id="btn-close-premium">&times;</button>
+            <div class="premium-icon">✨</div>
+            <h2>이 기능은 <strong style="color:var(--premium-gold);">프리미엄 패키지</strong> 전용입니다.</h2>
+            <p>나만의 일정을 추가하고, AI 맞춤형 로드맵 관리를 받으시려면<br>청춘비서 프리미엄 패키지를 구독해 주세요.</p>
+            <div class="premium-benefits">
+                <ul>
+                    <li>✔️ AI 비서 미씨의 1:1 무제한 상담</li>
+                    <li>✔️ 나만의 커스텀 캘린더 및 알림 연동</li>
+                    <li>✔️ 개인 맞춤형 To-do 리스트 자동 생성</li>
+                </ul>
+            </div>
+            <button class="btn-upgrade" onclick="alert('구독 결제 페이지로 이동합니다.')">프리미엄 패키지 알아보기</button>
+        </div>
+    </div>
+
     <!-- 1. 첫 접속 모달 -->
     <div class="modal-overlay" id="welcome-modal" style="display:none;">
-        <div class="modal-content welcome-modal">
+        <div class="modal-content small-modal welcome-modal">
             <h2>세상에 첫발을 내딛는 당신,<br>어떤 독립을 꿈꾸시나요?</h2>
             <p>1분 자가진단을 통해 현재 경제 상황과<br>목표에 딱 맞는 자립 패키지를 추천해 드릴게요!</p>
             <button class="btn-start-diag" id="btn-open-survey">1분 자가진단 시작하기</button>
@@ -597,8 +676,8 @@
 
     <!-- 2. 주거비 계산기 모달 팝업 -->
     <div class="modal-overlay" id="calc-modal">
-        <div class="modal-content">
-            <span class="modal-close" id="btn-close-calc">&times;</span>
+        <div class="modal-content small-modal">
+            <button type="button" class="modal-close" id="btn-close-calc">&times;</button>
             <div class="calc-header">
                 <h2>💰 스마트 주거비 계산기</h2>
                 <p>소득과 고정 지출을 입력하면 여유 자금을 알려드려요.</p>
@@ -930,42 +1009,68 @@
         </div>
     </div>
 
-    <!-- 4. 진단 완료 감동 팝업 -->
+    <!-- 진단 완료 감동 팝업 -->
     <div class="modal-overlay" id="completion-modal" style="z-index: 9999;">
-        <div class="modal-content completion-modal-content">
+        <div class="modal-content small-modal completion-modal-content">
             <div class="completion-icon">🏠💙</div>
             <h2>이제, 혼자가 아니에요.</h2>
             <p>처음 해보는 독립 준비, 어디서부터 시작해야 할지 막막하고 두려웠죠?<br><br>작성해주신 20개의 답변을 바탕으로 <strong>당신만의 맞춤형 자립 지도</strong>가 완성되었습니다.<br><br>당신이 목표를 이루고 온전히 자립하는 그날까지, 청춘비서가 늘 곁에서 든든한 길잡이가 되어 줄게요. 세상에 혼자 남겨진 것 같은 순간에도, 당신의 발걸음 뒤엔 언제나 우리가 버티고 서 있을게요.</p>
             <button class="btn-start-diag" id="btn-go-dashboard">나만의 대시보드로 이동하기</button>
         </div>
     </div>
+    
+    <!-- 토스트 알림창 -->
+    <div class="toast" id="toast-msg">마이페이지 도서관에 저장되었습니다!</div>
 
-    <!-- 인터랙션 자바스크립트 -->
+    <!-- 1. 외부 데이터 스크립트 불러오기 (여의도 리포트 파일 연동) -->
+    <script src="./library-data.js"></script>
+
+    <!-- 2. 인터랙션 자바스크립트 -->
     <script>
-        // --- [NEW] 화면 높이에 맞춘 동적 배율 계산 (가운데 콘텐츠 전용) ---
+        // --- 화면 높이에 맞춘 동적 배율 계산 (가운데 콘텐츠 전용) ---
         function updateResponsiveScale() {
             const winH = window.innerHeight;
             const headerH = 70;
             const availableH = winH - headerH;
-            
-            // 중앙 콘텐츠가 차지하는 이상적인 기준 높이 (약 720px)
             const idealH = 720;
-            
-            // 높이가 부족하면 비율에 맞춰 자동 축소 (최소 0.65배)
             let scale = 1;
             if (availableH < idealH) {
                 scale = Math.max(0.65, (availableH - 20) / idealH);
             }
-            
-            // CSS 변수로 배율 주입 -> 좌우 끝은 채우고 알맹이만 축소
             document.documentElement.style.setProperty('--ui-scale', scale);
         }
         window.addEventListener('resize', updateResponsiveScale);
         updateResponsiveScale();
 
         // --- 0. 헤더 기능 연동 ---
-        document.getElementById('btn-bell').addEventListener('click', () => alert('새로운 알림이 없습니다.'));
+        document.querySelectorAll('.icon-bell, .nav-item:not(.mega-hover)').forEach(item => {
+            if(item.innerText === '주거비 계산기') return; // 계산기는 별도 처리
+            item.addEventListener('click', () => alert('개발 중인 기능입니다.'));
+        });
         document.getElementById('btn-profile').addEventListener('click', () => alert('가입 후 마이페이지를 이용할 수 있습니다.'));
+
+        // --- 네비게이션 메가 드롭다운 제어 ---
+        const navItems = document.querySelectorAll(".nav-item.mega-hover");
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                // 도서관 글자 자체를 눌렀을 때 열고 닫기 토글
+                if(e.target === this || e.target.tagName === 'I') {
+                    const dropdown = this.querySelector('.mega-dropdown');
+                    if(dropdown) {
+                        const isVisible = dropdown.style.display === 'grid';
+                        document.querySelectorAll('.mega-dropdown').forEach(d => d.style.display = 'none');
+                        dropdown.style.display = isVisible ? 'none' : 'grid';
+                    }
+                }
+            });
+        });
+
+        // [핵심 수정] 모달창 내부나 어두운 배경을 클릭했을 때는 드롭다운 메뉴가 꺼지지 않고 그대로 유지되도록 처리
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.nav-item.mega-hover') && !e.target.closest('.modal-overlay')) {
+                document.querySelectorAll('.mega-dropdown').forEach(d => d.style.display = 'none');
+            }
+        });
 
         // --- 시네마틱 인트로 로딩 처리 타이밍 로직 ---
         window.addEventListener('DOMContentLoaded', () => {
@@ -976,7 +1081,7 @@
                     loader.style.display = 'none';
                     document.getElementById('welcome-modal').style.display = 'flex';
                 }, 2000);
-            }, 5000); 
+            }, 3000); 
         });
 
         // --- 1. 팝업(모달) -> 자가진단 로직 ---
@@ -992,13 +1097,102 @@
             welcomeModal.style.display = 'none';
         });
 
+        // --- [NEW] 도서관 아티클(여의도 리포트) 읽기 뷰어 연동 ---
+        const libraryModal = document.getElementById('library-modal');
+        
+        document.querySelectorAll('.lib-menu li').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation(); // 상위 네비게이션 드롭다운 닫히지 않도록 막음
+                
+                const title = e.target.innerText.trim();
+                const data = (typeof libraryData !== 'undefined') ? libraryData[title] : null;
+                
+                if(data) {
+                    document.getElementById('article-category').innerText = data.category;
+                    document.getElementById('article-title').innerText = title;
+                    
+                    // 상단 요약 + 본문 + 하단 닫기 버튼 결합
+                    const summaryHTML = `
+                        <div class="report-summary">
+                            <strong>[EXECUTIVE SUMMARY] 핵심 요약</strong>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.7;">
+                                ${data.summary.map(s => `<li>${s}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                    const bottomCloseBtnHTML = `
+                        <button type="button" class="btn-close-bottom" onclick="document.getElementById('library-modal').style.display='none'">
+                            다 읽었어요 (창 닫기)
+                        </button>
+                    `;
+                    document.getElementById('article-body').innerHTML = summaryHTML + data.content + bottomCloseBtnHTML;
+                } else {
+                    document.getElementById('article-title').innerText = title;
+                    document.getElementById('article-body').innerHTML = `
+                        <div class='report-summary'>
+                            library-data.js 파일이 연결되지 않았거나, 해당 제목의 데이터가 없습니다.<br>
+                            파일 경로를 다시 확인해주세요.
+                        </div>
+                    `;
+                }
+                
+                // 북마크 초기화
+                document.getElementById('btn-bookmark').classList.remove('active');
+                
+                // 모달 띄우기
+                libraryModal.style.display = 'flex';
+
+                // [핵심 수정] 모달 열릴 때 무조건 스크롤을 맨 위로 리셋
+                const articleContent = libraryModal.querySelector('.article-modal-content');
+                if (articleContent) {
+                    articleContent.scrollTop = 0;
+                }
+            });
+        });
+
+        // 북마크 토스트 알림 연동
+        const btnBookmark = document.getElementById('btn-bookmark');
+        const toastMsg = document.getElementById('toast-msg');
+        let toastTimeout;
+
+        btnBookmark.addEventListener('click', () => {
+            btnBookmark.classList.toggle('active');
+            const isActive = btnBookmark.classList.contains('active');
+            
+            toastMsg.innerText = isActive ? "마이페이지 도서관에 저장되었습니다! ✨" : "즐겨찾기가 취소되었습니다.";
+            toastMsg.classList.add('show');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toastMsg.classList.remove('show');
+            }, 3000);
+        });
+
+        // 퀴즈 힌트 버튼 클릭 시 도서관 열기
+        document.getElementById('btn-quiz-hint').addEventListener('click', () => {
+            const event = new Event('click');
+            const targetLi = Array.from(document.querySelectorAll('.lib-menu li')).find(li => li.innerText === "확정일자 및 전입신고");
+            if(targetLi) targetLi.dispatchEvent(event);
+        });
+
+        // --- 4. 프리미엄 잠금 해제(업셀링) 연동 ---
+        const premiumModal = document.getElementById('premium-modal');
+        document.getElementById('btn-close-premium').addEventListener('click', () => premiumModal.style.display = 'none');
+
+        document.querySelectorAll('.btn-premium-lock').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                premiumModal.style.display = 'flex';
+            });
+        });
+
+        // --- 설문조사 지역 선택 데이터 로직 ---
         setTimeout(() => {
             initRegionData();
             initCalendar();
             initHouseState();
         }, 100);
 
-        // --- 전국 지역 3단 아코디언 데이터 및 초기화 ---
         function initRegionData() {
             const rawRegionData = {
                 "서울특별시": "종로구:청운동,효자동,사직동,삼청동,부암동,평창동,무악동,교남동,가회동,종로1.2.3.4가동,종로5.6가동,이화동,혜화동,창신1동,창신2동,창신3동,숭인1동,숭인2동|중구:소공동,회현동,명동,필동,장충동,광희동,을지로동,신당동,다산동,약수동,청구동,동화동,황학동,중림동|용산구:후암동,용산2가동,남영동,청파동,원효로1동,원효로2동,효창동,용문동,한강로동,이촌1동,이촌2동,이태원1동,이태원2동,서빙고동,보광동,한남동|성동구:왕십리2동,왕십리도선동,마장동,사근동,행당1동,행당2동,응봉동,금호1가동,금호2.3가동,금호4가동,성수1가1동,성수1가2동,성수2가1동,성수2가3동,송정동,용답동|광진구:중곡1동,중곡2동,중곡3동,중곡4동,능동,구의1동,구의2동,구의3동,광장동,자양1동,자양2동,자양3동,자양4동,화양동,군자동|동대문구:신설동,용두동,제기동,전농1동,전농2동,답십리1동,답십리2동,장안1동,장안2동,청량리동,회기동,휘경1동,휘경2동,이문1동,이문2동|중랑구:면목본동,면목2동,면목3.8동,면목4동,면목5동,면목7동,상봉1동,상봉2동,중화1동,중화2동,묵1동,묵2동,망우본동,망우3동,신내1동,신내2동|성북구:성북동,삼선동,동선동,돈암1동,돈암2동,안암동,보문동,정릉1동,정릉2동,정릉3동,정릉4동,길음1동,길음2동,종암동,월곡1동,월곡2동,장위1동,장위2동,장위3동,석관동|강북구:삼양동,미아동,송중동,송천동,삼각산동,우이동,복사동,수유1동,수유2동,수유3동,인수동|도봉구:창1동,창2동,창3동,창4동,창5동,도봉1동,도봉2동,방학1동,방학2동,방학3동,쌍문1동,쌍문2동,쌍문3동,쌍문4동|노원구:월계1동,월계2동,월계3동,공릉1동,공릉2동,하계1동,하계2동,중계본동,중계1동,중계4동,중계동,상계1동,상계2동,상계3.4동,상계5동,상계6.7동,상계8동,상계9동,상계10동|은평구:불광1동,불광2동,갈현1동,갈현2동,구산동,대조동,응암1동,응암2동,응암3동,역촌동,신사1동,신사2동,증산동,수색동,진관동|서대문구:천연동,북아현동,신촌동,연희동,홍제1동,홍제2동,홍제3동,홍은1동,홍은2동,남가좌1동,남가좌2동,북가좌1동,북가좌2동|마포구:공덕동,아현동,도화동,용강동,대흥동,염리동,신수동,서강동,서교동,합정동,망원1동,망원2동,연남동,성산1동,성산2동,상암동|양천구:목1동,목2동,목3동,목4동,목5동,신월1동,신월2동,신월3동,신월4동,신월5동,신월6동,신월7동,신정1동,신정2동,신정3동,신정4동,신정6동,신정7동|강서구:염창동,목동,등촌1동,등촌2동,등촌3동,화곡본동,화곡1동,화곡2동,화곡3동,화곡4동,화곡6동,화곡8동,우장산동,발산1동,가양1동,가양2동,가양3동,공항동,방화1동,방화2동,방화3동,마곡동|구로구:신도림동,구로1동,구로2동,구로3동,구로4동,구로5동,가리봉동,고척1동,고척2동,개봉1동,개봉2동,개봉3동,오류1동,오류2동,수궁동,항동|금천구:가산동,독산1동,독산2동,독산3동,독산4동,시흥1동,시흥2동,시흥3동,시흥4동,시흥5동|영등포구:영등포본동,영등포동,여의동,당산1동,당산2동,도림동,문래동,양평1동,양평2동,신길1동,신길3동,신길4동,신길5동,신길6동,신길7동,대림1동,대림2동,대림3동|동작구:노량진1동,노량진2동,상도1동,상도2동,상도3동,상도4동,흑석동,사당1동,사당2동,사당3동,사당4동,사당5동,대방동,신대방1동,신대방2동|관악구:보라매동,청림동,성현동,행운동,낙성대동,청룡동,사당동,은천동,제기동,난향동,신사동,조원동,대학동,삼성동,난곡동,원신동,서원동,신림동|서초구:서초1동,서초2동,서초3동,서초4동,반포본동,반포1동,반포2동,반포3동,반포4동,방배본동,방배1동,방배2동,방배3동,방배4동,잠원동,서초동,양재1동,양재2동,내곡동|강남구:신사동,논현1동,논현2동,압구정동,청담동,삼성1동,삼성2동,대치1동,대치2동,대치4동,역삼1동,역삼2동,도곡1동,도곡2동,개포1동,개포4동,일원본동,일원1동,일원2동,수서동,세곡동|송파구:풍납1동,풍납2동,거여1동,거여2동,마천1동,마천2동,방이1동,방이2동,오륜동,오금동,송파1동,송파2동,석촌동,삼전동,가락본동,가락1동,가락2동,문정1동,문정2동,장지동,위례동,잠실본동,잠실2동,잠실3동,잠실4동,잠실6동,잠실7동|강동구:강일동,상일1동,상일2동,명일1동,명일2동,고덕1동,고덕2동,암사1동,암사2동,암사3동,천호1동,천호2동,천호3동,성내1동,성내2동,성내3동,둔촌1동,둔촌2동",
@@ -1156,8 +1350,7 @@
             });
         });
 
-        document.addEventListener('click', () => { document.querySelectorAll('.custom-select-wrap').forEach(w => w.classList.remove('open')); });
-
+        // 주거비 계산기 모달 로직
         const calcModal = document.getElementById('calc-modal');
         document.getElementById('btn-open-calc').addEventListener('click', () => calcModal.style.display = 'flex');
         document.getElementById('btn-close-calc').addEventListener('click', () => calcModal.style.display = 'none');
@@ -1181,6 +1374,7 @@
             }
         });
 
+        // 설문조사 스텝 전환
         let currentStep = 1;
         const totalSteps = 5;
         const steps = document.querySelectorAll('.step');
@@ -1206,6 +1400,7 @@
         document.getElementById('btn-go-dashboard').addEventListener('click', () => { document.getElementById('completion-modal').style.display = 'none'; fullscreenSurvey.style.display = 'none'; });
         btnSurveyPrev.addEventListener('click', () => { if (currentStep > 1) updateSurveyStep('prev'); });
 
+        // 캘린더 및 투두리스트 초기화
         function initCalendar() {
             const today = new Date();
             const year = today.getFullYear();
