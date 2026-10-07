@@ -282,11 +282,165 @@
         .todo-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--mint); cursor: pointer; }
         .todo-item.done { color: var(--text-light); text-decoration: line-through; background: #f8fafc;}
 
-        /* 우측 하단 정적 '미씨' 위젯 */
-        .missy-widget { position: fixed; bottom: 25px; right: 45px; z-index: 120; display: flex; flex-direction: column; align-items: center; user-select: none; pointer-events: none; }
-        .missy-body-wrap { pointer-events: auto; position: relative; width: 190px; height: 190px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background-color: var(--bg-color); box-shadow: 0 12px 30px rgba(25, 43, 77, 0.15); overflow: hidden; border: 4px solid rgba(255, 255, 255, 0.8); }
-        .missy-character { width: 112%; height: 112%; object-fit: contain; }
-        .missy-shadow { position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%); width: 90px; height: 14px; background: radial-gradient(ellipse, rgba(30, 58, 138, 0.25) 0%, rgba(30, 58, 138, 0) 75%); border-radius: 50%; pointer-events: none; }
+        /* 미씨 */
+        .missy {
+            position: fixed; right: 26px; bottom: 14px; z-index: 10000;
+            width: 168px; height: 168px;
+            opacity: 0; transform: translateY(60px) scale(.7);
+            transition: opacity .4s, transform .7s cubic-bezier(.3, 1.6, .5, 1);
+            -webkit-tap-highlight-color: transparent; user-select: none;
+        }
+        .missy.in { opacity: 1; transform: none; }
+        .missy-svg { width: 100%; height: 100%; overflow: visible; cursor: pointer; }
+        /* CSS로 움직이는 부위만 자기 영역 기준으로 회전·확대 */
+        .m-all, .m-shadow, .m-body, .m-head-wrap, .m-head, .m-sprout, .m-sprout-in, .m-eye, .m-smile, .m-arm,
+        .fx, .fx-hearts path, .fx-lines path, .flag-cloth, .fx-confetti > * { transform-box: fill-box; }
+        .m-head { transform-origin: 50% 85%; }
+
+        .m-shadow { fill: rgba(40, 70, 130, .16); transform-origin: 50% 50%; }
+        .m-cheek { opacity: .55; transition: opacity .3s; }
+
+        /* 숨쉬기, 새싹 흔들림 */
+        .m-body { transform-origin: 50% 100%; animation: mBreath 3.2s ease-in-out infinite alternate; }
+        .m-head-wrap { transform-origin: 50% 90%; animation: mBob 3.2s ease-in-out infinite alternate; transition: transform .5s cubic-bezier(.3, 1.4, .5, 1); }
+        .m-sprout { transform-origin: 25% 100%; transition: transform .6s cubic-bezier(.3, 1.4, .5, 1); }
+        .m-sprout-in { transform-origin: 25% 100%; animation: mSway 2.6s ease-in-out infinite alternate; }
+        @keyframes mBreath { to { transform: scale(1.02, .97); } }
+        @keyframes mBob { to { translate: 0 6px; } }
+        @keyframes mSway { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
+        .missy.wiggle .m-sprout-in { animation: mWiggle .8s ease-in-out; }
+        @keyframes mWiggle { 20% { transform: rotate(-22deg); } 45% { transform: rotate(18deg); } 70% { transform: rotate(-10deg); } 100% { transform: rotate(0); } }
+
+        /* 눈: 깜빡임, 표정 */
+        .m-eye { transform-origin: 50% 50%; transition: transform .12s ease-in; }
+        .missy.blink .m-eye { transform: scaleY(.08); }
+        .m-happy, .m-brow, .m-o { opacity: 0; transition: opacity .15s; }
+        .m-smile { transform-origin: 50% 0; transition: transform .25s, opacity .15s; }
+
+        .missy[data-mood="happy"] .m-eye,
+        .missy[data-mood="cheer"] .m-eye,
+        .missy[data-mood="success"] .m-eye { transform: scaleY(0); }
+        .missy[data-mood="happy"] .m-happy,
+        .missy[data-mood="cheer"] .m-happy,
+        .missy[data-mood="success"] .m-happy { opacity: 1; }
+        .missy[data-mood="happy"] .m-smile,
+        .missy[data-mood="cheer"] .m-smile,
+        .missy[data-mood="success"] .m-smile { transform: scale(1.35); }
+        .missy[data-mood="happy"] .m-cheek,
+        .missy[data-mood="success"] .m-cheek { opacity: .85; }
+
+        .missy[data-mood="curious"] .m-smile,
+        .missy[data-mood="study"] .m-smile,
+        .missy[data-mood="sad"] .m-smile { transform: scale(.4); opacity: 0; }
+
+        .missy[data-mood="surprised"] .m-eye { transform: scale(1.14); }
+        .missy[data-mood="surprised"] .m-smile { opacity: 0; }
+        .missy[data-mood="surprised"] .m-o { opacity: 1; }
+
+        .missy[data-mood="sad"] .m-brow { opacity: 1; }
+        .missy[data-mood="sad"] .m-eye { transform: scale(.94, .86); }
+        .missy[data-mood="sad"] .m-sprout { transform: rotate(24deg); }
+        .missy[data-mood="sad"] .m-head-wrap { transform: translateY(10px); }
+
+        /* 고개 */
+        .missy[data-mood="curious"] .m-head-wrap { transform: rotate(-9deg); }
+        .missy[data-mood="explore"] .m-head-wrap { transform: translateY(14px) rotate(5deg); }
+        .missy[data-mood="study"] .m-head-wrap { transform: translateY(8px) rotate(4deg); }
+
+        /* 팔 */
+        .m-arm { transition: transform .45s cubic-bezier(.3, 1.5, .5, 1); }
+        .m-arm-l { transform-origin: 78% 6%; }
+        .m-arm-r { transform-origin: 22% 6%; }
+        .missy.wave .m-arm-r { animation: mWave 1.1s ease-in-out; }
+        @keyframes mWave { 20%, 60% { transform: rotate(-120deg); } 40%, 80% { transform: rotate(-95deg); } }
+        .missy[data-mood="cheer"] .m-arm-l { animation: mPumpL .5s ease-in-out infinite alternate; }
+        .missy[data-mood="cheer"] .m-arm-r { animation: mPumpR .5s ease-in-out infinite alternate; }
+        @keyframes mPumpL { from { transform: rotate(138deg); } to { transform: rotate(160deg); } }
+        @keyframes mPumpR { from { transform: rotate(-138deg); } to { transform: rotate(-160deg); } }
+        .missy[data-mood="success"] .m-arm-r { transform: rotate(-120deg); }
+        .missy[data-mood="success"] .m-arm-l { transform: rotate(40deg); }
+        .missy[data-mood="happy"] .m-arm-l { transform: rotate(20deg); }
+        .missy[data-mood="happy"] .m-arm-r { transform: rotate(-20deg); }
+        .missy[data-mood="surprised"] .m-arm-l { transform: rotate(35deg); }
+        .missy[data-mood="surprised"] .m-arm-r { transform: rotate(-35deg); }
+
+        /* 점프 */
+        .m-all { transform-origin: 50% 100%; }
+        .missy.hop .m-all { animation: mHop .75s cubic-bezier(.3, .6, .4, 1); }
+        .missy.hop .m-shadow { animation: mShadow .75s cubic-bezier(.3, .6, .4, 1); }
+        @keyframes mHop {
+            18% { transform: scale(1.08, .88); }
+            45% { transform: translateY(-80px) scale(.95, 1.07); }
+            72% { transform: translateY(0) scale(1.1, .86); }
+            86% { transform: scale(.97, 1.04); }
+        }
+        @keyframes mShadow { 45% { transform: scale(.65); opacity: .5; } }
+
+        /* 감정 효과 */
+        .fx { opacity: 0; transition: opacity .25s; pointer-events: none; }
+        .missy[data-mood="happy"] .fx-hearts,
+        .missy[data-mood="curious"] .fx-q,
+        .missy[data-mood="explore"] .fx-map,
+        .missy[data-mood="explore"] .fx-lines,
+        .missy[data-mood="cheer"] .fx-star,
+        .missy[data-mood="cheer"] .fx-lines,
+        .missy[data-mood="study"] .fx-book,
+        .missy[data-mood="study"] .fx-lines,
+        .missy[data-mood="surprised"] .fx-bang,
+        .missy[data-mood="sad"] .fx-swirl,
+        .missy[data-mood="success"] .fx-flag,
+        .missy[data-mood="success"] .fx-confetti,
+        .missy[data-mood="success"] .fx-lines { opacity: 1; }
+
+        .fx-hearts path { transform-origin: 50% 50%; animation: mFloat 1.6s ease-in-out infinite; }
+        .fx-hearts .h2 { animation-delay: .35s; }
+        .fx-hearts .h3 { animation-delay: .7s; }
+        @keyframes mFloat { 0% { transform: translateY(10px) scale(.7); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-46px) scale(1.05); opacity: 0; } }
+        .fx-q, .fx-bang { transform-origin: 50% 100%; }
+        .missy[data-mood="curious"] .fx-q { animation: mTilt 1.2s ease-in-out infinite alternate; }
+        @keyframes mTilt { from { transform: rotate(-10deg); } to { transform: rotate(10deg) translateY(-8px); } }
+        .missy[data-mood="surprised"] .fx-bang { animation: mPop .45s cubic-bezier(.3, 1.8, .5, 1); }
+        @keyframes mPop { from { transform: scale(0); } }
+        .fx-star { transform-origin: 50% 50%; }
+        .missy[data-mood="cheer"] .fx-star { animation: mSpin 1.4s linear infinite; }
+        @keyframes mSpin { to { transform: rotate(360deg); } }
+        .fx-lines path { transform-origin: 0 100%; }
+        .fx-lines path:nth-child(2) { animation-delay: .1s; }
+        .fx-lines path:nth-child(3) { animation-delay: .2s; }
+        .missy[data-mood] .fx-lines path { animation: mFlick .6s ease-in-out infinite alternate; }
+        @keyframes mFlick { to { transform: scale(.75); opacity: .6; } }
+        .fx-swirl { transform-origin: 50% 50%; }
+        .missy[data-mood="sad"] .fx-swirl { animation: mSpin 2.4s linear infinite reverse; }
+        .flag-cloth { transform-origin: 0 50%; animation: mFlag .5s ease-in-out infinite alternate; }
+        @keyframes mFlag { to { transform: skewY(-8deg) scaleX(.9); } }
+        .missy[data-mood="success"] .fx-confetti > * { animation: mBurst .9s cubic-bezier(.2, .8, .3, 1) both; transform-origin: 50% 50%; }
+        @keyframes mBurst { from { transform: translate(0, 120px) scale(0); opacity: 0; } 60% { opacity: 1; } }
+        .fx-map { transform-origin: 50% 100%; }
+        .missy[data-mood="explore"] .fx-map { animation: mPop .5s cubic-bezier(.3, 1.6, .5, 1); }
+        .fx-book { transform-origin: 50% 100%; }
+        .missy[data-mood="study"] .fx-book { animation: mPop .5s cubic-bezier(.3, 1.6, .5, 1); }
+
+        /* 말풍선 */
+        .missy-say {
+            position: absolute; right: 62%; bottom: 74%;
+            width: max-content; max-width: 220px;
+            padding: 10px 14px; border-radius: 16px 16px 4px 16px;
+            background: #fff; color: var(--navy);
+            font-size: 14px; font-weight: 700; line-height: 1.45; word-break: keep-all;
+            box-shadow: 0 10px 24px -8px rgba(25, 43, 77, .35), 0 0 0 1px rgba(25, 43, 77, .06);
+            opacity: 0; transform: translateY(8px) scale(.85); transform-origin: 100% 100%;
+            transition: opacity .2s, transform .35s cubic-bezier(.3, 1.6, .5, 1);
+            pointer-events: none;
+        }
+        .missy-say.show { opacity: 1; transform: none; }
+
+        @media (max-width: 900px) {
+            .missy { width: 116px; height: 116px; right: 10px; bottom: 8px; }
+            .missy-say { font-size: 13px; max-width: 170px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .missy *, .missy { animation: none !important; transition: none !important; }
+        }
 
         /* =========================================
            모달 오버레이 공통
@@ -578,7 +732,7 @@
 
         // 타임라인 (초) — 숫자만 바꾸면 전체 템포 조절 가능
         // hold: 로고+슬로건이 전부 뜬 뒤 읽을 수 있게 머무는 시간 / sky: 남색 → 하늘색 전환 시작·길이
-        const T = { eyebrow: 0.2, roadIn: 0.1, roadDur: 1.3, house: 0.4, particles: 0.5, lockAfter: 1.9, sky: 0.5, skyDur: 3.2, hold: 2.0, minExit: 3.8 };
+        const T = { eyebrow: 0.2, roadIn: 0.1, roadDur: 1.3, house: 0.4, particles: 0.5, lockAfter: 1.9, sky: 1.8, skyDur: 3.2, hold: 2.0, minExit: 3.8 };
 
         // 슬로건: 어절 단위로 줄바꿈 보호 + 글자 단위 등장
         let ci = 0;
@@ -1214,11 +1368,180 @@
         </aside>
     </main>
 
-    <!-- 우측 하단 정적 '미씨' 위젯 -->
-    <div class="missy-widget" id="missy-widget">
-        <div class="missy-body-wrap" id="missy-body">
-            <img src="./missy.png" alt="비서 미씨" class="missy-character" id="missy-img">
-        </div>
+    <!-- 미씨: SVG로 직접 그려서 부위별로 움직임 (숨쉬기, 깜빡임, 시선, 새싹, 팔, 점프, 감정 9가지) -->
+    <div class="missy" id="missy" data-mood="idle">
+        <div class="missy-say" id="missy-say" role="status" aria-live="polite"></div>
+        <svg class="missy-svg" viewBox="-70 -20 700 700" role="img" aria-label="청춘비서 캐릭터 미씨">
+            <defs>
+                <radialGradient id="mHood" cx="36%" cy="26%" r="78%">
+                    <stop offset="0" stop-color="#d9e7fd"/>
+                    <stop offset=".45" stop-color="#b2c8f0"/>
+                    <stop offset="1" stop-color="#8ea7da"/>
+                </radialGradient>
+                <radialGradient id="mFace" cx="50%" cy="36%" r="72%">
+                    <stop offset="0" stop-color="#fffcf9"/>
+                    <stop offset=".62" stop-color="#fbf1ed"/>
+                    <stop offset="1" stop-color="#eadad6"/>
+                </radialGradient>
+                <radialGradient id="mBelly" cx="44%" cy="32%" r="72%">
+                    <stop offset="0" stop-color="#ffffff"/>
+                    <stop offset=".7" stop-color="#f8f0ed"/>
+                    <stop offset="1" stop-color="#e5d8d5"/>
+                </radialGradient>
+                <linearGradient id="mBlue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#b8ccf1"/>
+                    <stop offset="1" stop-color="#8ca5d8"/>
+                </linearGradient>
+                <radialGradient id="mEye" cx="50%" cy="68%" r="72%">
+                    <stop offset="0" stop-color="#3f63a6"/>
+                    <stop offset=".5" stop-color="#1f2f5c"/>
+                    <stop offset="1" stop-color="#0d1530"/>
+                </radialGradient>
+                <linearGradient id="mBeak" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#ffeba6"/>
+                    <stop offset="1" stop-color="#f3bb48"/>
+                </linearGradient>
+                <linearGradient id="mFoot" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#ffde8c"/>
+                    <stop offset="1" stop-color="#e7b04c"/>
+                </linearGradient>
+                <linearGradient id="mLeaf" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#a9dd98"/>
+                    <stop offset="1" stop-color="#58a56b"/>
+                </linearGradient>
+                <filter id="mBlurL" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9"/></filter>
+                <filter id="mBlurS" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.5"/></filter>
+                <path id="mFacePath" d="M86 330 C 84 268 120 234 166 225 C 202 217 240 211 275 222 C 310 211 348 217 384 225 C 430 234 466 268 464 330 C 462 394 430 442 380 464 C 330 484 220 484 170 464 C 120 442 88 394 86 330 Z"/>
+                <clipPath id="mFaceClip"><use href="#mFacePath"/></clipPath>
+            </defs>
+
+            <!-- 바닥 그림자, 탐색할 때 펼치는 지도 -->
+            <ellipse class="m-shadow" cx="275" cy="650" rx="150" ry="17"/>
+            <g class="fx fx-map">
+                <path d="M110 640 L 200 600 L 290 628 L 380 594 L 450 628 L 362 668 L 272 640 L 182 676 Z" fill="#f5f8f2" stroke="#cfdcc8" stroke-width="3"/>
+                <path d="M200 600 L 182 676 M290 628 L 272 640 M380 594 L 362 668" stroke="#d8e4d2" stroke-width="3"/>
+                <path d="M150 640 C 210 630 250 655 300 640 S 380 618 420 630" fill="none" stroke="#9fd0a8" stroke-width="5" stroke-linecap="round"/>
+                <path d="M330 560 C 310 560 302 578 312 594 L 330 622 L 348 594 C 358 578 350 560 330 560 Z" fill="#59b07a"/>
+                <circle cx="330" cy="582" r="8" fill="#fff"/>
+            </g>
+
+            <g class="m-all">
+                <g class="m-feet">
+                    <ellipse cx="215" cy="628" rx="36" ry="18" fill="url(#mFoot)"/>
+                    <ellipse cx="335" cy="628" rx="36" ry="18" fill="url(#mFoot)"/>
+                </g>
+
+                <g class="m-body">
+                    <path d="M128 452 C 104 480 102 540 128 588 C 160 640 390 640 422 588 C 448 540 446 480 422 452 Z" fill="url(#mBlue)"/>
+                    <ellipse cx="275" cy="552" rx="104" ry="76" fill="url(#mBelly)"/>
+                </g>
+
+                <g class="m-arm m-arm-l">
+                    <path d="M150 468 C 110 478 90 530 102 566 C 110 592 140 590 152 562 C 163 536 167 500 150 468 Z" fill="#fbf6f4"/>
+                    <path d="M150 468 C 120 474 104 498 103 520 C 128 512 152 503 163 490 C 163 482 158 472 150 468 Z" fill="url(#mBlue)"/>
+                </g>
+                <g class="m-arm m-arm-r">
+                    <path d="M400 468 C 440 478 460 530 448 566 C 440 592 410 590 398 562 C 387 536 383 500 400 468 Z" fill="#fbf6f4"/>
+                    <path d="M400 468 C 430 474 446 498 447 520 C 422 512 398 503 387 490 C 387 482 392 472 400 468 Z" fill="url(#mBlue)"/>
+                </g>
+
+                <g class="m-head-wrap">
+                    <g class="m-head" id="m-head">
+                        <g class="m-sprout">
+                            <g class="m-sprout-in"><g transform="translate(296 100) scale(1.32) translate(-296 -100)">
+                                <path d="M294 102 Q 297 88 300 76" stroke="#6aae7b" stroke-width="9" stroke-linecap="round" fill="none"/>
+                                <path d="M298 82 C 270 82 252 60 258 28 C 288 30 306 54 298 82 Z" fill="url(#mLeaf)"/>
+                                <path d="M302 80 C 318 46 362 30 420 44 C 404 82 352 96 302 80 Z" fill="url(#mLeaf)"/>
+                                <path d="M295 76 Q 278 58 265 36" stroke="#e1f5d6" stroke-width="3.5" stroke-linecap="round" fill="none" opacity=".7"/>
+                                <path d="M308 77 Q 360 60 410 49" stroke="#e1f5d6" stroke-width="3.5" stroke-linecap="round" fill="none" opacity=".7"/>
+                            </g></g>
+                        </g>
+
+                        <path d="M62 456 C 18 400 20 300 60 218 C 100 130 190 92 275 92 C 360 92 450 130 490 218 C 530 300 532 400 488 456 C 430 490 120 490 62 456 Z" fill="url(#mHood)"/>
+                        <ellipse cx="205" cy="150" rx="95" ry="38" fill="#fff" opacity=".4" filter="url(#mBlurL)"/>
+
+                        <use href="#mFacePath" fill="url(#mFace)"/>
+                        <g clip-path="url(#mFaceClip)">
+                            <use href="#mFacePath" fill="none" stroke="#8aa2d4" stroke-width="34" opacity=".15" filter="url(#mBlurL)"/>
+                        </g>
+                        <rect x="166" y="223" width="52" height="17" rx="8.5" fill="#bfd1f3" transform="rotate(-10 192 231)"/>
+                        <rect x="332" y="223" width="52" height="17" rx="8.5" fill="#bfd1f3" transform="rotate(10 358 231)"/>
+
+                        <ellipse class="m-cheek" cx="146" cy="398" rx="36" ry="21" fill="#ffaaa1" filter="url(#mBlurL)"/>
+                        <ellipse class="m-cheek" cx="404" cy="398" rx="36" ry="21" fill="#ffaaa1" filter="url(#mBlurL)"/>
+
+                        <g transform="translate(180 330)">
+                            <g class="m-eye">
+                                <g class="m-look">
+                                    <ellipse rx="44" ry="49" fill="url(#mEye)"/>
+                                    <ellipse cy="17" rx="26" ry="19" fill="#6c9ce0" opacity=".5" filter="url(#mBlurS)"/>
+                                    <ellipse cx="-13" cy="-15" rx="13" ry="11" fill="#fff"/>
+                                    <circle cx="13" cy="13" r="5.5" fill="#fff" opacity=".9"/>
+                                </g>
+                            </g>
+                            <path class="m-happy" d="M-30 10 Q 0 -26 30 10" fill="none" stroke="#1b2647" stroke-width="10" stroke-linecap="round"/>
+                            <path class="m-brow" d="M-30 -56 Q -4 -60 22 -74" fill="none" stroke="#7f97c9" stroke-width="8" stroke-linecap="round"/>
+                        </g>
+                        <g transform="translate(372 330)">
+                            <g class="m-eye">
+                                <g class="m-look">
+                                    <ellipse rx="44" ry="49" fill="url(#mEye)"/>
+                                    <ellipse cy="17" rx="26" ry="19" fill="#6c9ce0" opacity=".5" filter="url(#mBlurS)"/>
+                                    <ellipse cx="-13" cy="-15" rx="13" ry="11" fill="#fff"/>
+                                    <circle cx="13" cy="13" r="5.5" fill="#fff" opacity=".9"/>
+                                </g>
+                            </g>
+                            <path class="m-happy" d="M-30 10 Q 0 -26 30 10" fill="none" stroke="#1b2647" stroke-width="10" stroke-linecap="round"/>
+                            <path class="m-brow" d="M30 -56 Q 4 -60 -22 -74" fill="none" stroke="#7f97c9" stroke-width="8" stroke-linecap="round"/>
+                        </g>
+
+                        <g transform="translate(275 352)">
+                            <g class="m-smile">
+                                <path d="M-22 4 Q 0 48 23 4 Z" fill="#ec7457"/>
+                                <ellipse cy="25" rx="10" ry="7" fill="#ffa08b"/>
+                            </g>
+                            <ellipse class="m-o" cy="21" rx="11" ry="14" fill="#d65d48"/>
+                            <path d="M-32 -5 Q 0 -28 32 -5 Q 16 13 0 14 Q -16 13 -32 -5 Z" fill="url(#mBeak)"/>
+                            <path d="M-18 -10 Q 0 -20 16 -12" fill="none" stroke="#fff6cf" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+                        </g>
+                    </g>
+                </g>
+
+                <!-- 감정마다 나오는 효과 -->
+                <g class="fx fx-lines" stroke="#78c08b" stroke-width="11" stroke-linecap="round">
+                    <path d="M478 150 l 22 -32"/>
+                    <path d="M500 196 l 36 -14"/>
+                    <path d="M504 242 l 36 2"/>
+                </g>
+                <g class="fx fx-hearts" fill="none" stroke="#5fb67a" stroke-width="9" stroke-linejoin="round">
+                    <path class="h1" d="M500 214 c -26 -18 -22 -44 0 -32 c 22 -12 26 14 0 32 z"/>
+                    <path class="h2" d="M520 300 c -20 -14 -17 -34 0 -25 c 17 -9 20 11 0 25 z"/>
+                    <path class="h3" d="M50 280 c -22 -15 -19 -38 0 -27 c 19 -11 22 12 0 27 z"/>
+                </g>
+                <g class="fx fx-q"><text x="470" y="170" font-size="150" font-weight="900" fill="#5fb67a">?</text></g>
+                <g class="fx fx-bang"><text x="478" y="170" font-size="160" font-weight="900" fill="#5fb67a">!</text></g>
+                <g class="fx fx-star"><path d="M520 120 l 13 27 30 4 -22 21 6 30 -27 -14 -27 14 6 -30 -22 -21 30 -4 z" fill="none" stroke="#5fb67a" stroke-width="9" stroke-linejoin="round"/></g>
+                <g class="fx fx-swirl"><path d="M500 140 c 30 0 38 -38 8 -42 c -36 -4 -50 46 -12 56 c 46 12 64 -54 18 -70" fill="none" stroke="#5b7fd6" stroke-width="9" stroke-linecap="round"/></g>
+                <g class="fx fx-book">
+                    <rect x="438" y="590" width="128" height="30" rx="6" fill="#6b9be6"/>
+                    <rect x="446" y="560" width="116" height="30" rx="6" fill="#7cc08b"/>
+                    <rect x="434" y="530" width="124" height="30" rx="6" fill="#5b7fd6"/>
+                    <path d="M446 600 h 108 M454 570 h 96 M442 540 h 104" stroke="#fff" stroke-width="5" opacity=".7"/>
+                </g>
+                <g class="fx fx-flag">
+                    <path d="M474 400 L 474 170" stroke="#4d6fb8" stroke-width="10" stroke-linecap="round"/>
+                    <path class="flag-cloth" d="M478 172 L 576 200 L 478 232 Z" fill="#5d93e8"/>
+                </g>
+                <g class="fx fx-confetti">
+                    <rect x="120" y="120" width="16" height="26" rx="4" fill="#5d93e8" transform="rotate(-25 128 133)"/>
+                    <rect x="430" y="80" width="16" height="26" rx="4" fill="#7cc08b" transform="rotate(30 438 93)"/>
+                    <circle cx="70" cy="210" r="10" fill="#ffcf5e"/>
+                    <circle cx="560" cy="300" r="10" fill="#5d93e8"/>
+                    <rect x="40" y="330" width="16" height="26" rx="4" fill="#ffcf5e" transform="rotate(20 48 343)"/>
+                    <circle cx="200" cy="60" r="8" fill="#7cc08b"/>
+                </g>
+            </g>
+        </svg>
     </div>
 
     <!-- =========================================
@@ -2475,6 +2798,180 @@
             if (e.target.id === 'btn-rm-dashboard') roadmapSurvey.style.display = 'none';
             if (e.target.id === 'btn-rm-retry') rmShowStep('s1');
         });
+    </script>
+    <script>
+    // 미씨: 깜빡이고, 마우스를 쳐다보고, 심심하면 혼자 놀고, 대시보드에서 일어나는 일에 반응함
+    (function () {
+        const missy = document.getElementById('missy');
+        if (!missy) return;
+        const svg = missy.querySelector('.missy-svg');
+        const bubble = document.getElementById('missy-say');
+        const head = missy.querySelector('.m-head');
+        const pupils = missy.querySelectorAll('.m-look');
+        const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // 캐릭터 시트에 있는 9가지 모습과 대사
+        const LINES = {
+            idle: '언제나 네 곁에, 미씨!',
+            happy: '좋은 일이 생길 거야!',
+            curious: '어떤 게 궁금해?',
+            explore: '지금, 너의 길을 찾고 있어!',
+            cheer: '넌 할 수 있어! 화이팅!',
+            study: '조금만 더 힘내자!',
+            surprised: '어? 정말?',
+            sad: '괜찮아! 다음에 또 하자!',
+            success: '드디어 해냈다!'
+        };
+        // 감정마다 눈이 가는 곳 (없으면 마우스를 봄)
+        const GAZE = { curious: [0.6, -0.8], explore: [-0.1, 0.9], study: [0.8, 0.6], sad: [0, 0.8] };
+
+        let mood = 'idle';
+        let backTimer = 0, sayTimer = 0, lastPoke = Date.now();
+
+        function setMood(next, opt = {}) {
+            clearTimeout(backTimer);
+            mood = next;
+            missy.dataset.mood = next;
+            armsInFront(next === 'cheer' || next === 'success');
+            missy.querySelectorAll('.fx').forEach(f => {   // 같은 감정을 연달아 불러도 효과가 다시 나오게
+                f.style.animation = 'none';
+                void f.getBoundingClientRect();
+                f.style.animation = '';
+            });
+            if (opt.talk !== false) talk(opt.text || LINES[next]);
+            if (opt.hop) hop();
+            if (next !== 'idle') backTimer = setTimeout(() => setMood('idle', { talk: false }), opt.hold || 3800);
+            lastPoke = Date.now();
+        }
+
+        // 팔을 번쩍 들 땐 얼굴 앞으로, 평소엔 후드 밑으로
+        const headWrap = missy.querySelector('.m-head-wrap');
+        const arms = [...missy.querySelectorAll('.m-arm')];
+        function armsInFront(front) {
+            if (front) headWrap.after(...arms);
+            else headWrap.before(...arms);
+        }
+
+        function talk(text) {
+            bubble.textContent = text;
+            bubble.classList.remove('show');
+            void bubble.offsetWidth;
+            bubble.classList.add('show');
+            clearTimeout(sayTimer);
+            sayTimer = setTimeout(() => bubble.classList.remove('show'), 3600);
+        }
+
+        function flash(cls, ms) {
+            missy.classList.remove(cls);
+            void missy.offsetWidth;
+            missy.classList.add(cls);
+            setTimeout(() => missy.classList.remove(cls), ms);
+        }
+        const hop = () => { if (!calm) flash('hop', 760); };
+
+        // 2~6초마다 깜빡, 가끔은 두 번
+        function blinkLater() {
+            setTimeout(() => {
+                flash('blink', 130);
+                if (Math.random() < 0.2) setTimeout(() => flash('blink', 130), 270);
+                blinkLater();
+            }, 2000 + Math.random() * 4000);
+        }
+
+        // 시선: 마우스 쪽으로 눈동자가 가고 고개도 살짝 따라감
+        const aim = { x: 0, y: 0 }, cur = { x: 0, y: 0 };
+        let wander = null;
+        window.addEventListener('pointermove', e => {
+            const r = svg.getBoundingClientRect();
+            aim.x = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width * 0.49)) / 420));
+            aim.y = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height * 0.5)) / 320));
+        }, { passive: true });
+
+        function follow() {
+            const g = wander || GAZE[mood] || [aim.x, aim.y];
+            cur.x += (g[0] - cur.x) * 0.12;
+            cur.y += (g[1] - cur.y) * 0.12;
+            pupils.forEach(p => { p.style.transform = `translate(${(cur.x * 11).toFixed(2)}px, ${(cur.y * 9).toFixed(2)}px)`; });
+            head.style.transform = `translate(${(cur.x * 7).toFixed(2)}px, ${(cur.y * 4).toFixed(2)}px) rotate(${(cur.x * 4).toFixed(2)}deg)`;
+            requestAnimationFrame(follow);
+        }
+
+        function lookAround() {
+            wander = [-0.9, -0.1];
+            setTimeout(() => { wander = [0.9, -0.3]; }, 750);
+            setTimeout(() => { wander = null; }, 1600);
+        }
+
+        // 아무도 안 건드리면 혼자 노는 것들. 30초 넘게 조용하면 말을 걸어봄
+        function idleLater() {
+            setTimeout(() => {
+                if (mood === 'idle' && !document.hidden) {
+                    if (Date.now() - lastPoke > 30000) setMood('curious');
+                    else {
+                        const r = Math.random();
+                        if (r < 0.3) lookAround();
+                        else if (r < 0.55) flash('wiggle', 820);
+                        else if (r < 0.8) flash('wave', 1150);
+                        else hop();
+                    }
+                }
+                idleLater();
+            }, 6000 + Math.random() * 6000);
+        }
+
+        // 미씨를 건드리면
+        let pokes = 0;
+        svg.addEventListener('pointerenter', () => { if (mood === 'idle') setMood('happy', { hold: 2400 }); });
+        svg.addEventListener('click', () => {
+            const order = ['cheer', 'surprised', 'curious', 'success', 'happy'];
+            setMood(order[pokes++ % order.length], { hop: true });
+        });
+
+        // 대시보드에서 일어나는 일들
+        const on = (sel, ev, fn) => document.querySelectorAll(sel).forEach(el => el.addEventListener(ev, fn));
+
+        on('#todo-list input[type="checkbox"]', 'change', e => {
+            const boxes = [...document.querySelectorAll('#todo-list input[type="checkbox"]')];
+            if (!e.target.checked) setMood('sad');
+            else if (boxes.every(b => b.checked)) setMood('success', { hop: true, hold: 5000 });
+            else setMood('cheer', { hop: true });
+        });
+        on('.lib-menu li', 'click', () => setMood('study'));
+        on('#btn-quiz-hint', 'click', () => setMood('explore'));
+        on('.quiz-btn.know', 'click', () => setMood('happy', { hop: true }));
+        on('#btn-bookmark', 'click', e => { if (e.currentTarget.classList.contains('active')) setMood('happy'); });
+        on('#btn-do-calc', 'click', () => {
+            const status = document.getElementById('result-status').innerText;
+            if (status.includes('⚠️')) setMood('surprised', { hop: true });
+            else if (status.includes('✅')) setMood('happy');
+        });
+        on('#btn-open-survey', 'click', () => setMood('curious'));
+        on('#btn-skip-survey', 'click', () => setMood('idle'));
+        on('.radio-card input', 'change', () => flash('wiggle', 820));
+
+        // 진단 결과 팝업, 로드맵 결과가 뜨는 순간
+        const done = document.getElementById('completion-modal');
+        if (done) new MutationObserver(() => {
+            if (done.style.display === 'flex') setMood('success', { hop: true, hold: 4500 });
+        }).observe(done, { attributes: true, attributeFilter: ['style'] });
+
+        const roadmapResult = document.getElementById('s-step-result');
+        if (roadmapResult) new MutationObserver(() => {
+            if (roadmapResult.classList.contains('active')) setMood('cheer', { hop: true, hold: 4000 });
+        }).observe(roadmapResult, { attributes: true, attributeFilter: ['class'] });
+
+        // 인트로가 끝나면 통 튀어나와서 인사
+        function enter() {
+            missy.classList.add('in');
+            setTimeout(() => setMood('idle', { hop: true }), 450);
+        }
+        if (window.__introDone || !document.getElementById('intro')) setTimeout(enter, 300);
+        else window.addEventListener('intro:done', enter, { once: true });
+
+        blinkLater();
+        idleLater();
+        if (!calm) requestAnimationFrame(follow);
+    })();
     </script>
 </body>
 </html>
